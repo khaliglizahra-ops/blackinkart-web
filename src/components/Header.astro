@@ -72,11 +72,13 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     border-bottom: 1px solid transparent;
   }
 
+  /* Tam opak siyah: yarı saydamken menü, altından geçen açık renkli
+     fotoğrafların üzerinde okunmaz hâle geliyordu. */
   .site-header.is-scrolled {
-    background: rgba(0, 0, 0, 0.86);
-    backdrop-filter: blur(10px);
+    background: #000;
     padding-block: 0.7rem;
     border-color: var(--color-hairline);
+    box-shadow: 0 1px 24px rgba(0, 0, 0, 0.6);
   }
 
   .bar {

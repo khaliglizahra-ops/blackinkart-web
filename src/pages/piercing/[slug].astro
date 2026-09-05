@@ -101,7 +101,7 @@ const gallerySansHero = areaPhotos.slice(1);
         {gallerySansHero.length > 0 && (
           <div class="area-gallery" data-reveal>
             {gallerySansHero.map((src) => (
-              <img src={src} loading="lazy" alt={`${entry.data.title} örneği — Black Ink Art`} width="400" height="500" />
+              <img src={src} loading="lazy" alt={`${entry.data.title} örneği — Black Ink Art`} width="400" height="500" data-lightbox="bolge" />
             ))}
           </div>
         )}

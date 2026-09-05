@@ -17,19 +17,16 @@ const studioTeaser = studioPhotos.slice(0, 3);
   <section class="section pillars" id="hero-next">
     <div class="container pillar-grid">
       <div class="pillar" data-reveal>
-        <span class="pillar-index">01</span>
         <h3>Steril Standartlar</h3>
         <p>Tek kullanımlık iğne, otoklavda sterilize edilmiş ekipman ve MEB onaylı hijyen eğitimleri.</p>
         <a href="/hijyen-ve-guvenlik" class="btn-ghost">Detaylı Bilgi →</a>
       </div>
       <div class="pillar" data-reveal>
-        <span class="pillar-index">02</span>
         <h3>Deneyimli Sanatçılık</h3>
         <p>2014'ten bu yana piercing, 2017'den bu yana dövme sanatında uzmanlaşmış bir ekip.</p>
         <a href="/sanatcilar" class="btn-ghost">Sanatçıları Gör →</a>
       </div>
       <div class="pillar" data-reveal>
-        <span class="pillar-index">03</span>
         <h3>Şeffaf Fiyatlandırma</h3>
         <p>Malzeme ve uygulamaya göre net fiyat listesi; sürpriz ücret yok.</p>
         <a href="/dovme/fiyatlar" class="btn-ghost">Fiyatları Gör →</a>
@@ -91,7 +88,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
       <div class="teaser-grid">
         {teaserImages.map((src, i) => (
           <div class="tile" data-reveal>
-            <img src={src} alt="Black Ink Art dövme çalışması" loading={i < 4 ? 'eager' : 'lazy'} width="400" height="400" />
+            <img src={src} alt="Black Ink Art dövme çalışması" loading={i < 4 ? 'eager' : 'lazy'} width="400" height="400" data-lightbox="portfolyo" />
           </div>
         ))}
       </div>
@@ -123,7 +120,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
       <div class="studio-grid">
         {studioTeaser.map((src) => (
           <div class="tile" data-reveal>
-            <img src={src} alt="Black Ink Art stüdyo" loading="lazy" width="500" height="400" />
+            <img src={src} alt="Black Ink Art stüdyo" loading="lazy" width="500" height="400" data-lightbox="studyo" />
           </div>
         ))}
       </div>
@@ -152,14 +149,19 @@ const studioTeaser = studioPhotos.slice(0, 3);
     gap: 2rem;
   }
 
-  .pillar-index {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    color: var(--color-gold-dim);
+  .pillar h3 {
+    margin: 0 0 0.5em;
   }
 
-  .pillar h3 {
-    margin: 0.4em 0 0.5em;
+  /* Numaraların yerine ince bir altın çizgi — sıralama hissi kalsın,
+     rakamlar görünmesin. */
+  .pillar::before {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 2px;
+    background: var(--color-gold);
+    margin-bottom: 1.1rem;
   }
 
   h2 {

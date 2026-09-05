@@ -60,22 +60,31 @@ müşavire danışmanız önerilir.
 - **Genital ve yanak (cheek) piercing** sayfalarında mahremiyet gerekçesiyle hiç fotoğraf
   kullanılmadı (kaynakta da uygun fotoğraf yoktu).
 
-## Yayınlamadığım İçerikler — Önemli
+## Sertifika Görselleri — Sansürlenerek Yayınlandı
 
-Kaynak klasörlerde bulduğum aşağıdaki belgeleri **bilerek siteye koymadım**, çünkü hepsinde T.C.
-kimlik numaranız açıkça görünüyor (kamuya açık bir sitede yayınlamak kimlik hırsızlığı riski
-oluşturur):
+Talebiniz üzerine 6 belgenin görseli [Hijyen ve Güvenlik](src/pages/hijyen-ve-guvenlik.astro)
+sayfasına eklendi. Belgelerin hepsinde **T.C. kimlik numarası, anne ve baba adı**, üçünde ayrıca
+**tam doğum tarihi** yer alıyordu. Bu dörtlü, Türkiye'de kimlik doğrulama ve hesap kurtarma için
+kullanılan bilgi setinin ta kendisi — kamuya açık bir sitede olduğu gibi yayınlanması kimlik
+hırsızlığına açık kapı bırakırdı. Bu yüzden yayınlanan görsellerde o alanlar opak kutuyla
+kapatıldı. e-Devlet belgelerindeki **barkod ve karekodlar da kapatıldı**: okutulduklarında belgenin
+sansürlenmemiş tam hâli görüntülenebiliyordu.
 
-- `Belgelerim/IMG_7558.JPG` — Dövme Uygulayıcılığı Eğitimi kurs bitirme belgesi (2017)
-- `Black_İnk_Art/hijyen belgeleri/*.pdf` — 3 adet MEB hijyen eğitimi katılım/kurs bitirme belgesi (2022)
+Kurum, program, tarih, isim ve fotoğraf görünür bırakıldı; belge ziyaretçi için hâlâ ikna edici.
 
-Bu sertifikaların **metin bilgilerini** (unvan, kurum, tarih) [Hijyen ve Güvenlik](src/pages/hijyen-ve-guvenlik.astro)
-sayfasına görsel olmadan ekledim. İsterseniz kimlik numarası kırpılmış/sansürlenmiş bir versiyonunu
-hazırlayıp bana iletebilirsiniz, o zaman görselleri de ekleyebilirim.
+- Kaynaklar: `Belgelerim/` klasöründeki 3 ekran görüntüsü ve 3 fotoğraf (bu klasör siteye
+  kopyalanmadı, sadece okundu).
+- Sansürleme betiği: `tools/redact-certificates.py` — kapatılacak alanlar orana göre tanımlı,
+  `python3 redact-certificates.py` ile yeniden üretilebilir.
+- Çıktılar: `public/images/sertifikalar/*.jpg`
+
+Sayfaya ayrıca daha önce hiç yer almayan **Ustalık Belgesi** ve **Kalfalık Belgesi** (TESK, meslek
+dalı: Dövme, 2020) eklendi — bunlar mesleki yeterliliğin en güçlü kanıtı olduğu için listenin
+başına konuldu.
 
 `Black_İnk_Art/patent/black ink art.pdf` içinde TÜRKPATENT'e yapılmış bir marka **başvurusu**
-(2025/000887, henüz tescil değil) bulunuyor — bu belgede hassas alanlar zaten maskelenmiş, isterseniz
-"Marka başvurusu yapılmıştır" notu olarak footer'a eklenebilir.
+(2025/000887, henüz tescil değil) bulunuyor — bu belgede hassas alanlar zaten maskelenmiş,
+isterseniz "Marka başvurusu yapılmıştır" notu olarak footer'a eklenebilir.
 
 ## Eksik / Sizden Beklenen
 

@@ -1,0 +1,288 @@
+---
+/**
+ * Tek bir tam ekran görsel görüntüleyici.
+ *
+ * Sayfadaki herhangi bir <img> etiketine `data-lightbox="grup-adi"` eklemek
+ * yeterli: tıklandığında görsel kırpılmadan, tam hâliyle açılır. Aynı gruptaki
+ * görseller arasında ok tuşlarıyla veya kenardaki düğmelerle gezinilir.
+ * İsteğe bağlı `data-caption` alt yazı olarak gösterilir.
+ */
+---
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Görsel görüntüleyici">
+  <button class="lb-close" id="lb-close" aria-label="Kapat">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg>
+  </button>
+
+  <button class="lb-nav lb-prev" id="lb-prev" aria-label="Önceki görsel">
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></svg>
+  </button>
+  <button class="lb-nav lb-next" id="lb-next" aria-label="Sonraki görsel">
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="m8.6 16.6 1.4 1.4 6-6-6-6-1.4 1.4 4.6 4.6z"/></svg>
+  </button>
+
+  <figure class="lb-stage">
+    <img id="lb-image" src="" alt="" />
+    <figcaption id="lb-caption"></figcaption>
+  </figure>
+
+  <span class="lb-counter" id="lb-counter" aria-hidden="true"></span>
+</div>
+
+<style is:global>
+  [data-lightbox] {
+    cursor: zoom-in;
+  }
+</style>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 4vw, 3rem);
+    background: rgba(0, 0, 0, 0.94);
+    opacity: 0;
+    transition: opacity var(--dur-mid) var(--ease-out);
+  }
+
+  /* Tarayıcının [hidden] kuralı display:flex'e yeniliyor — açıkça geçersiz kılıyoruz. */
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox.is-open {
+    opacity: 1;
+  }
+
+  .lb-stage {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .lb-stage img {
+    max-width: min(1400px, 100%);
+    max-height: calc(100vh - 9rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    transform: scale(0.97);
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+
+  .lightbox.is-open .lb-stage img {
+    transform: scale(1);
+  }
+
+  .lb-stage figcaption {
+    color: var(--color-ivory-dim);
+    font-size: 0.85rem;
+    text-align: center;
+    max-width: 60ch;
+  }
+
+  .lb-stage figcaption:empty {
+    display: none;
+  }
+
+  .lb-close,
+  .lb-nav {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-ivory);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: color var(--dur-fast), border-color var(--dur-fast), background var(--dur-fast);
+  }
+
+  .lb-close:hover,
+  .lb-nav:hover {
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .lb-close {
+    top: clamp(0.8rem, 2.5vw, 1.6rem);
+    right: clamp(0.8rem, 2.5vw, 1.6rem);
+    width: 44px;
+    height: 44px;
+  }
+
+  .lb-nav {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+  }
+
+  .lb-prev {
+    left: clamp(0.5rem, 2vw, 1.6rem);
+  }
+  .lb-next {
+    right: clamp(0.5rem, 2vw, 1.6rem);
+  }
+
+  .lb-nav[hidden] {
+    display: none;
+  }
+
+  .lb-counter {
+    position: absolute;
+    bottom: clamp(0.8rem, 2.5vw, 1.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    color: var(--color-ivory-dim);
+  }
+
+  @media (max-width: 640px) {
+    .lb-nav {
+      width: 40px;
+      height: 40px;
+    }
+    .lb-stage img {
+      max-height: calc(100vh - 8rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox,
+    .lb-stage img {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type Slide = { src: string; caption: string };
+  type State = { slides: Slide[]; index: number; lastFocused: HTMLElement | null };
+
+  /**
+   * Sayfalar arası geçişte (ClientRouter) bu betik yeniden çalışıyor ama
+   * document üzerindeki dinleyiciler kalıyor. Bu yüzden durum window'da
+   * tutuluyor ve DOM her seferinde yeniden sorgulanıyor — aksi hâlde eski
+   * sayfanın silinmiş elemanlarına tutunup çalışmaz hâle gelirdi.
+   */
+  function state(): State {
+    const w = window as any;
+    if (!w.__lbState) w.__lbState = { slides: [], index: 0, lastFocused: null };
+    return w.__lbState;
+  }
+
+  function dom() {
+    return {
+      root: document.getElementById('lightbox'),
+      image: document.getElementById('lb-image') as HTMLImageElement | null,
+      caption: document.getElementById('lb-caption'),
+      counter: document.getElementById('lb-counter'),
+      closeBtn: document.getElementById('lb-close'),
+      prevBtn: document.getElementById('lb-prev'),
+      nextBtn: document.getElementById('lb-next'),
+    };
+  }
+
+  function render() {
+    const { image, caption, counter, prevBtn, nextBtn } = dom();
+    const s = state();
+    const slide = s.slides[s.index];
+    if (!slide || !image || !caption || !counter) return;
+    image.src = slide.src;
+    image.alt = slide.caption;
+    caption.textContent = slide.caption;
+    counter.textContent = s.slides.length > 1 ? `${s.index + 1} / ${s.slides.length}` : '';
+    prevBtn?.toggleAttribute('hidden', s.slides.length < 2);
+    nextBtn?.toggleAttribute('hidden', s.slides.length < 2);
+  }
+
+  function open(group: string, startSrc: string) {
+    const { root, closeBtn } = dom();
+    if (!root) return;
+    const s = state();
+    // Gizli olanları atla — portfolyo filtresi seçili olmayan kartları
+    // gizliyor, onların galeriye karışmaması gerekiyor.
+    const members = Array.from(
+      document.querySelectorAll<HTMLImageElement>(`img[data-lightbox="${group}"]`)
+    ).filter((el) => el.offsetParent !== null);
+    s.slides = members.map((el) => ({
+      src: el.dataset.full || el.currentSrc || el.src,
+      caption: el.dataset.caption || el.alt || '',
+    }));
+    s.index = Math.max(0, s.slides.findIndex((slide) => slide.src === startSrc));
+    s.lastFocused = document.activeElement as HTMLElement;
+    render();
+    root.removeAttribute('hidden');
+    // Bir kare bekle ki açılış geçişi tetiklensin.
+    requestAnimationFrame(() => root.classList.add('is-open'));
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus();
+  }
+
+  function close() {
+    const { root } = dom();
+    if (!root) return;
+    root.classList.remove('is-open');
+    root.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+    state().lastFocused?.focus();
+  }
+
+  function step(delta: number) {
+    const s = state();
+    if (s.slides.length < 2) return;
+    s.index = (s.index + delta + s.slides.length) % s.slides.length;
+    render();
+  }
+
+  function bindGlobalOnce() {
+    const w = window as any;
+    if (w.__lbBound) return;
+    w.__lbBound = true;
+
+    document.addEventListener('click', (e) => {
+      const target = (e.target as HTMLElement)?.closest<HTMLImageElement>('img[data-lightbox]');
+      if (!target) return;
+      e.preventDefault();
+      open(target.dataset.lightbox!, target.dataset.full || target.currentSrc || target.src);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const { root } = dom();
+      if (!root || root.hasAttribute('hidden')) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') step(-1);
+      else if (e.key === 'ArrowRight') step(1);
+    });
+  }
+
+  function bindPanel() {
+    const { root, closeBtn, prevBtn, nextBtn } = dom();
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+    closeBtn?.addEventListener('click', close);
+    prevBtn?.addEventListener('click', () => step(-1));
+    nextBtn?.addEventListener('click', () => step(1));
+    // Görselin dışına tıklamak kapatır.
+    root.addEventListener('click', (e) => {
+      const el = e.target as HTMLElement;
+      if (el === root || el.classList.contains('lb-stage')) close();
+    });
+  }
+
+  bindGlobalOnce();
+  bindPanel();
+  document.addEventListener('astro:page-load', bindPanel);
+</script>

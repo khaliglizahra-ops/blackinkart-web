@@ -5,28 +5,46 @@ import { studioPhotos } from '../data/gallery';
 
 const certificates = [
   {
+    title: 'Ustalık Belgesi — Dövme',
+    issuer: 'Türkiye Esnaf ve Sanatkârları Konfederasyonu',
+    detail: '3308 sayılı Mesleki Eğitim Kanunu kapsamında, sınav sonucunda verilen ustalık belgesi',
+    date: '2020',
+    image: '/images/sertifikalar/ustalik-belgesi-2020.jpg',
+  },
+  {
+    title: 'Kalfalık Belgesi — Dövme',
+    issuer: 'Türkiye Esnaf ve Sanatkârları Konfederasyonu',
+    detail: 'Ustalık belgesinin ön şartı olan kalfalık yeterliliği',
+    date: '2020',
+    image: '/images/sertifikalar/kalfalik-belgesi-2020.jpg',
+  },
+  {
     title: 'Dövme Uygulayıcılığı Eğitimi',
     issuer: 'T.C. Millî Eğitim Bakanlığı',
     detail: '30 saatlik teorik ve uygulamalı eğitim · "Pekiyi" derece',
     date: '2017',
+    image: '/images/sertifikalar/dovme-uygulayiciligi-2017.jpg',
   },
   {
     title: 'Salgın Döneminde Hijyen Kuralları Eğitimi',
     issuer: 'T.C. Millî Eğitim Bakanlığı · Çankaya Halk Eğitim Merkezi',
     detail: '8 saatlik katılım belgesi',
     date: '2022',
+    image: '/images/sertifikalar/hijyen-salgin-2022.jpg',
   },
   {
     title: 'Güzellik ve Saç Bakım Hizmetlerinde Çalışanlar İçin Hijyen Eğitimi',
     issuer: 'T.C. Millî Eğitim Bakanlığı · Çankaya Halk Eğitim Merkezi',
     detail: '8 saatlik kurs bitirme belgesi',
     date: '2022',
+    image: '/images/sertifikalar/hijyen-guzellik-2022.jpg',
   },
   {
     title: 'Gıda ve Su Sektöründe Çalışanlar İçin Hijyen Eğitimi',
     issuer: 'T.C. Millî Eğitim Bakanlığı · Çankaya Halk Eğitim Merkezi',
     detail: '8 saatlik kurs bitirme belgesi',
     date: '2022',
+    image: '/images/sertifikalar/hijyen-gida-2022.jpg',
   },
 ];
 
@@ -74,12 +92,25 @@ const checklist = [
   <section class="section-tight">
     <div class="container narrow">
       <h2>Sertifikalarımız</h2>
-      <p class="cert-note">Gizlilik nedeniyle sertifikaların görsellerini değil, aşağıdaki bilgilerini paylaşıyoruz.</p>
+      <p class="cert-note">
+        Belgelerin üzerine tıklayarak büyütebilirsiniz. Kimlik numarası, anne–baba adı ve doğum
+        tarihi gibi kişisel bilgiler güvenlik gerekçesiyle kapatılmıştır; belgelerin kurum, program
+        ve tarih bilgileri olduğu gibi görünmektedir.
+      </p>
       <div class="cert-list">
         {certificates.map((c) => (
           <div class="cert-card surface" data-reveal>
-            <span class="cert-date">{c.date}</span>
+            <img
+              src={c.image}
+              alt={`${c.title} — ${c.issuer}`}
+              loading="lazy"
+              width="150"
+              height="110"
+              data-lightbox="sertifikalar"
+              data-caption={`${c.title} · ${c.issuer} · ${c.date}`}
+            />
             <div>
+              <span class="cert-date">{c.date}</span>
               <h3>{c.title}</h3>
               <p class="issuer">{c.issuer}</p>
               <p class="detail">{c.detail}</p>
@@ -96,7 +127,7 @@ const checklist = [
       <div class="studio-grid">
         {studioPhotos.map((src) => (
           <div class="tile" data-reveal>
-            <img src={src} alt="Black Ink Art stüdyo" loading="lazy" width="500" height="400" />
+            <img src={src} alt="Black Ink Art stüdyo" loading="lazy" width="500" height="400" data-lightbox="studyo" />
           </div>
         ))}
       </div>
@@ -155,7 +186,8 @@ const checklist = [
   .cert-note {
     font-size: 0.85rem;
     color: var(--color-ivory-faint);
-    font-style: italic;
+    max-width: 68ch;
+    margin-bottom: 1.4rem;
   }
 
   .cert-list {
@@ -166,22 +198,51 @@ const checklist = [
 
   .cert-card {
     display: flex;
-    gap: 1.2rem;
-    padding: 1.4rem 1.6rem;
-    align-items: flex-start;
+    gap: 1.3rem;
+    padding: 1.2rem 1.4rem;
+    align-items: center;
+  }
+
+  /* Küçük ama okunur bir önizleme; tıklanınca tam boy açılıyor. */
+  .cert-card img {
+    width: 150px;
+    height: 110px;
+    flex-shrink: 0;
+    object-fit: cover;
+    object-position: top center;
+    background: #fff;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+  }
+
+  .cert-card img:hover {
+    border-color: var(--color-gold);
+    transform: translateY(-2px);
   }
 
   .cert-date {
+    display: block;
     font-family: var(--font-display);
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     color: var(--color-gold);
-    flex-shrink: 0;
-    min-width: 3.2em;
+    margin-bottom: 0.15em;
   }
 
   .cert-card h3 {
     margin-bottom: 0.2em;
     font-size: 1.15rem;
+  }
+
+  @media (max-width: 560px) {
+    .cert-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .cert-card img {
+      width: 100%;
+      height: 150px;
+    }
   }
 
   .issuer {
