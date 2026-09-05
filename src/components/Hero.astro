@@ -1,0 +1,281 @@
+---
+import { site } from '../data/site';
+import { topPortfolio } from '../data/gallery';
+
+// Hand-picked large-scale pieces that read well as a dark, moody hero background.
+const HERO_SLIDE_INDEXES = [12, 6, 13, 10, 24];
+const heroSlides = HERO_SLIDE_INDEXES.map((i) => topPortfolio[i]).filter(Boolean);
+const slideDuration = heroSlides.length * 6; // seconds for one full loop
+---
+
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true" style={`--slide-duration:${slideDuration}s`}>
+    {heroSlides.map((src, i) => (
+      <div
+        class="hero-bg-slide"
+        style={`background-image:url(${src}); animation-delay:${i * 6}s;`}
+      ></div>
+    ))}
+    <div class="hero-bg-overlay"></div>
+  </div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="hero-logo-wrap">
+      <img
+        src="/brand/logo-mark.png"
+        alt={`${site.name} — logo`}
+        width="620"
+        height="288"
+        class="hero-logo"
+        fetchpriority="high"
+      />
+    </div>
+    <span class="hero-rule" aria-hidden="true"></span>
+    <p class="hero-eyebrow">Ankara Bahçelievler · 7. Cadde</p>
+    <h1 class="hero-title">Kalıcı sanatın <em>ustalıkla</em> buluştuğu adres</h1>
+    <p class="hero-sub">
+      Dövme ve piercingde steril standartlar, deneyimli sanatçılık ve şeffaf fiyatlarla —
+      hayalinizdeki tasarımı Black Ink Art'ta hayata geçirin.
+    </p>
+    <div class="hero-actions">
+      <a href="/randevu" class="btn btn-primary">Randevu Al</a>
+      <a href="/portfolyo" class="btn btn-outline">Portfolyoyu Gör</a>
+    </div>
+  </div>
+  <a class="scroll-cue" href="#hero-next" aria-label="Aşağı kaydır">
+    <span></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding-block: 7rem 4rem;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: var(--color-black);
+  }
+
+  .hero-bg-slide {
+    position: absolute;
+    inset: -4%;
+    background-size: cover;
+    background-position: center 25%;
+    opacity: 0;
+    filter: saturate(1) brightness(1.05);
+    animation: hero-slide var(--slide-duration) infinite;
+    animation-fill-mode: both;
+  }
+
+  .hero-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.42) 45%, var(--color-black) 94%),
+      radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.5) 72%);
+  }
+
+  @keyframes hero-slide {
+    0% {
+      opacity: 0;
+      transform: scale(1);
+    }
+    3% {
+      opacity: 1;
+    }
+    17% {
+      opacity: 1;
+    }
+    20% {
+      opacity: 0;
+      transform: scale(1.09);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 70%;
+    z-index: 1;
+    background: radial-gradient(ellipse at 50% 0%, var(--color-gold-20), transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 760px;
+  }
+
+  .hero-title,
+  .hero-sub {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 4px 28px rgba(0, 0, 0, 0.7);
+  }
+
+  .hero-logo-wrap {
+    clip-path: inset(0 100% 0 0);
+    animation: ink-reveal 1.1s var(--ease-out) 0.15s forwards;
+  }
+
+  .hero-logo {
+    width: min(78vw, 420px);
+    height: auto;
+    filter: drop-shadow(0 0 40px rgba(242, 169, 0, 0.18));
+  }
+
+  .hero-rule {
+    display: block;
+    width: 120px;
+    height: 1px;
+    margin: 1.6rem 0 1.4rem;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    transform: scaleX(0);
+    animation: draw-line var(--dur-slow) var(--ease-out) 1.05s forwards;
+  }
+
+  .hero-eyebrow,
+  .hero-title,
+  .hero-sub,
+  .hero-actions {
+    opacity: 0;
+    transform: translateY(22px);
+    animation: rise var(--dur-slow) var(--ease-out) forwards;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin: 0 0 1rem;
+    animation-delay: 1.35s;
+  }
+
+  .hero-title {
+    margin-bottom: 1rem;
+    animation-delay: 1.5s;
+  }
+
+  .hero-title em {
+    color: var(--color-gold);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    max-width: 52ch;
+    font-size: 1.05rem;
+    animation-delay: 1.65s;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.6rem;
+    animation-delay: 1.8s;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 36px;
+    border: 1px solid var(--color-hairline);
+    border-radius: 12px;
+    opacity: 0;
+    animation: rise var(--dur-slow) var(--ease-out) 2.1s forwards;
+  }
+
+  .scroll-cue span {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 3px;
+    height: 8px;
+    margin-left: -1.5px;
+    background: var(--color-gold);
+    border-radius: 2px;
+    animation: scroll-dot 1.8s ease-in-out infinite;
+  }
+
+  @keyframes ink-reveal {
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes draw-line {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scroll-dot {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 0.4;
+    }
+    100% {
+      transform: translateY(14px);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-logo-wrap,
+    .hero-rule,
+    .hero-eyebrow,
+    .hero-title,
+    .hero-sub,
+    .hero-actions,
+    .scroll-cue,
+    .scroll-cue span {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      clip-path: none !important;
+    }
+
+    .hero-bg-slide {
+      animation: none !important;
+      opacity: 0 !important;
+    }
+
+    .hero-bg-slide:first-child {
+      opacity: 1 !important;
+    }
+  }
+</style>

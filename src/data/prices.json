@@ -1,0 +1,410 @@
+{
+  "kdvNote": "Fiyatlarımıza KDV dahil değildir.",
+  "multiPiercingNote": "Bir kişi üzerinde yapılacak 700 TL’lik çelik 3 adet piercing 1800 TL, 900 TL’lik 3 adet titanyum piercing ise 2400 TL olarak fiyatlandırılır.",
+  "tattoo": {
+    "openingPrice": 750,
+    "currency": "TL",
+    "notes": [
+      "5 cm’e kadar çizgisel, detaysız minimal dövmeler makine açılış fiyatından uygulanır.",
+      "Bir kişi üzerinde uygulanacak 3 minimal dövme toplam 2000 TL olarak fiyatlandırılır.",
+      "Detaylı ve büyük dövmeler; boyut, malzeme ve işçilik detayına göre fiyatlandırılır. Net fiyat için lütfen iletişime geçin."
+    ]
+  },
+  "piercingTables": [
+    {
+      "slug": "kulak",
+      "title": "Kulak Piercingleri",
+      "rows": [
+        {
+          "name": "Lobe Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Upperlobe Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Tragus Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Anti Tragus Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Outer Conch Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Inner Conch Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Orbital Conch Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Snug Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Daith Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Helix Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Forward Helix Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Rook Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Flat Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Transverse Lobe",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Industrial Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        }
+      ]
+    },
+    {
+      "slug": "burun",
+      "title": "Burun Piercingleri",
+      "rows": [
+        {
+          "name": "Nostril Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Septum Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Erl Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Third Eye Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Mantis Piercing",
+          "steel": 900,
+          "stoneRing": 1000,
+          "titanium": 1200
+        },
+        {
+          "name": "High Nostril Piercing",
+          "steel": 900,
+          "stoneRing": 1000,
+          "titanium": 1200
+        },
+        {
+          "name": "Austin Bar Piercing",
+          "steel": 900,
+          "stoneRing": 1000,
+          "titanium": 1200
+        },
+        {
+          "name": "Rhino Piercing",
+          "steel": 900,
+          "stoneRing": 1000,
+          "titanium": 1200
+        },
+        {
+          "name": "Septril Piercing",
+          "steel": 900,
+          "stoneRing": 1000,
+          "titanium": 1200
+        },
+        {
+          "name": "Nasallang Piercing",
+          "steel": 1500,
+          "stoneRing": 1600,
+          "titanium": 1700
+        }
+      ]
+    },
+    {
+      "slug": "dudak",
+      "title": "Dudak Piercingleri",
+      "rows": [
+        {
+          "name": "Jestrum Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Medusa Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Madonna Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Monroe Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Labret Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Horizontal Lip Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Vertical Labret Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Dahlia Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Joker Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Dahlia Bites Piercing",
+          "steel": 1400,
+          "stoneRing": 1600,
+          "titanium": 1800
+        },
+        {
+          "name": "Joker Bites Piercing",
+          "steel": 1400,
+          "stoneRing": 1600,
+          "titanium": 1800
+        },
+        {
+          "name": "Snake Bites Piercing",
+          "steel": 1400,
+          "stoneRing": 1600,
+          "titanium": 1800
+        },
+        {
+          "name": "Dolphin Bites Piercing",
+          "steel": 1400,
+          "stoneRing": 1600,
+          "titanium": 1800
+        },
+        {
+          "name": "Angel Bites Piercing",
+          "steel": 1400,
+          "stoneRing": 1600,
+          "titanium": 1800
+        },
+        {
+          "name": "Cyber Bites Piercing",
+          "steel": 1400,
+          "stoneRing": 1600,
+          "titanium": 1800
+        },
+        {
+          "name": "Spider (Viper) Bites",
+          "steel": 1400,
+          "stoneRing": 1600,
+          "titanium": 1800
+        },
+        {
+          "name": "Canine Bites Piercing",
+          "steel": 2400,
+          "stoneRing": 2800,
+          "titanium": 3200
+        },
+        {
+          "name": "Shark Bites Piercing",
+          "steel": 2400,
+          "stoneRing": 2800,
+          "titanium": 3200
+        },
+        {
+          "name": "T-Rex Bites Piercing",
+          "steel": 4800,
+          "stoneRing": 5600,
+          "titanium": 6400
+        }
+      ]
+    },
+    {
+      "slug": "dil",
+      "title": "Dil Piercingleri",
+      "rows": [
+        {
+          "name": "Smiley Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Tongue Web (Marley) Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Tongue Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Venom Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Frowney Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Gum Piercing",
+          "steel": null,
+          "stoneRing": null,
+          "titanium": null,
+          "note": "Fiyat için iletişime geçin"
+        },
+        {
+          "name": "Uvula Piercing",
+          "steel": null,
+          "stoneRing": null,
+          "titanium": null,
+          "note": "Fiyat için iletişime geçin"
+        },
+        {
+          "name": "Vampire Piercing",
+          "steel": null,
+          "stoneRing": null,
+          "titanium": null,
+          "note": "Fiyat için iletişime geçin"
+        },
+        {
+          "name": "Dental Piercing",
+          "steel": null,
+          "stoneRing": null,
+          "titanium": null,
+          "note": "Fiyat için iletişime geçin"
+        }
+      ]
+    },
+    {
+      "slug": "diger",
+      "title": "Diğer Piercingler",
+      "rows": [
+        {
+          "name": "Kaş (Eyebrow) Piercing",
+          "steel": 700,
+          "stoneRing": 800,
+          "titanium": 900
+        },
+        {
+          "name": "Cheek Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Nipple Piercing",
+          "steel": 1200,
+          "stoneRing": 1300,
+          "titanium": 1500
+        },
+        {
+          "name": "Göbek (Belly) Piercing",
+          "steel": 800,
+          "stoneRing": 900,
+          "titanium": 1000
+        },
+        {
+          "name": "Dermal Piercing",
+          "steel": 1200,
+          "stoneRing": 1300,
+          "titanium": 1500
+        },
+        {
+          "name": "Genital Piercing",
+          "steel": 2000,
+          "stoneRing": 2300,
+          "titanium": 2500
+        },
+        {
+          "name": "Micro Dermal Piercing",
+          "steel": null,
+          "stoneRing": null,
+          "titanium": null,
+          "note": "Başlangıç fiyatı 1800–2500 TL arası (bölgeye göre)"
+        }
+      ]
+    }
+  ]
+}

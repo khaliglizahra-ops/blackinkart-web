@@ -1,0 +1,78 @@
+---
+import { site } from '../data/site';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [{ label: 'Ana Sayfa', href: '/' }, ...items].map((item, i, arr) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.label,
+    item: new URL(item.href ?? '', site.url).toString(),
+  })),
+};
+---
+
+<nav class="breadcrumbs" aria-label="Kırıntı navigasyonu">
+  <ol>
+    <li><a href="/">Ana Sayfa</a></li>
+    {items.map((item, i) => (
+      <li>
+        <span aria-hidden="true">/</span>
+        {item.href && i < items.length - 1 ? (
+          <a href={item.href}>{item.label}</a>
+        ) : (
+          <span aria-current="page">{item.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+<style>
+  .breadcrumbs {
+    padding-block: 1rem 0;
+  }
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.78rem;
+    color: var(--color-ivory-faint);
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  a {
+    color: var(--color-ivory-faint);
+    transition: color var(--dur-fast);
+  }
+
+  a:hover {
+    color: var(--color-gold);
+  }
+
+  [aria-current='page'] {
+    color: var(--color-ivory-dim);
+  }
+</style>

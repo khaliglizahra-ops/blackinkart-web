@@ -1,0 +1,52 @@
+{
+  "templates": [
+    {
+      "image": "/images/tattoo-templates/mandala.png",
+      "label": "Mandala"
+    },
+    {
+      "image": "/images/tattoo-templates/pusula.png",
+      "label": "Pusula"
+    },
+    {
+      "image": "/images/tattoo-templates/ay-yildiz.png",
+      "label": "Ay ve Yıldız"
+    },
+    {
+      "image": "/images/tattoo-templates/kuslar.png",
+      "label": "Kuşlar"
+    },
+    {
+      "image": "/images/tattoo-templates/dag-manzara.png",
+      "label": "Dağ Manzarası"
+    },
+    {
+      "image": "/images/tattoo-templates/gunes.png",
+      "label": "Güneş"
+    },
+    {
+      "image": "/images/tattoo-templates/kelebek.png",
+      "label": "Kelebek"
+    },
+    {
+      "image": "/images/tattoo-templates/tuy.png",
+      "label": "Tüy"
+    },
+    {
+      "image": "/images/tattoo-templates/dalga.png",
+      "label": "Dalga"
+    },
+    {
+      "image": "/images/tattoo-templates/ok.png",
+      "label": "Ok"
+    },
+    {
+      "image": "/images/tattoo-templates/yilan.png",
+      "label": "Yılan"
+    },
+    {
+      "image": "/images/tattoo-templates/kalp-atisi.png",
+      "label": "Kalp Atışı"
+    }
+  ]
+}

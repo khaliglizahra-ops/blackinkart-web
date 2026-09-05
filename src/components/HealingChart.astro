@@ -1,0 +1,114 @@
+---
+// Same figures as the markdown table on this guide, rendered as a range chart (0–12 ay)
+// so the relative healing time across regions reads at a glance.
+const MAX = 12;
+const rows = [
+  { label: 'Kulak memesi', min: 2, max: 4 },
+  { label: 'Kulak kıkırdağı', min: 4, max: 12 },
+  { label: 'Dudak', min: 2, max: 4 },
+  { label: 'Dil', min: 1, max: 2 },
+  { label: 'Burun', min: 2, max: 4 },
+  { label: 'Kaş', min: 2, max: 4 },
+  { label: 'Yanak', min: 4, max: 8 },
+  { label: 'Göbek', min: 4, max: 12 },
+  { label: 'Göğüs / Meme ucu', min: 3, max: 8 },
+  { label: 'Genital bölge', min: 0.5, max: 1.5 },
+  { label: 'Dermal', min: 3, max: 12 },
+];
+---
+
+<div class="healing-chart" data-reveal>
+  <div class="axis">
+    {[0, 3, 6, 9, 12].map((m) => <span style={`left:${(m / MAX) * 100}%`}>{m} ay</span>)}
+  </div>
+  {rows.map((r) => (
+    <div class="row">
+      <span class="label">{r.label}</span>
+      <div class="track">
+        <div
+          class="bar"
+          style={`left:${(r.min / MAX) * 100}%; width:${((r.max - r.min) / MAX) * 100}%`}
+        ></div>
+      </div>
+      <span class="value">{r.min}–{r.max} ay</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .healing-chart {
+    margin: 2rem 0 2.5rem;
+    padding: 1.6rem 1.6rem 1rem;
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+  }
+
+  .axis {
+    position: relative;
+    height: 1.2rem;
+    margin-left: 34%;
+    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+    color: var(--color-ivory-faint);
+  }
+
+  .axis span {
+    position: absolute;
+    transform: translateX(-50%);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 34% 1fr auto;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .row:first-of-type {
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .label {
+    font-size: 0.84rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .track {
+    position: relative;
+    height: 8px;
+    background: var(--color-ink-800);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, var(--color-gold-dim), var(--color-gold));
+    border-radius: 4px;
+  }
+
+  .value {
+    font-size: 0.76rem;
+    color: var(--color-ivory-faint);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 560px) {
+    .axis {
+      display: none;
+    }
+    .row {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+    .value {
+      font-size: 0.72rem;
+    }
+  }
+</style>

@@ -1,0 +1,237 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Hakkımızda ve İletişim"
+  description="Black Ink Art Tattoo Piercing'in hikayesi, Ankara Bahçelievler adresimiz, çalışma saatlerimiz ve iletişim bilgilerimiz."
+  path="/hakkimizda-iletisim"
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: 'Hakkımızda / İletişim' }]} />
+      <p class="eyebrow">Hikayemiz</p>
+      <h1>Hakkımızda</h1>
+      <div class="prose" data-reveal>
+        <p>
+          Black Ink Art, 2014 yılında piercingle başlayıp 2017'de dövmeyle genişleyen bir tutkunun
+          eseri. 2020'de Ankara Bahçelievler 7. Cadde'de kapılarını açtığımızdan bu yana, her
+          müşterinin hikâyesini dinleyip onu kalıcı bir sanat eserine dönüştürmeyi amaçlıyoruz.
+        </p>
+        <p>
+          Ekibimiz, en yüksek hijyen standartlarına bağlı kalarak, farklı tarzlarda özelleştirilmiş
+          tasarımlar üretiyor. Sizin için de hayalinizdeki dövmeyi veya piercingi tasarlamaktan
+          mutluluk duyarız — <a href="/sanatcilar/huseyin-olmez">kurucumuz Hüseyin Ölmez'in hikâyesinin devamını okuyun</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container contact-layout">
+      <div class="info-col">
+        <h2>İletişim Bilgileri</h2>
+        <ul class="info-list" data-reveal>
+          <li>
+            <span class="label">Adres</span>
+            <span class="value">{site.address.full}</span>
+          </li>
+          <li>
+            <span class="label">Telefon</span>
+            <a class="value" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
+          </li>
+          <li>
+            <span class="label">E-posta</span>
+            <a class="value" href={`mailto:${site.email}`}>{site.email}</a>
+          </li>
+          <li>
+            <span class="label">WhatsApp</span>
+            <a class="value" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">Mesaj Gönder</a>
+          </li>
+          <li>
+            <span class="label">Instagram</span>
+            <a class="value" href={site.instagram.url} target="_blank" rel="noopener">{site.instagram.handle}</a>
+          </li>
+          <li>
+            <span class="label">Piercing Takı Mağazası</span>
+            <a class="value" href={site.jewelryShopUrl} target="_blank" rel="noopener">Mağazayı Ziyaret Et ↗</a>
+          </li>
+        </ul>
+        <div class="gold-rule"></div>
+        <h3>Çalışma Saatleri</h3>
+        {site.hours.map((h) => (
+          <p class="hours"><span>{h.day}</span><span>{h.hours}</span></p>
+        ))}
+      </div>
+
+      <div class="map-col" data-reveal>
+        <iframe
+          src={site.mapsEmbedSrc}
+          title="Black Ink Art konum haritası"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container narrow">
+      <h2>Mesaj Bırakın</h2>
+      <form name="iletisim" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form" data-reveal>
+        <input type="hidden" name="form-name" value="iletisim" />
+        <p class="honeypot"><label>Bu alanı boş bırakın: <input name="bot-field" /></label></p>
+        <div class="field-row">
+          <label>
+            Ad Soyad
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            Telefon veya E-posta
+            <input type="text" name="contact" required />
+          </label>
+        </div>
+        <label>
+          Mesajınız
+          <textarea name="message" rows="5" required></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary">Gönder</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 780px;
+  }
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  h2 {
+    margin-bottom: 1.2rem;
+  }
+
+  .info-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .info-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    padding-bottom: 0.7em;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ivory-faint);
+  }
+
+  .value {
+    color: var(--color-ivory);
+    font-size: 0.98rem;
+  }
+
+  a.value {
+    color: var(--color-gold);
+  }
+
+  h3 {
+    font-size: 1rem;
+  }
+
+  .hours {
+    display: flex;
+    justify-content: space-between;
+    max-width: 320px;
+    font-size: 0.9rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .map-col {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-hairline);
+    min-height: 360px;
+  }
+
+  .map-col iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    border: 0;
+    filter: grayscale(0.3) invert(0.92) contrast(0.9);
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+  }
+
+  input,
+  textarea {
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    padding: 0.8em 1em;
+    color: var(--color-ivory);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    transition: border-color var(--dur-fast);
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-gold);
+  }
+
+  .contact-form .btn {
+    align-self: flex-start;
+  }
+
+  @media (max-width: 800px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

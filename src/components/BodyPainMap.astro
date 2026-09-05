@@ -1,0 +1,123 @@
+---
+// Stylised (not anatomically literal) front-body diagram marking relative tattoo pain zones,
+// referenced from the "Dövme Acısı" guide. Colour = intensity, all within the gold/ivory palette.
+
+const zones = [
+  { label: 'Boyun', x: 100, cy: 62, tier: 'high' },
+  { label: 'Kaburga', x: 82, cy: 150, tier: 'high' },
+  { label: 'Dirsek içi', x: 46, cy: 168, tier: 'high' },
+  { label: 'El', x: 30, cy: 230, tier: 'high' },
+  { label: 'Omuz', x: 128, cy: 92, tier: 'mid' },
+  { label: 'Uyluk', x: 88, cy: 268, tier: 'mid' },
+  { label: 'Baldır (iç)', x: 90, cy: 330, tier: 'mid' },
+  { label: 'Üst kol (dış)', x: 138, cy: 140, tier: 'low' },
+  { label: 'Ön kol', x: 150, cy: 190, tier: 'low' },
+  { label: 'Baldır (dış)', x: 122, cy: 330, tier: 'low' },
+];
+
+const tierMeta: Record<string, { color: string; label: string }> = {
+  low: { color: 'var(--color-gold-dim)', label: 'Daha az hassas' },
+  mid: { color: 'var(--color-gold)', label: 'Orta hassasiyet' },
+  high: { color: 'var(--color-gold-bright)', label: 'Daha hassas' },
+};
+---
+
+<div class="pain-map" data-reveal>
+  <svg viewBox="0 0 200 380" role="img" aria-label="Vücut bölgelerine göre dövme acı hassasiyet şeması">
+    <g stroke="var(--color-hairline)" stroke-width="1.5" fill="none" opacity="0.9">
+      <circle cx="100" cy="30" r="22" />
+      <path d="M85 50 L85 66 M115 50 L115 66" />
+      <path d="M70 66 h60 a10 10 0 0 1 10 10 v90 a10 10 0 0 1 -10 10 h-60 a10 10 0 0 1 -10 -10 v-90 a10 10 0 0 1 10 -10 Z" />
+      <path d="M70 90 L28 100 L22 235" stroke-linecap="round" />
+      <path d="M130 90 L172 100 L178 235" stroke-linecap="round" />
+      <path d="M84 176 L74 340 L74 372" stroke-linecap="round" />
+      <path d="M116 176 L126 340 L126 372" stroke-linecap="round" />
+    </g>
+    {zones.map((z) => (
+      <circle cx={z.x} cy={z.cy} r="6" fill={tierMeta[z.tier].color} opacity="0.9" />
+    ))}
+  </svg>
+
+  <div class="pain-legend">
+    {(['low', 'mid', 'high'] as const).map((tier) => (
+      <div class="legend-row">
+        <span class="dot" style={`background:${tierMeta[tier].color}`}></span>
+        <span>{tierMeta[tier].label}</span>
+      </div>
+    ))}
+    <ul class="zone-list">
+      {zones.map((z) => (
+        <li><span class="dot small" style={`background:${tierMeta[z.tier].color}`}></span>{z.label}</li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .pain-map {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 1.8rem;
+    margin: 2rem 0;
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+  }
+
+  .pain-map svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+    margin-bottom: 0.5em;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot.small {
+    width: 7px;
+    height: 7px;
+  }
+
+  .zone-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0.9rem 0 0;
+    border-top: 1px solid var(--color-hairline);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5em 1.2em;
+    font-size: 0.82rem;
+    color: var(--color-ivory-faint);
+  }
+
+  .zone-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  @media (max-width: 560px) {
+    .pain-map {
+      grid-template-columns: 140px 1fr;
+      gap: 1.2rem;
+      padding: 1.4rem;
+    }
+    .zone-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+import ArtBackground from './ArtBackground.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  breadcrumbs: { label: string; href?: string }[];
+  image?: string;
+  art?: 'flow' | 'radiate' | 'steps' | 'waves' | 'bodymap' | 'ornament' | 'scatter' | 'lattice';
+  seed?: number;
+}
+
+const { eyebrow, title, breadcrumbs, image, art, seed = 3 } = Astro.props;
+---
+
+<header class="guide-hero">
+  {image ? (
+    <div class="guide-hero-bg" style={`background-image:url(${image})`}></div>
+  ) : (
+    <ArtBackground variant={art ?? 'flow'} seed={seed} />
+  )}
+  <div class="guide-hero-overlay"></div>
+  <div class="container guide-hero-inner">
+    <Breadcrumbs items={breadcrumbs} />
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+  </div>
+</header>
+
+<style>
+  .guide-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 46vh;
+    display: flex;
+    align-items: flex-end;
+    padding-top: 5.5rem;
+  }
+
+  .guide-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 30%;
+    filter: saturate(0.85) brightness(0.85);
+    transform: scale(1.02);
+  }
+
+  .guide-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.55) 40%, var(--color-black) 96%);
+  }
+
+  .guide-hero-inner {
+    position: relative;
+    padding-bottom: 2.6rem;
+  }
+
+  .guide-hero :global(.breadcrumbs) {
+    padding-block: 0 0.6rem;
+  }
+
+  .guide-hero :global(.breadcrumbs a),
+  .guide-hero :global(.breadcrumbs span) {
+    color: var(--color-ivory-dim);
+  }
+
+  .eyebrow {
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-hero h1 {
+    max-width: 18ch;
+    margin-bottom: 0;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
+  }
+
+  @media (max-width: 640px) {
+    .guide-hero {
+      min-height: 38vh;
+    }
+  }
+</style>

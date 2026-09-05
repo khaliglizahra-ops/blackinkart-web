@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Çerez Politikası"
+  description="Black Ink Art Tattoo Piercing web sitesinde kullanılan çerezler hakkında bilgilendirme."
+  path="/cerez-politikasi"
+  noindex={true}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: 'Çerez Politikası' }]} />
+      <p class="eyebrow">Yasal</p>
+      <h1>Çerez Politikası</h1>
+      <div class="prose">
+        <p>
+          Bu web sitesi, ziyaretçilerine daha iyi bir deneyim sunmak amacıyla sınırlı sayıda çerez
+          (cookie) ve benzeri teknolojiler kullanabilir.
+        </p>
+
+        <h2>Kullandığımız Çerez Türleri</h2>
+        <ul>
+          <li>
+            <strong>Zorunlu çerezler:</strong> Sitenin temel işlevlerini (ör. mobil menü durumu)
+            çalıştırmak için gereklidir; kapatılamaz.
+          </li>
+          <li>
+            <strong>Randevu ve harici içerik çerezleri:</strong> Randevu takvimi (Cal.com) ve harita
+            (Google Maps) gibi gömülü içerikler, kendi çerezlerini kullanabilir. Bu çerezler ilgili
+            üçüncü tarafların gizlilik politikalarına tabidir.
+          </li>
+          <li>
+            <strong>Analitik çerezler:</strong> Sitenin nasıl kullanıldığını anlamak için ileride
+            anonim istatistik araçları eklenmesi durumunda kullanılabilir.
+          </li>
+        </ul>
+
+        <h2>Çerezleri Yönetme</h2>
+        <p>
+          Tarayıcınızın ayarlarından çerezleri silebilir veya engelleyebilirsiniz. Ancak bazı
+          çerezlerin engellenmesi, randevu takvimi gibi bazı özelliklerin düzgün çalışmamasına neden
+          olabilir.
+        </p>
+
+        <h2>İletişim</h2>
+        <p>Çerez kullanımıyla ilgili sorularınız için {site.email} adresinden bize ulaşabilirsiniz.</p>
+
+        <blockquote>
+          Bu metin genel bir bilgilendirme amacıyla hazırlanmıştır; yayınlanmadan önce bir hukuk
+          danışmanı tarafından gözden geçirilmesi önerilir.
+        </blockquote>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+</style>

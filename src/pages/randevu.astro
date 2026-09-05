@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../data/site';
+
+const calEmbedUrl = `${site.calcomUrl}?theme=dark&layout=month_view`;
+---
+
+<BaseLayout
+  title="Randevu Al"
+  description="Black Ink Art Tattoo Piercing'de online takvim üzerinden dövme veya piercing randevunuzu hemen alın."
+  path="/randevu"
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: 'Randevu' }]} />
+      <p class="eyebrow">Randevu</p>
+      <h1>Randevunuzu Alın</h1>
+      <p class="lead">
+        Uygun tarih ve saati seçin, randevunuz anında onaylansın. Depozito gerekmez.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="booking-layout">
+        <div class="calendar-wrap surface" data-reveal>
+          <iframe
+            src={calEmbedUrl}
+            title="Randevu takvimi"
+            loading="lazy"
+            allow="camera; microphone; autoplay; encrypted-media;"
+          ></iframe>
+          <noscript>
+            <p class="fallback-note">Takvimi görüntülemek için lütfen <a href={site.calcomUrl} target="_blank" rel="noopener">bu bağlantıyı</a> kullanın.</p>
+          </noscript>
+        </div>
+
+        <aside class="alt-contact">
+          <h2>Takvim Açılmıyorsa</h2>
+          <p>Aşağıdaki kanallardan bize doğrudan ulaşabilirsiniz:</p>
+          <ul>
+            <li>
+              <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener" class="contact-link">
+                <span class="label">WhatsApp</span>
+                <span class="value">{site.phone}</span>
+              </a>
+            </li>
+            <li>
+              <a href={site.instagram.url} target="_blank" rel="noopener" class="contact-link">
+                <span class="label">Instagram</span>
+                <span class="value">{site.instagram.handle}</span>
+              </a>
+            </li>
+            <li>
+              <a href={`tel:${site.phone.replace(/\s/g, '')}`} class="contact-link">
+                <span class="label">Telefon</span>
+                <span class="value">{site.phone}</span>
+              </a>
+            </li>
+          </ul>
+          <div class="gold-rule"></div>
+          <h3>Adres</h3>
+          <p>{site.address.full}</p>
+          {site.hours.map((h) => (
+            <p class="hours"><span>{h.day}</span><span>{h.hours}</span></p>
+          ))}
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 780px;
+  }
+
+  .lead {
+    max-width: 56ch;
+  }
+
+  .booking-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .calendar-wrap {
+    overflow: hidden;
+    min-height: 720px;
+    display: flex;
+  }
+
+  .calendar-wrap iframe {
+    width: 100%;
+    min-height: 720px;
+    border: 0;
+  }
+
+  .fallback-note {
+    padding: 2rem;
+  }
+
+  .fallback-note a {
+    color: var(--color-gold);
+  }
+
+  .alt-contact {
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    padding: 1.8rem;
+  }
+
+  .alt-contact h2 {
+    font-size: 1.3rem;
+  }
+
+  .alt-contact ul {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .contact-link {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7em 0;
+    border-bottom: 1px solid var(--color-hairline);
+    font-size: 0.9rem;
+  }
+
+  .contact-link .label {
+    color: var(--color-ivory-faint);
+  }
+
+  .contact-link .value {
+    color: var(--color-gold);
+  }
+
+  .alt-contact h3 {
+    font-size: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .hours {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+    margin-bottom: 0.4em;
+  }
+
+  @media (max-width: 900px) {
+    .booking-layout {
+      grid-template-columns: 1fr;
+    }
+    .calendar-wrap,
+    .calendar-wrap iframe {
+      min-height: 600px;
+    }
+  }
+</style>

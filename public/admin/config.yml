@@ -1,0 +1,263 @@
+# Black Ink Art — yönetim paneli yapılandırması
+# Panelde yapılan her değişiklik GitHub deposuna kaydedilir; Netlify siteyi
+# otomatik olarak yeniden yayınlar (genellikle 1-2 dakika).
+
+backend:
+  name: github
+  repo: KULLANICI_ADINIZ/blackinkart-web   # <-- GitHub deposu bağlanınca güncellenecek
+  branch: main
+
+locale: tr
+publish_mode: simple
+
+site_url: https://www.blackinkart.com.tr
+display_url: https://www.blackinkart.com.tr
+logo_url: /brand/logo-mark.png
+
+# Tüm site görselleri tek klasörde — böylece mevcut fotoğraflar da panelden seçilebilir.
+media_folder: public/images
+public_folder: /images
+
+collections:
+  # ------------------------------------------------------------------ FİYATLAR
+  - name: fiyatlar
+    label: Fiyatlar
+    files:
+      - name: fiyat_listesi
+        label: Fiyat Listesi
+        file: src/data/prices.json
+        description: Dövme açılış fiyatı ve tüm piercing fiyat tabloları.
+        fields:
+          - { name: kdvNote, label: KDV notu, widget: string }
+          - { name: multiPiercingNote, label: Çoklu piercing notu, widget: text }
+          - name: tattoo
+            label: Dövme Fiyatlandırma
+            widget: object
+            fields:
+              - { name: openingPrice, label: Makine açılış fiyatı (TL), widget: number, value_type: int, min: 0 }
+              - { name: currency, label: Para birimi, widget: string, default: TL }
+              - name: notes
+                label: Fiyat notları
+                widget: list
+                field: { name: note, label: Not, widget: text }
+          - name: piercingTables
+            label: Piercing Fiyat Tabloları
+            label_singular: Tablo
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { name: title, label: Tablo başlığı, widget: string }
+              - name: slug
+                label: Tablo kimliği
+                widget: select
+                options: [kulak, burun, dudak, dil, diger]
+                hint: Bölge sayfalarının hangi tabloyu göstereceğini belirler — değiştirmeyin.
+              - name: rows
+                label: Satırlar
+                label_singular: Uygulama
+                widget: list
+                summary: '{{fields.name}}'
+                fields:
+                  - { name: name, label: Uygulama adı, widget: string }
+                  - { name: steel, label: Cerrahi çelik (TL), widget: number, value_type: int, required: false, min: 0 }
+                  - { name: stoneRing, label: Taşlı & Ring (TL), widget: number, value_type: int, required: false, min: 0 }
+                  - { name: titanium, label: Titanyum (TL), widget: number, value_type: int, required: false, min: 0 }
+                  - { name: note, label: Fiyat yerine gösterilecek not, widget: string, required: false, hint: 'Örn. "Fiyat için iletişime geçin". Doldurulursa fiyatların yerine bu yazı görünür.' }
+
+  # ----------------------------------------------------------------- SANATÇILAR
+  - name: sanatcilar
+    label: Sanatçılar
+    label_singular: Sanatçı
+    folder: src/content/sanatcilar
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    summary: '{{name}}'
+    fields:
+      - { name: name, label: Ad Soyad, widget: string }
+      - { name: role, label: Ünvan, widget: string, default: 'Dövme ve Piercing Sanatçısı' }
+      - { name: since, label: Mesleğe başlangıç yılı, widget: string }
+      - { name: photo, label: Fotoğraf, widget: image }
+      - { name: description, label: Kısa tanıtım, widget: text, hint: Sanatçılar sayfasındaki kartta ve arama sonuçlarında görünür. }
+      - { name: body, label: Biyografi, widget: markdown }
+
+  # -------------------------------------------------------------- DÖVME REHBERİ
+  - name: dovme-rehberi
+    label: Dövme Rehberi
+    label_singular: Dövme yazısı
+    folder: src/content/dovme-rehberi
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    summary: '{{order}} — {{title}}'
+    fields:
+      - { name: title, label: Başlık, widget: string }
+      - { name: description, label: Arama motoru açıklaması, widget: text, hint: Google sonuçlarında görünen 1-2 cümlelik özet. }
+      - { name: order, label: Sıra, widget: number, value_type: int, min: 1 }
+      - { name: updatedAt, label: Güncelleme tarihi, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - { name: heroImage, label: Üst görsel (fotoğraf), widget: image, required: false, hint: Boş bırakılırsa aşağıdaki desen kullanılır. }
+      - name: heroArt
+        label: Üst görsel (desen)
+        widget: select
+        required: false
+        options: [flow, radiate, steps, waves, bodymap, ornament, scatter, lattice]
+      - { name: heroSeed, label: Desen varyasyonu, widget: number, value_type: int, required: false }
+      - { name: body, label: İçerik, widget: markdown }
+
+  # ------------------------------------------------------------ PIERCING REHBERİ
+  - name: piercing-rehberi
+    label: Piercing Rehberi
+    label_singular: Piercing yazısı
+    folder: src/content/piercing-rehberi
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    summary: '{{order}} — {{title}}'
+    fields:
+      - { name: title, label: Başlık, widget: string }
+      - { name: description, label: Arama motoru açıklaması, widget: text }
+      - { name: order, label: Sıra, widget: number, value_type: int, min: 1 }
+      - { name: updatedAt, label: Güncelleme tarihi, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - { name: heroImage, label: Üst görsel (fotoğraf), widget: image, required: false }
+      - name: heroArt
+        label: Üst görsel (desen)
+        widget: select
+        required: false
+        options: [flow, radiate, steps, waves, bodymap, ornament, scatter, lattice]
+      - { name: heroSeed, label: Desen varyasyonu, widget: number, value_type: int, required: false }
+      - { name: body, label: İçerik, widget: markdown }
+
+  # ---------------------------------------------------------- PIERCING BÖLGELERİ
+  - name: piercing-bolgeleri
+    label: Piercing Bölgeleri
+    label_singular: Bölge sayfası
+    folder: src/content/piercing-bolgeleri
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    summary: '{{order}} — {{title}}'
+    fields:
+      - { name: title, label: Başlık, widget: string }
+      - { name: description, label: Arama motoru açıklaması, widget: text }
+      - { name: order, label: Sıra, widget: number, value_type: int, min: 1 }
+      - { name: updatedAt, label: Güncelleme tarihi, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - name: priceSlug
+        label: Fiyat tablosu
+        widget: select
+        options: [kulak, burun, dudak, dil, diger]
+        hint: Bu sayfada hangi fiyat tablosunun gösterileceği.
+      - { name: healingTime, label: İyileşme süresi, widget: string, hint: 'Örn. "2 – 4 ay"' }
+      - name: painLevel
+        label: Acı seviyesi
+        widget: select
+        options: ['Düşük', 'Orta', 'Orta-Yüksek', 'Yüksek']
+      - name: photos
+        label: Fotoğraflar
+        widget: list
+        required: false
+        field: { name: image, label: Fotoğraf, widget: image }
+        hint: İlk fotoğraf sayfanın üst görseli olarak kullanılır.
+      - { name: body, label: İçerik, widget: markdown }
+
+  # ------------------------------------------------------------------ PORTFOLYO
+  - name: portfolyo
+    label: Portfolyo
+    files:
+      - name: portfolyo_listesi
+        label: Portfolyo Fotoğrafları
+        file: src/data/portfolio.json
+        description: Ana sayfadaki öne çıkanlar, stil kategorileri ve stüdyo fotoğrafları.
+        fields:
+          - name: featured
+            label: Öne Çıkanlar
+            widget: list
+            field: { name: image, label: Fotoğraf, widget: image }
+            hint: Ana sayfada ve portfolyo sayfasının üstünde gösterilir.
+          - name: categories
+            label: Stil Kategorileri
+            label_singular: Kategori
+            widget: list
+            summary: '{{fields.label}}'
+            fields:
+              - { name: label, label: Kategori adı, widget: string, hint: 'Portfolyo sayfasındaki filtre butonunda görünen isim.' }
+              - { name: key, label: Kategori kimliği, widget: string, hint: 'Boşluksuz, küçük harf. Örn. black-work' }
+              - name: images
+                label: Fotoğraflar
+                widget: list
+                field: { name: image, label: Fotoğraf, widget: image }
+          - name: studio
+            label: Stüdyo Fotoğrafları
+            widget: list
+            field: { name: image, label: Fotoğraf, widget: image }
+            hint: Ana sayfa ve Hijyen ve Güvenlik sayfasında gösterilir.
+
+  # -------------------------------------------------------------- 3D TASARIMLAR
+  - name: sablonlar
+    label: 3D Hazır Tasarımlar
+    files:
+      - name: tasarim_listesi
+        label: Hazır Dövme Tasarımları
+        file: src/data/templates.json
+        description: 3D önizleme aracında müşterilerin deneyebildiği hazır tasarımlar.
+        fields:
+          - name: templates
+            label: Tasarımlar
+            label_singular: Tasarım
+            widget: list
+            summary: '{{fields.label}}'
+            fields:
+              - { name: label, label: Tasarım adı, widget: string }
+              - { name: image, label: Tasarım görseli (şeffaf PNG), widget: image, hint: 'Arka planı şeffaf PNG yükleyin; siyah çizgili tasarımlar en iyi sonucu verir.' }
+
+  # ------------------------------------------------------- İLETİŞİM VE AYARLAR
+  - name: ayarlar
+    label: İletişim ve Saatler
+    files:
+      - name: iletisim
+        label: Stüdyo Bilgileri
+        file: src/data/site.json
+        description: Telefon, WhatsApp, Instagram, adres, çalışma saatleri ve randevu linki.
+        fields:
+          - { name: name, label: İşletme adı, widget: string }
+          - { name: shortName, label: Kısa ad, widget: string }
+          - { name: founder, label: Kurucu, widget: string }
+          - { name: tagline, label: Slogan, widget: string }
+          - { name: description, label: Site açıklaması (SEO), widget: text }
+          - { name: url, label: Site adresi, widget: string, hint: 'Örn. https://www.blackinkart.com.tr' }
+          - { name: phone, label: Telefon, widget: string }
+          - { name: whatsapp, label: WhatsApp numarası, widget: string, hint: 'Sadece rakam, ülke kodu ile: 905xxxxxxxxx' }
+          - { name: email, label: E-posta, widget: string }
+          - name: instagram
+            label: Instagram
+            widget: object
+            fields:
+              - { name: handle, label: Kullanıcı adı, widget: string }
+              - { name: url, label: Profil adresi, widget: string }
+          - name: address
+            label: Adres
+            widget: object
+            fields:
+              - { name: streetAddress, label: Sokak / cadde, widget: string }
+              - { name: addressLocality, label: Semt / ilçe, widget: string }
+              - { name: addressRegion, label: İl, widget: string }
+              - { name: postalCode, label: Posta kodu, widget: string }
+              - { name: addressCountry, label: Ülke kodu, widget: string, default: TR }
+              - { name: full, label: Tam adres (sitede görünen), widget: string }
+          - { name: mapsEmbedSrc, label: Google Haritalar embed linki, widget: string }
+          - name: geo
+            label: Harita koordinatları
+            widget: object
+            fields:
+              - { name: latitude, label: Enlem, widget: number, value_type: float }
+              - { name: longitude, label: Boylam, widget: number, value_type: float }
+          - name: hours
+            label: Çalışma Saatleri
+            label_singular: Gün
+            widget: list
+            summary: '{{fields.day}} — {{fields.hours}}'
+            fields:
+              - { name: day, label: Gün(ler), widget: string }
+              - { name: hours, label: Saatler, widget: string }
+          - { name: calcomUrl, label: Cal.com randevu linki, widget: string }
+          - { name: jewelryShopUrl, label: Piercing takı mağazası adresi, widget: string }
+          - { name: googleBusinessUrl, label: Google İşletme Profili linki, widget: string, required: false }

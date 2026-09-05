@@ -1,0 +1,180 @@
+"""Rebuild the male body from male anthropometry, not by patching the neutral base.
+
+The base mesh supplies topology, head, hands and feet. The torso and limb *volumes* are
+then retargeted: every vertex is expressed in cylindrical coordinates around the body's
+own axis and its radius is replaced by a target profile derived from male body
+measurements (shoulder / chest / waist / hip breadth and depth), with anatomical
+modulation by angle (pecs at the front, lats at the sides, glutes at the back).
+"""
+import numpy as np
+
+BASE, TDIR, OUT = "body-source/mh_base.obj", "body-source", "../public/models/human-body-male.obj"
+
+raw = open(BASE).read().split("\n")
+BV, bvidx = [], []
+for i, l in enumerate(raw):
+    if l.startswith("v "):
+        BV.append([float(t) for t in l.split()[1:4]]); bvidx.append(i)
+BV = np.array(BV)
+
+
+def target(name, w=1.0):
+    d = np.zeros_like(BV)
+    for l in open(f"{TDIR}/{name}"):
+        if l.startswith("#") or not l.strip():
+            continue
+        p = l.split()
+        if len(p) >= 4:
+            d[int(p[0])] = [float(p[1]), float(p[2]), float(p[3])]
+    return d * w
+
+
+def extract_body(P):
+    src = list(raw)
+    for k, i in enumerate(bvidx):
+        src[i] = f"v {P[k,0]:.6f} {P[k,1]:.6f} {P[k,2]:.6f}"
+    verts, uvs, faces, group = [], [], [], None
+    for l in src:
+        if l.startswith("v "): verts.append([float(t) for t in l.split()[1:4]])
+        elif l.startswith("vt "): uvs.append(l)
+        elif l.startswith("g "): group = l[2:].strip()
+        elif l.startswith("f ") and group == "body": faces.append(l)
+    uv_i, v_i, out_faces = {}, {}, []
+    for f in faces:
+        parts = []
+        for p in f.split()[1:]:
+            c = p.split("/"); vi = int(c[0]); ti = int(c[1])
+            if vi not in v_i: v_i[vi] = len(v_i) + 1
+            if ti not in uv_i: uv_i[ti] = len(uv_i) + 1
+            parts.append(f"{v_i[vi]}/{uv_i[ti]}")
+        out_faces.append("f " + " ".join(parts))
+    inv_v = {n: o for o, n in v_i.items()}; inv_t = {n: o for o, n in uv_i.items()}
+    V = np.array([verts[inv_v[i] - 1] for i in range(1, len(v_i) + 1)])
+    U = [uvs[inv_t[i] - 1] for i in range(1, len(uv_i) + 1)]
+    return V, U, out_faces
+
+
+def sstep(t):
+    t = np.clip(t, 0, 1)
+    return t * t * (3 - 2 * t)
+
+
+# ---------------------------------------------------------------- male profile
+# Breadth / depth half-measures as fractions of stature, athletic male build.
+#            fy      half-width   half-depth
+PROFILE = [(0.455, 0.0855, 0.0700),   # hips / seat
+           (0.500, 0.0870, 0.0690),   # widest pelvis
+           (0.560, 0.0790, 0.0630),   # lower abdomen
+           (0.620, 0.0725, 0.0580),   # waist (narrowest)
+           (0.680, 0.0810, 0.0640),   # lower ribs
+           (0.720, 0.0930, 0.0690),   # chest
+           (0.770, 0.0975, 0.0670),   # upper chest
+           (0.820, 0.0960, 0.0600),   # shoulder girdle
+           (0.860, 0.0620, 0.0470)]   # base of the neck
+PF = np.array([p[0] for p in PROFILE])
+PW = np.array([p[1] for p in PROFILE])
+PD = np.array([p[2] for p in PROFILE])
+
+male = BV + target("t_male.target", 1.0) + target("t_prop_m.target", 0.45)
+V, U, F = extract_body(male)
+
+minY, maxY = V[:, 1].min(), V[:, 1].max()
+H = maxY - minY
+fy = (V[:, 1] - minY) / H
+ax = np.abs(V[:, 0])
+ARM = ax > 1.95
+
+# torso centre line in depth, measured from the mesh and smoothed
+zc = np.zeros_like(fy)
+grid = np.linspace(0.40, 0.90, 60)
+vals = []
+for g in grid:
+    m = (np.abs(fy - g) < 0.02) & (~ARM)
+    vals.append(np.median(V[m, 2]) if m.sum() > 8 else np.nan)
+vals = np.array(vals)
+ok = ~np.isnan(vals)
+zc = np.interp(fy, grid[ok], vals[ok])
+
+torso = (~ARM) & (fy > 0.435) & (fy < 0.875)
+dx = V[:, 0]
+dz = V[:, 2] - zc
+r = np.hypot(dx, dz)
+th = np.arctan2(dz, np.maximum(np.abs(dx), 1e-9) * np.sign(np.where(dx == 0, 1, dx)))
+theta = np.arctan2(dz, dx)                      # 0 = right side, +pi/2 = front, -pi/2 = back
+
+a = np.interp(fy, PF, PW) * H                   # target half-width
+b = np.interp(fy, PF, PD) * H                   # target half-depth
+ct, st = np.cos(theta), np.sin(theta)
+R = (a * b) / np.sqrt((b * ct) ** 2 + (a * st) ** 2 + 1e-9)
+
+front = np.clip(st, 0, 1)
+back = np.clip(-st, 0, 1)
+side = np.abs(ct)
+
+mod = np.zeros_like(R)
+mod += 0.085 * front * sstep((fy - 0.700) / 0.035) * sstep((0.800 - fy) / 0.035)   # pectorals
+mod -= 0.045 * front * sstep((fy - 0.575) / 0.045) * sstep((0.675 - fy) / 0.045)   # flat abdomen
+mod += 0.070 * side * sstep((fy - 0.655) / 0.045) * sstep((0.775 - fy) / 0.05)     # lats
+mod += 0.075 * back * sstep((fy - 0.440) / 0.03) * sstep((0.520 - fy) / 0.04)      # glutes
+mod += 0.040 * back * sstep((fy - 0.780) / 0.03) * sstep((0.865 - fy) / 0.03)      # traps
+R = R * (1 + mod)
+
+# blend: full retarget in the middle of the torso, fading at neck, hips and the armpits
+w = (sstep((fy - 0.445) / 0.05) * sstep((0.870 - fy) / 0.045))
+# only guard against the arms at the heights where they actually run alongside the torso
+near_arms = sstep((fy - 0.60) / 0.10)
+w = w * (1 - near_arms * (1 - sstep((1.95 - ax) / 0.45)))
+w = np.where(torso, w, 0.0)
+
+scale = np.where(r > 1e-6, (R / np.maximum(r, 1e-6)), 1.0)
+scale = 1 + (scale - 1) * w
+V[:, 0] = dx * scale
+V[:, 2] = zc + dz * scale
+
+# ---------------------------------------------------------------- limbs
+def limb(mask, axis_of, radius_scale):
+    """Scale a limb's cross-section around its own centre line."""
+    idx = np.where(mask)[0]
+    if not len(idx):
+        return
+    key = axis_of(idx)
+    bins = np.linspace(key.min(), key.max(), 24)
+    for lo, hi in zip(bins[:-1], bins[1:]):
+        m = idx[(key >= lo) & (key < hi)]
+        if len(m) < 6:
+            continue
+        t = np.clip((abs((lo + hi) / 2) - bins[0]) / (bins[-1] - bins[0] + 1e-9), 0, 1)
+        s = radius_scale(t)
+        for c in (1, 2) if axis_of is ax_of_arm else (0, 2):
+            cc = V[m, c].mean()
+            V[m, c] = cc + (V[m, c] - cc) * s
+
+
+def ax_of_arm(idx):
+    return np.abs(V[idx, 0])
+
+
+def ax_of_leg(idx):
+    return V[idx, 1]
+
+
+arm_mask = ARM.copy()
+limb(arm_mask, ax_of_arm, lambda t: 1.10 - 0.09 * t)          # thicker upper arm, tapering
+leg_mask = (~ARM) & (fy < 0.45)
+limb(leg_mask, ax_of_leg, lambda t: 0.99 + 0.06 * (1 - t))     # fuller thigh, trim calf/ankle
+
+with open(OUT, "w") as fh:
+    fh.write("# Black Ink Art male body — base topology, torso retargeted to male anthropometry\n")
+    for v in V: fh.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
+    for u in U: fh.write(u + "\n")
+    fh.write("\n".join(F) + "\n")
+
+torso_m = (~ARM)
+def hw(f, tol=0.02):
+    y = minY + f * H
+    sl = V[(V[:, 1] > y - tol * H) & (V[:, 1] < y + tol * H) & torso_m]
+    return np.abs(sl[:, 0]).max() if len(sl) else 0
+ch, wa, hp = hw(0.72), hw(0.62), hw(0.50)
+delt = np.abs(V[(V[:, 1] > minY + 0.80 * H) & (V[:, 1] < minY + 0.84 * H), 0]).max()
+print(f"male rebuilt: chest={ch:.2f} waist={wa:.2f} hip={hp:.2f} "
+      f"chest/waist={ch/wa:.2f} hip/chest={hp/ch:.2f} shoulder={delt:.2f}")

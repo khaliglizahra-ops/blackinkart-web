@@ -1,0 +1,41 @@
+{
+  "name": "Black Ink Art Tattoo Piercing",
+  "shortName": "Black Ink Art",
+  "founder": "Hüseyin Ölmez",
+  "tagline": "Ankara Bahçelievler’de dövme ve piercing sanatı",
+  "description": "Ankara Bahçelievler 7. Cadde’de dövme ve piercing stüdyosu. Steril ekipman, deneyimli sanatçı ve şeffaf fiyatlarla randevunuzu bugün alın.",
+  "url": "https://www.blackinkart.com.tr",
+  "address": {
+    "streetAddress": "7. Cadde",
+    "addressLocality": "Bahçelievler, Çankaya",
+    "addressRegion": "Ankara",
+    "postalCode": "06490",
+    "addressCountry": "TR",
+    "full": "Bahçelievler 7. Cadde, Çankaya/Ankara"
+  },
+  "mapsEmbedSrc": "https://www.google.com/maps?q=Bah%C3%A7elievler+7.+Cadde+Çankaya+Ankara&output=embed",
+  "geo": {
+    "latitude": 39.9208,
+    "longitude": 32.8138
+  },
+  "phone": "+90 500 000 00 00",
+  "whatsapp": "905000000000",
+  "email": "info@blackinkart.com.tr",
+  "instagram": {
+    "handle": "@blackinkart",
+    "url": "https://instagram.com/blackinkart"
+  },
+  "jewelryShopUrl": "https://www.piercingland.com",
+  "calcomUrl": "https://cal.com/blackinkart",
+  "hours": [
+    {
+      "day": "Pazartesi – Cumartesi",
+      "hours": "11:00 – 20:00"
+    },
+    {
+      "day": "Pazar",
+      "hours": "Randevu ile"
+    }
+  ],
+  "googleBusinessUrl": ""
+}

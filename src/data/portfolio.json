@@ -1,0 +1,175 @@
+{
+  "featured": [
+    "/images/portfolyo/top30/top-01.jpg",
+    "/images/portfolyo/top30/top-02.jpg",
+    "/images/portfolyo/top30/top-03.jpg",
+    "/images/portfolyo/top30/top-04.jpg",
+    "/images/portfolyo/top30/top-05.jpg",
+    "/images/portfolyo/top30/top-06.jpg",
+    "/images/portfolyo/top30/top-07.jpg",
+    "/images/portfolyo/top30/top-08.jpg",
+    "/images/portfolyo/top30/top-09.jpg",
+    "/images/portfolyo/top30/top-10.jpg",
+    "/images/portfolyo/top30/top-11.jpg",
+    "/images/portfolyo/top30/top-12.jpg",
+    "/images/portfolyo/top30/top-13.jpg",
+    "/images/portfolyo/top30/top-14.jpg",
+    "/images/portfolyo/top30/top-15.jpg",
+    "/images/portfolyo/top30/top-16.jpg",
+    "/images/portfolyo/top30/top-17.jpg",
+    "/images/portfolyo/top30/top-18.jpg",
+    "/images/portfolyo/top30/top-19.jpg",
+    "/images/portfolyo/top30/top-20.jpg",
+    "/images/portfolyo/top30/top-21.jpg",
+    "/images/portfolyo/top30/top-22.jpg",
+    "/images/portfolyo/top30/top-23.jpg",
+    "/images/portfolyo/top30/top-24.jpg",
+    "/images/portfolyo/top30/top-25.jpg",
+    "/images/portfolyo/top30/top-26.jpg",
+    "/images/portfolyo/top30/top-27.jpg",
+    "/images/portfolyo/top30/top-28.jpg",
+    "/images/portfolyo/top30/top-29.jpg",
+    "/images/portfolyo/top30/top-30.jpg"
+  ],
+  "studio": [
+    "/images/studio/studio-01.jpg",
+    "/images/studio/studio-02.jpg",
+    "/images/studio/studio-03.jpg",
+    "/images/studio/studio-04.jpg",
+    "/images/studio/studio-05.jpg",
+    "/images/studio/studio-06.jpg",
+    "/images/studio/studio-07.jpg",
+    "/images/studio/studio-08.jpg",
+    "/images/studio/studio-09.jpg",
+    "/images/studio/studio-10.jpg",
+    "/images/studio/studio-11.jpg"
+  ],
+  "categories": [
+    {
+      "key": "black-work",
+      "label": "Blackwork",
+      "images": [
+        "/images/portfolyo/black-work/black-work-01.jpg",
+        "/images/portfolyo/black-work/black-work-02.jpg",
+        "/images/portfolyo/black-work/black-work-03.jpg",
+        "/images/portfolyo/black-work/black-work-04.jpg",
+        "/images/portfolyo/black-work/black-work-05.jpg",
+        "/images/portfolyo/black-work/black-work-06.jpg",
+        "/images/portfolyo/black-work/black-work-07.jpg",
+        "/images/portfolyo/black-work/black-work-08.jpg",
+        "/images/portfolyo/black-work/black-work-09.jpg",
+        "/images/portfolyo/black-work/black-work-10.jpg",
+        "/images/portfolyo/black-work/black-work-11.jpg",
+        "/images/portfolyo/black-work/black-work-12.jpg",
+        "/images/portfolyo/black-work/black-work-13.jpg",
+        "/images/portfolyo/black-work/black-work-14.jpg"
+      ]
+    },
+    {
+      "key": "coverup-scarup",
+      "label": "Cover-up & Scar-up",
+      "images": [
+        "/images/portfolyo/coverup-scarup/coverup-01.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-02.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-03.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-04.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-05.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-06.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-07.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-08.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-09.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-10.jpg"
+      ]
+    },
+    {
+      "key": "minimaller",
+      "label": "Minimal",
+      "images": [
+        "/images/portfolyo/minimaller/minimal-01.jpg",
+        "/images/portfolyo/minimaller/minimal-02.jpg",
+        "/images/portfolyo/minimaller/minimal-03.jpg",
+        "/images/portfolyo/minimaller/minimal-04.jpg",
+        "/images/portfolyo/minimaller/minimal-05.jpg",
+        "/images/portfolyo/minimaller/minimal-06.jpg",
+        "/images/portfolyo/minimaller/minimal-07.jpg",
+        "/images/portfolyo/minimaller/minimal-08.jpg",
+        "/images/portfolyo/minimaller/minimal-09.jpg",
+        "/images/portfolyo/minimaller/minimal-10.jpg",
+        "/images/portfolyo/minimaller/minimal-11.jpg",
+        "/images/portfolyo/minimaller/minimal-12.jpg",
+        "/images/portfolyo/minimaller/minimal-13.jpg",
+        "/images/portfolyo/minimaller/minimal-14.jpg",
+        "/images/portfolyo/minimaller/minimal-15.jpg",
+        "/images/portfolyo/minimaller/minimal-16.jpg"
+      ]
+    },
+    {
+      "key": "portreler",
+      "label": "Portre",
+      "images": [
+        "/images/portfolyo/portreler/portre-01.jpg",
+        "/images/portfolyo/portreler/portre-02.jpg",
+        "/images/portfolyo/portreler/portre-03.jpg",
+        "/images/portfolyo/portreler/portre-04.jpg",
+        "/images/portfolyo/portreler/portre-05.jpg",
+        "/images/portfolyo/portreler/portre-06.jpg",
+        "/images/portfolyo/portreler/portre-07.jpg",
+        "/images/portfolyo/portreler/portre-08.jpg",
+        "/images/portfolyo/portreler/portre-09.jpg",
+        "/images/portfolyo/portreler/portre-10.jpg"
+      ]
+    },
+    {
+      "key": "renkliler",
+      "label": "Renkli",
+      "images": [
+        "/images/portfolyo/renkliler/renkli-01.jpg",
+        "/images/portfolyo/renkliler/renkli-02.jpg",
+        "/images/portfolyo/renkliler/renkli-03.jpg",
+        "/images/portfolyo/renkliler/renkli-04.jpg",
+        "/images/portfolyo/renkliler/renkli-05.jpg",
+        "/images/portfolyo/renkliler/renkli-06.jpg",
+        "/images/portfolyo/renkliler/renkli-07.jpg",
+        "/images/portfolyo/renkliler/renkli-08.jpg",
+        "/images/portfolyo/renkliler/renkli-09.jpg",
+        "/images/portfolyo/renkliler/renkli-10.jpg",
+        "/images/portfolyo/renkliler/renkli-11.jpg",
+        "/images/portfolyo/renkliler/renkli-12.jpg"
+      ]
+    },
+    {
+      "key": "retrolar",
+      "label": "Retro / Old School",
+      "images": [
+        "/images/portfolyo/retrolar/retro-01.jpg",
+        "/images/portfolyo/retrolar/retro-02.jpg",
+        "/images/portfolyo/retrolar/retro-03.jpg",
+        "/images/portfolyo/retrolar/retro-04.jpg",
+        "/images/portfolyo/retrolar/retro-05.jpg",
+        "/images/portfolyo/retrolar/retro-06.jpg",
+        "/images/portfolyo/retrolar/retro-07.jpg",
+        "/images/portfolyo/retrolar/retro-08.jpg",
+        "/images/portfolyo/retrolar/retro-09.jpg",
+        "/images/portfolyo/retrolar/retro-10.jpg"
+      ]
+    },
+    {
+      "key": "yazi-dovmeleri",
+      "label": "Yazı Dövmesi",
+      "images": [
+        "/images/portfolyo/yazi-dovmeleri/yazi-01.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-02.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-03.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-04.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-05.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-06.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-07.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-08.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-09.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-10.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-11.jpg",
+        "/images/portfolyo/yazi-dovmeleri/yazi-12.jpg"
+      ]
+    }
+  ]
+}

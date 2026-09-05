@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { studioPhotos } from '../data/gallery';
+
+const certificates = [
+  {
+    title: 'Dövme Uygulayıcılığı Eğitimi',
+    issuer: 'T.C. Millî Eğitim Bakanlığı',
+    detail: '30 saatlik teorik ve uygulamalı eğitim · "Pekiyi" derece',
+    date: '2017',
+  },
+  {
+    title: 'Salgın Döneminde Hijyen Kuralları Eğitimi',
+    issuer: 'T.C. Millî Eğitim Bakanlığı · Çankaya Halk Eğitim Merkezi',
+    detail: '8 saatlik katılım belgesi',
+    date: '2022',
+  },
+  {
+    title: 'Güzellik ve Saç Bakım Hizmetlerinde Çalışanlar İçin Hijyen Eğitimi',
+    issuer: 'T.C. Millî Eğitim Bakanlığı · Çankaya Halk Eğitim Merkezi',
+    detail: '8 saatlik kurs bitirme belgesi',
+    date: '2022',
+  },
+  {
+    title: 'Gıda ve Su Sektöründe Çalışanlar İçin Hijyen Eğitimi',
+    issuer: 'T.C. Millî Eğitim Bakanlığı · Çankaya Halk Eğitim Merkezi',
+    detail: '8 saatlik kurs bitirme belgesi',
+    date: '2022',
+  },
+];
+
+const checklist = [
+  'Her uygulamada tek kullanımlık, steril paketinden müşterinin gözü önünde açılan iğne kullanılır.',
+  'Tekrar kullanılabilir metal ekipman (pens, tutucu vb.) her kullanım sonrası otoklavda sterilize edilir.',
+  'Çalışma yüzeyleri her müşteriden önce dezenfekte edilir ve tek kullanımlık örtüyle kaplanır.',
+  'Uygulama boyunca tek kullanımlık steril eldiven kullanılır.',
+  'İğne ve kesici atıklar tıbbi atık prosedürüne uygun şekilde ayrıştırılır.',
+  'Boya ve solüsyonlar tek kullanımlık potalara alınır, kalan malzeme bir sonraki müşteriye kullanılmaz.',
+];
+---
+
+<BaseLayout
+  title="Hijyen ve Güvenlik"
+  description="Black Ink Art'ta steril ekipman, otoklav sterilizasyonu ve MEB onaylı hijyen sertifikalarıyla güvenli dövme ve piercing uygulaması."
+  path="/hijyen-ve-guvenlik"
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: 'Hijyen ve Güvenlik' }]} />
+      <p class="eyebrow">Güven</p>
+      <h1>Hijyen ve Güvenlik</h1>
+      <p class="lead">
+        Dövme ve piercing, cildi delen kalıcı işlemlerdir — bu yüzden hijyen bizim için pazarlık
+        konusu değildir. Stüdyomuzda uyguladığımız standartlar ve aldığımız eğitimler aşağıdadır.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container narrow">
+      <h2>Stüdyo Standartlarımız</h2>
+      <ul class="checklist" data-reveal>
+        {checklist.map((item) => (
+          <li>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M9.55 17.6 4.9 12.95l1.4-1.4 3.25 3.25 8.15-8.15 1.4 1.4Z"/></svg>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container narrow">
+      <h2>Sertifikalarımız</h2>
+      <p class="cert-note">Gizlilik nedeniyle sertifikaların görsellerini değil, aşağıdaki bilgilerini paylaşıyoruz.</p>
+      <div class="cert-list">
+        {certificates.map((c) => (
+          <div class="cert-card surface" data-reveal>
+            <span class="cert-date">{c.date}</span>
+            <div>
+              <h3>{c.title}</h3>
+              <p class="issuer">{c.issuer}</p>
+              <p class="detail">{c.detail}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <h2>Stüdyomuzdan</h2>
+      <div class="studio-grid">
+        {studioPhotos.map((src) => (
+          <div class="tile" data-reveal>
+            <img src={src} alt="Black Ink Art stüdyo" loading="lazy" width="500" height="400" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container narrow cta surface" data-reveal>
+      <div>
+        <h3>Sorularınız mı var?</h3>
+        <p>Hijyen protokollerimiz veya stüdyomuz hakkında merak ettiklerinizi sorun.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="/randevu" class="btn btn-primary">Randevu Al</a>
+        <a href="/hakkimizda-iletisim" class="btn btn-outline">İletişime Geç</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 780px;
+  }
+
+  .lead {
+    max-width: 62ch;
+  }
+
+  h2 {
+    margin-bottom: 1.2rem;
+  }
+
+  .checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8em;
+    color: var(--color-ivory-dim);
+  }
+
+  .checklist svg {
+    flex-shrink: 0;
+    margin-top: 0.2em;
+    color: var(--color-gold);
+  }
+
+  .cert-note {
+    font-size: 0.85rem;
+    color: var(--color-ivory-faint);
+    font-style: italic;
+  }
+
+  .cert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cert-card {
+    display: flex;
+    gap: 1.2rem;
+    padding: 1.4rem 1.6rem;
+    align-items: flex-start;
+  }
+
+  .cert-date {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--color-gold);
+    flex-shrink: 0;
+    min-width: 3.2em;
+  }
+
+  .cert-card h3 {
+    margin-bottom: 0.2em;
+    font-size: 1.15rem;
+  }
+
+  .issuer {
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+    margin-bottom: 0.2em;
+  }
+
+  .detail {
+    font-size: 0.82rem;
+    color: var(--color-ivory-faint);
+    margin: 0;
+  }
+
+  .studio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.9rem;
+  }
+
+  .tile {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-hairline);
+    aspect-ratio: 5 / 4;
+  }
+
+  .tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+
+  .cta h3 {
+    margin-bottom: 0.3em;
+  }
+
+  .cta p {
+    margin: 0;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+</style>

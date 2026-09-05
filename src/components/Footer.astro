@@ -1,0 +1,133 @@
+---
+import { site, nav, legalNav } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container grid">
+    <div class="col-brand">
+      <img src="/brand/logo-mark.png" alt={site.shortName} width="200" height="93" class="footer-logo" />
+      <p>{site.tagline}.</p>
+      <p class="addr">{site.address.full}</p>
+    </div>
+
+    <div class="col">
+      <h4>Keşfet</h4>
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="col">
+      <h4>İletişim</h4>
+      <ul>
+        <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href={site.instagram.url} target="_blank" rel="noopener">{site.instagram.handle}</a></li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h4>Diğer</h4>
+      <ul>
+        <li><a href={site.jewelryShopUrl} target="_blank" rel="noopener">Piercing Takı Mağazası ↗</a></li>
+        {legalNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container bottom">
+    <p>© {year} {site.name}. Tüm hakları saklıdır.</p>
+    <p class="made-by">18 yaş altına dövme ve piercing uygulanmaz.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-ink-950);
+    border-top: 1px solid var(--color-hairline);
+    padding-block: clamp(3rem, 6vw, 5rem) 2rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .footer-logo {
+    height: 40px;
+    width: auto;
+    margin-bottom: 1rem;
+  }
+
+  .col-brand p {
+    max-width: 34ch;
+    font-size: 0.88rem;
+  }
+
+  .addr {
+    color: var(--color-ivory-faint);
+  }
+
+  h4 {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 1.1rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  ul a {
+    font-size: 0.88rem;
+    color: var(--color-ivory-dim);
+    transition: color var(--dur-fast);
+  }
+
+  ul a:hover {
+    color: var(--color-gold);
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-hairline);
+    font-size: 0.78rem;
+    color: var(--color-ivory-faint);
+  }
+
+  .bottom p {
+    margin: 0;
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .col-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

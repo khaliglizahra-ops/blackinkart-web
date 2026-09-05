@@ -1,0 +1,94 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const artists = await getCollection('sanatcilar');
+  return artists.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: entry.data.name,
+  jobTitle: entry.data.role,
+  image: new URL(entry.data.photo, site.url).toString(),
+  worksFor: { '@type': 'Organization', name: site.name },
+  description: entry.data.description,
+};
+---
+
+<BaseLayout
+  title={entry.data.name}
+  description={entry.data.description}
+  path={`/sanatcilar/${entry.slug}`}
+  image={entry.data.photo}
+  jsonLd={jsonLd}
+>
+  <section class="section-tight">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Sanatçılar', href: '/sanatcilar' }, { label: entry.data.name }]} />
+      <div class="artist-layout">
+        <div class="photo-col" data-reveal>
+          <img src={entry.data.photo} alt={entry.data.name} width="500" height="625" />
+        </div>
+        <div class="text-col">
+          <p class="eyebrow">{entry.data.role}</p>
+          <h1>{entry.data.name}</h1>
+          <p class="since">Sektörde {entry.data.since}'ten bu yana</p>
+          <div class="gold-rule"></div>
+          <div class="prose" data-reveal>
+            <Content />
+          </div>
+          <div class="actions">
+            <a href="/randevu" class="btn btn-primary">Randevu Al</a>
+            <a href="/portfolyo" class="btn btn-outline">Portfolyoyu Gör</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .artist-layout {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+
+  .photo-col img {
+    width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-hairline);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .since {
+    color: var(--color-ivory-faint);
+    font-size: 0.9rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 800px) {
+    .artist-layout {
+      grid-template-columns: 1fr;
+    }
+    .photo-col {
+      max-width: 320px;
+    }
+  }
+</style>
