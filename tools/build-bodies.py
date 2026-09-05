@@ -87,25 +87,31 @@ def male_corrections(V, F):
         y0, y1 = minY+a*H, minY+b*H; fe = f*H
         return sstep((V[:,1]-(y0-fe))/fe) * sstep(((y1+fe)-V[:,1])/fe)
 
-    # Clean chest canvas: the reference mannequin has a completely smooth chest, so the
-    # whole pectoral area is relaxed — this removes the nipples and the small areola pits
-    # in one pass. The pectoral shape itself is added afterwards by the anatomy field.
+    # Erase the nipples, keep the ribcage. The previous version relaxed the whole chest
+    # (fy 0.645–0.800) eighteen times, which did remove the nipples but also sanded the
+    # chest into a flat slab — the anatomy field then had to rebuild a pectoral from
+    # nothing, and never convincingly did. Now the smoothing is confined to the nipple
+    # band and run gently, so the underlying chest form survives for the pec to sit on.
     fyv = (V[:,1] - minY) / H
-    chest = (sstep((fyv - 0.645) / 0.035) * sstep((0.800 - fyv) / 0.035)
-             * sstep((1.55 - np.abs(V[:,0])) / 0.35)
-             * (V[:,2] > 0.55) * FADE)
-    for _ in range(18):
+    chest = (sstep((fyv - 0.702) / 0.014) * sstep((0.734 - fyv) / 0.014)
+             * sstep((np.abs(V[:,0]) - 0.60) / 0.22)
+             * sstep((1.32 - np.abs(V[:,0])) / 0.28)
+             * sstep((V[:,2] - 0.55) / 0.30) * FADE)
+    for _ in range(7):
         Q = V.copy()
         for i in np.where(chest > 0.02)[0]:
             n = neigh[i]
-            if len(n): Q[i] = V[i] + 0.55*chest[i]*(V[n].mean(axis=0) - V[i])
+            if len(n): Q[i] = V[i] + 0.45*chest[i]*(V[n].mean(axis=0) - V[i])
         V = Q
 
-    # chest is handled by the morph target now — only the body shaping remains
-    # narrower pelvis, tighter waist
-    V[:,0] *= 1 - 0.11*band(0.40, 0.585, 0.07)*FADE
-    V[:,0] *= 1 - 0.06*band(0.30, 0.42, 0.06)*FADE
-    V[:,0] *= 1 - 0.03*band(0.585, 0.685, 0.06)*FADE
+    # Silhouette. Measured on the previous build, the male read hip/chest = 1.12 and
+    # chest/waist = 1.12 — hips wider than the ribcage, which is a female proportion and
+    # was quietly working against every chest fix. An athletic male sits near hip/chest
+    # 0.95 and chest/waist 1.25, so the ribcage widens and the pelvis comes in.
+    V[:,0] *= 1 + 0.075*band(0.680, 0.790, 0.05)*FADE   # ribcage
+    V[:,0] *= 1 - 0.17*band(0.40, 0.585, 0.07)*FADE     # pelvis
+    V[:,0] *= 1 - 0.06*band(0.30, 0.42, 0.06)*FADE      # upper thigh
+    V[:,0] *= 1 - 0.05*band(0.585, 0.685, 0.06)*FADE    # waist
     return V
 
 def report(V, name):
@@ -121,9 +127,9 @@ def report(V, name):
 # ---------------- male ----------------
 # Chest comes from MakeHuman's own min-cup morph (artist-authored), not from smoothing.
 mV, mU, mF = extract_body(BV
-                          + target("t_male.target")*0.45         # male shape, not max muscle
-                          + target("t_male_weight.target")*0.40  # normal body mass
-                          + target("t_prop_m.target")*0.35
+                          + target("t_male.target")*0.58         # trains, but not a bodybuilder
+                          + target("t_male_weight.target")*0.36  # a little leaner than before
+                          + target("t_prop_m.target")*0.38
                           + target("t_chest_flat.target")*1.0)   # flat male chest
 mV = male_corrections(mV, mF)
 save(mV, mU, mF, "human-body-male.obj"); report(mV, "human-body-male.obj")

@@ -119,12 +119,31 @@ ayarlanabiliyor, sonuç PNG olarak indirilebiliyor.
   `python3 build-bodies.py` çalıştırmak yeterli.
   Not: Meta/Google reklam politikaları 3D de olsa çıplak figüre takılabilir; bu sayfanın ekran
   görüntüsünü reklamda kullanacaksanız dövmeli bölgeyi yakın plan kırpmanız işinizi kolaylaştırır.
+- **Göğüs (pektoral):** `tools/anatomy.py` içindeki `pec_plate()` göğsü BEŞGEN, ÖN YÜZÜ DÜZ bir
+  plaka olarak modelliyor — kubbe/Gauss olarak değil. Bunun sebebi ölçülebilir: erkek göğsünü
+  kadın göğsünden ayıran şey hacim değil profil tipi; merkezde tepe yapan radyal simetrik her
+  alan koni profili üretir ve "meme" gibi okunur. Kalınlık gerçek anatomik ölçüden geliyor
+  (antrenmanlı pektoral ~11 mm; modelde tepe deplasman ~12.9 mm), çünkü göğüs kavisinin çoğu
+  kaburga kafesinden yani KEMİKTEN gelir; üstüne kalın bir şişkinlik eklemek kavisi iki kez
+  saymak olur. Ayar düğmeleri `anatomy.PEC` sözlüğünde toplu; `tools/tune-chest.py` birkaç
+  ayarı yan yana render edip karşılaştırmayı sağlıyor (public/models'a hiçbir şey yazmaz).
 - **Kas rölyefi:** `tools/anatomy.py` içinde analitik bir "kas alanı" tanımlı (göğüs, karın, omuz,
   sırt, kalça, bacak kasları, köprücük kemiği, omurga oluğu...). `tools/apply-anatomy.py` bunu iki
   şekilde uyguluyor: (1) vertex'leri normal yönünde kaydırarak **gerçek geometri** (siluete etki
   eder), (2) mesh'in UV'lerinden geçirip **bump map** olarak pişirerek (`anatomy-male.jpg`,
   `anatomy-female.jpg`) gölgelemede kas tanımı. Kadın modelde ağırlıklar yumuşatılmış.
   Modelleri yeniden üretmek için sırayla: `cd tools && python3 build-bodies.py && python3 apply-anatomy.py`
+  `apply-anatomy.py` kendi girdisinin üzerine yazar; iki kez üst üste çalıştırılırsa deplasman
+  ikiye katlanırdı (pektoral 12.9 mm -> 25.8 mm, yani "biraz kaslı"dan doğrudan vücut
+  geliştiriciye). Artık dosyaya bir işaret satırı koyup ikinci çalıştırmayı reddediyor.
+- **Form incelemesi:** `tools/render-preview.py` mesh'i gri kil olarak, sıyırma ışığı altında
+  render eder (`--chest` yakın plan göğüs). Tarayıcıdaki görüntüleyici müşteri için iyi ama
+  anatomi incelemek için elverişsiz: kamerayı yerleştirmek zor, cilt dokusu yüzeyi gizler.
+  Sıyırma ışığı en sığ kabartıyı bile gölgeye çevirdiği için hatalar orada görünür.
+- **Kadın modeli dokunulmaz:** erkek için yapılan her değişiklik, kadın mesh'i ve bump map'i
+  bayt bayt aynı kalacak şekilde uygulandı (`w["pec"]`/`w["pecedge"]` kadında 0; klavikula
+  bandı genişliği gibi ortak parametreler cinsiyete göre ayrıldı). Değişiklik sonrası
+  `git diff` ile doğrulanmalı.
 - **Cilt dokusu:** `public/models/skin-color.jpg` + `skin-bump.jpg` — prosedürel olarak üretildi.
 - **Hazır tasarımlar:** `public/images/tattoo-templates/*.png` (12 adet) — sıfırdan çizilen vektör
   benzeri flash tasarımlar. Stüdyonun kendi flash çizimleri hazır olduğunda yönetim panelindeki

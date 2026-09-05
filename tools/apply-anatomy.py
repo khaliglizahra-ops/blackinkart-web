@@ -73,8 +73,23 @@ def bake_bump(V, VT, tris, field_of_point, path):
     print("  bump map ->", path, f"({filled.mean()*100:.0f}% of UV space covered)")
 
 
+MARKER = "# anatomy-applied"
+
+
 def process(name, weights, gain):
     path = f"{MODELS}/{name}"
+
+    # This script rewrites its own input. Running it twice without regenerating the mesh
+    # doubles every displacement — the pectoral goes from ~12 mm to ~25 mm, which is the
+    # difference between "trains a bit" and a bodybuilder with breasts. That is a silent
+    # failure with no error and no visible cause, so refuse instead of guessing.
+    head = open(path).readline()
+    if MARKER in head:
+        raise SystemExit(
+            f"{name} zaten deforme edilmiş. Önce 'python3 build-bodies.py' çalıştırıp\n"
+            f"mesh'i yeniden üretin, sonra bu betiği bir kez çalıştırın."
+        )
+
     V, VT, quads = load(path)
     tris = triangles(quads)
     N = vertex_normals(V, tris)
@@ -88,7 +103,7 @@ def process(name, weights, gain):
 
     Vd = V + N * (f * gain)[:, None]
     lines = open(path).read().split("\n")
-    out, k = [], 0
+    out, k = [MARKER], 0
     for l in lines:
         if l.startswith("v "):
             out.append(f"v {Vd[k,0]:.6f} {Vd[k,1]:.6f} {Vd[k,2]:.6f}"); k += 1
