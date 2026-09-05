@@ -40,7 +40,10 @@ const year = new Date().getFullYear();
 
   <div class="container bottom">
     <p>© {year} {site.name}. Tüm hakları saklıdır.</p>
-    <p class="made-by">18 yaş altına dövme ve piercing uygulanmaz.</p>
+    <p class="made-by">
+      18 yaş altına yalnızca veli veya yasal vasi eşliğinde ve onayıyla uygulama yapılır.
+      <a href="/yas-ve-onam-politikasi">Detaylar</a>
+    </p>
   </div>
 </footer>
 
@@ -110,6 +113,16 @@ const year = new Date().getFullYear();
     border-top: 1px solid var(--color-hairline);
     font-size: 0.78rem;
     color: var(--color-ivory-faint);
+  }
+
+  .made-by {
+    max-width: 62ch;
+  }
+
+  .made-by a {
+    color: var(--color-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .bottom p {
