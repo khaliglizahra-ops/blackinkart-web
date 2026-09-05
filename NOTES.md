@@ -11,12 +11,21 @@ npm run build     # dist/ klasörüne statik site üretir
 npm run preview   # üretilen build'i yerelde önizler
 ```
 
-`npm run build` sonrası oluşan **dist/** klasörünü [Netlify Drop](https://app.netlify.com/drop) sayfasına
-sürükleyip bırakarak siteyi anında yayınlayabilirsiniz (plandaki 1. adım).
+## Yayınlama ve Yönetim Paneli
+
+Site artık GitHub + Netlify üzerinden yayınlanacak şekilde hazırlandı: depoya gönderilen her
+değişiklik otomatik olarak yeniden yayınlanır. İçerik, fiyat, fotoğraf ve iletişim bilgileri
+`/admin` adresindeki **yönetim panelinden** (Decap CMS) düzenlenir — kod bilmeye gerek yoktur.
+
+Kurulum sizin GitHub ve Netlify hesaplarınızı gerektirir; adım adım anlatımı
+**[YONETIM-PANELI.md](YONETIM-PANELI.md)** dosyasında. Kurulum tamamlanana kadar `npm run build`
+çıktısı olan **dist/** klasörünü [Netlify Drop](https://app.netlify.com/drop) sayfasına sürükleyerek
+de yayınlayabilirsiniz (panel bu yöntemle çalışmaz).
 
 ## Yer Tutucu (Placeholder) Değerler — Yayın Öncesi Değiştirin
 
-Hepsi tek dosyada toplu: **`src/data/site.ts`**. İçinde şu alanlar gerçek bilgilerle değiştirilmeli:
+Hepsi tek yerde: yönetim panelindeki **İletişim ve Saatler** bölümü (dosya karşılığı
+`src/data/site.json`). Şu alanlar gerçek bilgilerle değiştirilmeli:
 
 - `url` — satın alınan gerçek alan adı
 - `phone`, `whatsapp`, `email` — gerçek iletişim bilgileri
@@ -33,8 +42,8 @@ canonical linkleri için).
 
 ## Fiyatlar
 
-Kaynak: `piercing fiyat listeleri/*.docx` (Şubat 2026). Fiyatlar `src/data/prices.ts` dosyasında
-düzenlenir — Sanity/Payload admin paneli kurulana kadar fiyat güncellemeleri buradan yapılmalı.
+Kaynak: `piercing fiyat listeleri/*.docx` (Şubat 2026). Fiyatlar artık yönetim panelindeki
+**Fiyatlar** bölümünden düzenlenir (dosya karşılığı `src/data/prices.json`).
 "Fiyatlarımıza KDV dahil değildir" notu, talebiniz üzerine olduğu gibi bırakıldı — Türkiye'de
 tüketiciye gösterilen fiyatların KDV dahil olması yasal bir gerekliliktir; yayın öncesi bir mali
 müşavire danışmanız önerilir.
@@ -71,6 +80,9 @@ hazırlayıp bana iletebilirsiniz, o zaman görselleri de ekleyebilirim.
 ## Eksik / Sizden Beklenen
 
 - Gerçek logo dosyası bulundu ve kullanıldı: `logo new/black ink art logo.png` (Masaüstü).
+- **GitHub + Netlify kurulumu** — yönetim panelinin çalışması için tek eksik adım.
+  Anlatımı: [YONETIM-PANELI.md](YONETIM-PANELI.md). Kurulumdan sonra
+  `public/admin/config.yml` içindeki `repo:` satırı gerçek `kullanıcı/depo` adıyla güncellenmeli.
 - Domain, Cal.com hesabı, Google Business Profile durumu — plandaki "owed" listesi hâlâ geçerli.
 - Sitede yer alan KVKK / Çerez Politikası / 18 Yaş ve Onam Politikası metinleri **taslaktır**; genel
   bilgilendirme amaçlıdır ve yayın öncesi bir hukuk danışmanına gösterilmesi önerilir.
@@ -95,10 +107,9 @@ ayarlanabiliyor, sonuç PNG olarak indirilebiliyor.
   mesafeye** göre söndürüyor; bu sayede omuz/koltukaltı bölgesinde mesh yırtılmıyor. Erkek modelin
   oranları antropometrik aralıkta tutuluyor (göğüs/bel ≈ 1.44, kalça/göğüs ≈ 0.92). Ham mesh
   `human-body-original.obj` olarak duruyor; oranları değiştirmek için betikteki sayıları düzenleyip
-  `python3 build-bodies.py` çalıştırmak yeterli. Görüntüleyicinin sol alt
-  köşesindeki **"Kıyafet"** düğmesi, gerektiğinde (ör. reklam görselleri, sosyal medya paylaşımı)
-  koyu bir üst/şort ekliyor. Not: Meta/Google reklam politikaları 3D de olsa çıplak figüre takılabilir;
-  reklam görselleri hazırlarken bu düğmeyi açmak işinizi kolaylaştırır.
+  `python3 build-bodies.py` çalıştırmak yeterli.
+  Not: Meta/Google reklam politikaları 3D de olsa çıplak figüre takılabilir; bu sayfanın ekran
+  görüntüsünü reklamda kullanacaksanız dövmeli bölgeyi yakın plan kırpmanız işinizi kolaylaştırır.
 - **Kas rölyefi:** `tools/anatomy.py` içinde analitik bir "kas alanı" tanımlı (göğüs, karın, omuz,
   sırt, kalça, bacak kasları, köprücük kemiği, omurga oluğu...). `tools/apply-anatomy.py` bunu iki
   şekilde uyguluyor: (1) vertex'leri normal yönünde kaydırarak **gerçek geometri** (siluete etki
@@ -107,8 +118,10 @@ ayarlanabiliyor, sonuç PNG olarak indirilebiliyor.
   Modelleri yeniden üretmek için sırayla: `cd tools && python3 build-bodies.py && python3 apply-anatomy.py`
 - **Cilt dokusu:** `public/models/skin-color.jpg` + `skin-bump.jpg` — prosedürel olarak üretildi.
 - **Hazır tasarımlar:** `public/images/tattoo-templates/*.png` (12 adet) — sıfırdan çizilen vektör
-  benzeri flash tasarımlar. Stüdyonun kendi flash çizimleri hazır olduğunda bu klasördeki dosyalar
-  değiştirilebilir; sayfadaki `templates` listesine dosya adını eklemek yeterli.
+  benzeri flash tasarımlar. Stüdyonun kendi flash çizimleri hazır olduğunda yönetim panelindeki
+  **3D Hazır Tasarımlar** bölümünden değiştirilebilir/eklenebilir (dosya karşılığı
+  `src/data/templates.json`). Şeffaf arka planlı PNG yüklemek gerekir; bu klasördeki dosyalar
+  görsel optimizasyonundan bilerek muaf tutulur, şeffaflıkları bozulmasın diye.
 - **Kendi tasarımını yükleme:** arka plan kaldırma `@imgly/background-removal` ile **tamamen
   tarayıcıda** yapılır; fotoğraf sunucuya gitmez. İlk kullanımda ~40 MB model dosyası indirilir.
 - **Gezinme:** sürükle = döndür, tekerlek (imleç görüntüleyicinin üzerindeyken) / + − düğmeleri /
@@ -131,5 +144,15 @@ değiştirilebilir — decal/rotasyon/ölçek mantığının tamamı aynen çal�
   gerekir.
 - Node sürümü: bu makinede Node 20.18.0 kurulu; Astro 5 bunu destekler (Astro 7 ise Node 22+ ister —
   bu yüzden bilinçli olarak Astro 5.18.2'de kalındı).
-- Sanity/Payload CMS entegrasyonu henüz yapılmadı — içerik şu an `src/content/` altında Markdown,
-  `src/data/prices.ts` ve `src/data/site.ts` içinde TypeScript olarak tutuluyor.
+- **İçerik yönetimi:** Decap CMS 3.16 (`public/admin/`), GitHub backend. Ayrı bir sunucu ya da
+  veritabanı yok — panel doğrudan depodaki dosyaları düzenler: `src/content/` altındaki Markdown
+  yazıları ve `src/data/{prices,site,portfolio,templates}.json`. TypeScript dosyaları
+  (`prices.ts`, `site.ts`, `gallery.ts`) artık bu JSON'ları okuyup tiplendiren ince yükleyicilerdir;
+  panelin düzenlediği veri hep JSON tarafındadır.
+- **Görsel optimizasyonu:** `scripts/optimize-images.mjs` her build'de çalışır (`npm run build`
+  zincirinde). `public/images` altındaki 1600px'i veya 400 KB'ı aşan JPEG/PNG'leri kendi formatında
+  yeniden kodlar; `tattoo-templates` klasörü hariç tutulur. Sonuçlar
+  `node_modules/.cache/image-optimize.json` içinde önbelleklenir, tekrar eden build'ler hızlıdır.
+  Böylece panelden telefon fotoğrafı yüklemek siteyi yavaşlatmaz.
+- **Netlify yapılandırması:** `netlify.toml` — build komutu, Node 22, `/admin/*` için SPA
+  yönlendirmesi, panelde `noindex` başlığı ve `/_astro/*` + `/models/*` için önbellek başlıkları.
