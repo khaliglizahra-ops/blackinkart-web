@@ -39,11 +39,16 @@ def band(v, lo, hi, soft=0.02):
 # 12.9 mm — inside the 10–14 mm band that published measurements give for a man who
 # trains but is not a bodybuilder.
 PEC = dict(
-    e_low=0.15,      # lower-border transition. Small = crisp edge, large = it disappears.
+    e_low=0.10,      # lower-border transition. Small = crisp edge, large = it disappears.
     e_up=0.40,       # upper transition into the clavicle (no real edge there)
     clav_head=0.16,  # extra thickness of the clavicular head, upper-outer
     fat_pad=0.12,    # extra thickness at the lower-outer corner (the "boxy" corner)
-    amp=0.130,       # peak displacement of the muscle itself
+    # Deliberately low. Once the ribcage carries its real barrel depth (build-bodies.py
+    # widens it in z), the bone supplies most of the chest's forward curve — which is
+    # how it works on a real body. Leaving the muscle amplitude high on top of that
+    # counts the curve twice and the chest rounds back into a breast; swept side by
+    # side, the flatter settings read unmistakably more male.
+    amp=0.080,       # peak displacement of the muscle itself
     crease=0.012,    # undercut below the free lower edge
     fossa=0.038,     # infraclavicular hollow
     dpg=0.028,       # deltopectoral groove
@@ -100,8 +105,8 @@ def pec_plate(fy, ax):
     # part) and lower-outer (the fat pad that gives a male chest its boxy corner).
     thick = (0.58
              + 0.46 * _s(u / 0.50)
-             + PEC['clav_head'] * u * np.clip(1.0 - np.abs(v - 0.82) / 0.34, 0, 1)
-             + PEC['fat_pad'] * u * np.clip(1.0 - np.abs(v - 0.20) / 0.26, 0, 1))
+             + PEC['clav_head'] * _s(u / 0.50) * np.clip(1.0 - np.abs(v - 0.82) / 0.34, 0, 1)
+             + PEC['fat_pad'] * _s(u / 0.50) * np.clip(1.0 - np.abs(v - 0.20) / 0.26, 0, 1))
     mass = plate * thick
 
     # The free lower edge lifts off the chest wall, so the shadow under it is a genuine
@@ -113,7 +118,8 @@ def pec_plate(fy, ax):
     # lower corner outlines a rounded lobe and reads as a breast, while a shadow that
     # runs straight across reads as the flat plane break we want. Anatomy texts describe
     # a body under its own light; this is a mannequin under the viewer's. Renders win.
-    crease = _s((v + 0.26) / 0.24) * (1.0 - _s((v + 0.02) / 0.20)) * np.clip(1 - u ** 1.7, 0, 1)
+    crease = (_s((v + 0.26) / 0.24) * (1.0 - _s((v + 0.02) / 0.20))
+              * np.clip(1 - u ** 1.7, 0, 1) * _s((u - 0.02) / 0.10))
     fossa = g((u - 0.74) / 0.16, (v - 0.93) / 0.11)   # Mohrenheim's fossa
     dpg = g((u - 1.02) / 0.065) * np.clip(v / 0.28, 0, 1) * np.clip((1.18 - v), 0, 1)
     return mass, crease, fossa, dpg
@@ -125,12 +131,14 @@ def anatomy_field(P, N, minY, H, weights):
     ax = np.abs(P[:, 0])
     front = np.clip(N[:, 2], 0, 1) ** 0.6
     back = np.clip(-N[:, 2], 0, 1) ** 0.6
-    side = np.clip(np.abs(N[:, 0]), 0, 1)
     w = weights
     f = np.zeros(len(P))
 
-    torso = (ax < 1.85) & (fy > 0.52)
-    arms = ax > 1.85
+    ab = w.get("arm_blend", 0.0)          # 0.0 = eski sert maskeler (kadın modeli)
+    torso = (ax < 1.85 + ab) & (fy > 0.52)
+    arms = ax > 1.85 - ab
+    tw = _s((1.85 + ab - ax) / (2 * ab)) if ab else np.ones(len(P))
+    aw = _s((ax - (1.85 - ab)) / (2 * ab)) if ab else np.ones(len(P))
     legs = (fy < 0.53) & (ax < 2.6)
 
     # ---------------- front torso ----------------
@@ -138,14 +146,8 @@ def anatomy_field(P, N, minY, H, weights):
     if t.any():
         fyt, axt, ft = fy[t], ax[t], front[t]
         v = np.zeros(t.sum())
-        # Pectoral plate. The old code used a single wide Gaussian here, which produced a
-        # horizontal swelling with no lower edge — it read as a soft breast rather than a
-        # muscle, which is exactly what kept looking wrong.
+        # Shaping and amplitudes both live in the PEC block at the top of this file.
         pec_mass, pec_crease, pec_fossa, pec_dpg = pec_plate(fyt, axt)
-        # Amplitude is set from the real thickness of the muscle, not by eye: a trained
-        # pectoralis major is about 11 mm, which at this mesh's scale and the 0.85
-        # displacement gain works out near 0.12. The previous 0.27 was adding ~2.4 cm of
-        # bulge on top of an already-curved ribcage, and that is what made it a breast.
         v += w["pec"] * PEC['amp'] * pec_mass
         v -= w["pecedge"] * PEC['crease'] * pec_crease      # step under the free lower edge
         v -= w["pecedge"] * PEC['fossa'] * pec_fossa       # hollow under the outer clavicle
@@ -153,14 +155,14 @@ def anatomy_field(P, N, minY, H, weights):
         v -= w["stern"] * 0.055 * g(axt / 0.13, (fyt - 0.752) / 0.040)           # sternum line
         v += w["clav"] * 0.10 * g((fyt - (0.818 - 0.014 * axt)) / 0.0105) \
              * band(axt, 0.10, w["clav_out"], w["clav_soft"])
-        for cy in (0.672, 0.6425, 0.613):                                          # abdominal rows
+        for cy in (0.672, 0.6425, 0.613)[:w.get("abs_rows", 3)]:                                          # abdominal rows
             v += w["abs"] * 0.14 * g((axt - 0.30) / 0.195, (fyt - cy) / 0.0145)
-        for cy in (0.6575, 0.628, 0.599):                                          # transverse grooves
+        for cy in (0.6575, 0.628, 0.599)[:w.get("abs_rows", 3)]:                                          # transverse grooves
             v -= w["abs"] * 0.08 * g((fyt - cy) / 0.0068) * band(axt, 0.05, 0.62, 0.12)
         v -= w["abs"] * 0.09 * g(axt / 0.075) * band(fyt, 0.565, 0.700, 0.03)      # linea alba
         v += w["obliq"] * 0.11 * g((axt - 0.82) / 0.27, (fyt - 0.605) / 0.045)
         v += w["obliq"] * 0.09 * g((fyt - (0.487 + 0.075 * axt)) / 0.012) * band(axt, 0.15, 0.85, 0.18)
-        f[t] += v * ft
+        f[t] += v * ft * tw[t]
 
     # ---------------- back torso ----------------
     b = torso & (back > 0.05)
@@ -171,7 +173,7 @@ def anatomy_field(P, N, minY, H, weights):
         v += w["scap"] * 0.08 * g((axb - 0.80) / 0.40, (fyb - 0.778) / 0.030)
         v += w["lat"] * 0.13 * g((axb - 1.05) / 0.44, (fyb - 0.706) / 0.055)
         v += w["trap"] * 0.11 * g((axb - 0.42) / 0.52, (fyb - 0.848) / 0.034)
-        f[b] += v * bb
+        f[b] += v * bb * tw[b]
 
     # ---------------- glutes ----------------
     gl = (fy < 0.55) & (fy > 0.40) & (ax < 1.6) & (back > 0.05)
@@ -187,7 +189,7 @@ def anatomy_field(P, N, minY, H, weights):
         v += w["bic"] * 0.13 * g((axa - 2.86) / 0.42, d / 1.6) * front[arms]
         v += w["tri"] * 0.12 * g((axa - 2.80) / 0.46, d / 1.7) * back[arms]
         v += w["fore"] * 0.09 * g((axa - 3.55) / 0.42, d / 1.8)
-        f[arms] += v
+        f[arms] += v * aw[arms]
 
     # ---------------- legs ----------------
     if legs.any():
@@ -204,7 +206,7 @@ def anatomy_field(P, N, minY, H, weights):
 
     # keep the neck, hands, feet and head clean
     f *= np.clip((0.885 - fy) / 0.03, 0, 1)
-    f *= np.clip((ax_clean := (4.15 - ax)) / 0.35, 0, 1)
+    f *= np.clip((4.15 - ax) / 0.35, 0, 1)
     f *= np.clip((fy - 0.085) / 0.04, 0, 1)
     return f
 
@@ -214,8 +216,8 @@ def anatomy_field(P, N, minY, H, weights):
 # low on purpose, because a visible six-pack is the single thing that tips a figure from
 # "fit" into "bodybuilder", and `stern` is eased back now that the pec plate creates the
 # sternal separation on its own.
-MALE = dict(pec=1.00, pecedge=1.10, stern=0.50, clav=0.50, clav_out=1.10, clav_soft=0.22, abs=0.32, obliq=0.40, spine=0.62, scap=0.52, lat=0.58,
-            trap=0.56, glute=0.80, delt=0.60, bic=0.50, tri=0.50, fore=0.45,
+MALE = dict(pec=1.00, pecedge=1.10, arm_blend=0.30, abs_rows=2, stern=0.50, clav=0.50, clav_out=1.10, clav_soft=0.22, abs=0.32, obliq=0.40, spine=0.62, scap=0.52, lat=0.58,
+            trap=0.56, glute=0.80, delt=0.55, bic=0.50, tri=0.50, fore=0.45,
             quad=0.62, knee=0.58, calf=0.66, shin=0.40, ham=0.52)
 
 FEMALE = dict(pec=0.0, pecedge=0.0, stern=0.25, clav=0.60, clav_out=1.30, clav_soft=0.25, abs=0.10, obliq=0.22, spine=0.50, scap=0.35, lat=0.28,

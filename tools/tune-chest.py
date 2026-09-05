@@ -33,10 +33,10 @@ _spec.loader.exec_module(rp)
 
 
 VARIANTS = [
-    dict(name="A duz",    e_low=0.15, clav_head=0.16, fat_pad=0.12, amp=0.130, crease=0.012),
-    dict(name="B simdi",  e_low=0.15, clav_head=0.26, fat_pad=0.20, amp=0.145, crease=0.017),
-    dict(name="C keskin", e_low=0.09, clav_head=0.16, fat_pad=0.12, amp=0.130, crease=0.020),
-    dict(name="D ince",   e_low=0.12, clav_head=0.14, fat_pad=0.10, amp=0.115, crease=0.014),
+    dict(name="amp .125 (simdi)", amp=0.125),
+    dict(name="amp .105",         amp=0.105),
+    dict(name="amp .090",         amp=0.090),
+    dict(name="amp .075",         amp=0.075),
 ]
 
 

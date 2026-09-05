@@ -108,28 +108,41 @@ def male_corrections(V, F):
     # chest/waist = 1.12 — hips wider than the ribcage, which is a female proportion and
     # was quietly working against every chest fix. An athletic male sits near hip/chest
     # 0.95 and chest/waist 1.25, so the ribcage widens and the pelvis comes in.
-    V[:,0] *= 1 + 0.075*band(0.680, 0.790, 0.05)*FADE   # ribcage
+    V[:,0] *= 1 + 0.05*band(0.680, 0.790, 0.05)*FADE    # kafes — genişlik
+    V[:,2] *= 1 + 0.10*band(0.600, 0.820, 0.06)*FADE    # kafes — DERİNLİK (fıçı, levha değil)
     V[:,0] *= 1 - 0.17*band(0.40, 0.585, 0.07)*FADE     # pelvis
     V[:,0] *= 1 - 0.06*band(0.30, 0.42, 0.06)*FADE      # upper thigh
     V[:,0] *= 1 - 0.05*band(0.585, 0.685, 0.06)*FADE    # waist
     return V
 
 def report(V, name):
+    """Print the proportions that decide whether the figure reads as male and athletic.
+
+    Targets in brackets come from ANSUR anthropometry. The tolerance matters: a 0.02
+    slice is thick enough to catch the widest point either side of the height you asked
+    for, which inflated the chest by 6% and hid where the hips are actually widest.
+    """
     minY, H = V[:,1].min(), V[:,1].max()-V[:,1].min()
     torso = np.abs(V[:,0]) < 1.95
-    def hw(fr, tol=0.02):
+    def hw(fr, tol=0.008):
         y = minY+fr*H; sl = V[(V[:,1] > y-tol*H) & (V[:,1] < y+tol*H) & torso]
         return np.abs(sl[:,0]).max() if len(sl) else 0
+    def depth(fr, tol=0.008):
+        y = minY+fr*H
+        sl = V[(V[:,1] > y-tol*H) & (V[:,1] < y+tol*H) & torso & (np.abs(V[:,0]) < 1.0)]
+        return sl[:,2].max()-sl[:,2].min() if len(sl) else 0
+    ch, wa = hw(0.72), hw(0.640)
+    hp = max(hw(f) for f in np.arange(0.46, 0.545, 0.01))   # widest point, not one slice
     delt = np.abs(V[(V[:,1] > minY+0.80*H) & (V[:,1] < minY+0.84*H), 0]).max()
-    ch, wa, hp = hw(0.72), hw(0.635), hw(0.50)
-    print(f"{name:26s} shoulder={delt:.2f} chest/waist={ch/wa:.2f} hip/chest={hp/ch:.2f}")
+    print(f"{name:26s} omuz={2*delt/H:.3f}[.29-.30] gogus/bel={ch/wa:.3f}[1.18-1.25] "
+          f"kalca/gogus={hp/ch:.3f}[1.05-1.11] derinlik/genislik={depth(0.72)/(2*ch):.3f}[.75-.78]")
 
 # ---------------- male ----------------
 # Chest comes from MakeHuman's own min-cup morph (artist-authored), not from smoothing.
 mV, mU, mF = extract_body(BV
                           + target("t_male.target")*0.58         # trains, but not a bodybuilder
                           + target("t_male_weight.target")*0.36  # a little leaner than before
-                          + target("t_prop_m.target")*0.38
+                          + target("t_prop_m.target")*0.32
                           + target("t_chest_flat.target")*1.0)   # flat male chest
 mV = male_corrections(mV, mF)
 save(mV, mU, mF, "human-body-male.obj"); report(mV, "human-body-male.obj")

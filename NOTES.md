@@ -119,6 +119,12 @@ ayarlanabiliyor, sonuç PNG olarak indirilebiliyor.
   `python3 build-bodies.py` çalıştırmak yeterli.
   Not: Meta/Google reklam politikaları 3D de olsa çıplak figüre takılabilir; bu sayfanın ekran
   görüntüsünü reklamda kullanacaksanız dövmeli bölgeyi yakın plan kırpmanız işinizi kolaylaştırır.
+- **Kaburga kafesi derinliği:** Ölçüldüğünde erkeğin göğüs derinlik/genişlik oranı 0.705 çıkıyordu —
+  onaylı KADIN modelinde 0.761, ANSUR erkek ortalaması ~0.756. Yani erkeğin göğsü kadınınkinden
+  daha yassıydı; "gerçek göğse benzemiyor" geri bildiriminin fiziksel sebebi buydu. Kafesi
+  genişletmek sorunu kötüleştiriyordu, eksik olan DERİNLİKTİ (`build-bodies.py` içinde z ekseni).
+  Kafes derinleşince göğsün öne doğru kavisinin çoğunu kemik taşıyor ve pektoral genliği
+  düşürülebiliyor — kavis iki kez sayılmıyor. Şu an 0.775.
 - **Göğüs (pektoral):** `tools/anatomy.py` içindeki `pec_plate()` göğsü BEŞGEN, ÖN YÜZÜ DÜZ bir
   plaka olarak modelliyor — kubbe/Gauss olarak değil. Bunun sebebi ölçülebilir: erkek göğsünü
   kadın göğsünden ayıran şey hacim değil profil tipi; merkezde tepe yapan radyal simetrik her
@@ -140,6 +146,11 @@ ayarlanabiliyor, sonuç PNG olarak indirilebiliyor.
   render eder (`--chest` yakın plan göğüs). Tarayıcıdaki görüntüleyici müşteri için iyi ama
   anatomi incelemek için elverişsiz: kamerayı yerleştirmek zor, cilt dokusu yüzeyi gizler.
   Sıyırma ışığı en sığ kabartıyı bile gölgeye çevirdiği için hatalar orada görünür.
+- **Oranlar:** `build-bodies.py` içindeki `report()` her derlemede omuz, göğüs/bel, kalça/göğüs ve
+  göğüs derinlik/genişlik oranlarını hedef aralıklarıyla birlikte basar (ANSUR erkek verisi).
+  Ölçüm dilimi bilerek ince (tol=0.008): daha kalın bir dilim istenen yüksekliğin altındaki ve
+  üstündeki en geniş noktayı da yakalayıp göğsü %6 şişiriyor, kalçanın gerçekten en geniş olduğu
+  yeri ıskalıyordu — bir süre yanlış cetvele göre karar verildi.
 - **Kadın modeli dokunulmaz:** erkek için yapılan her değişiklik, kadın mesh'i ve bump map'i
   bayt bayt aynı kalacak şekilde uygulandı (`w["pec"]`/`w["pecedge"]` kadında 0; klavikula
   bandı genişliği gibi ortak parametreler cinsiyete göre ayrıldı). Değişiklik sonrası
