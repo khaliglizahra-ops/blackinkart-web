@@ -32,11 +32,16 @@ rp = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(rp)
 
 
+# "pec_" ile başlayan anahtarlar anatomy.PEC'e, diğerleri MALE ağırlıklarına gider.
+# "pec_" ile başlayan anahtarlar anatomy.PEC'e, diğerleri MALE ağırlıklarına gider.
+# Hedef: referans mankendeki gibi DÜZ, blok hâlinde göğüs + net alt kenar.
+# fat_pad (alt-dış yağ yastığı) sıfırlandı: kütleyi aşağı topluyor ve lob hissi veriyor.
+_C = dict(abs=0.44, abs_rows=3, stern=0.52)
 VARIANTS = [
-    dict(name="A keskin kenar", e_low=0.10, crease=0.012),
-    dict(name="B yumusak",      e_low=0.22, crease=0.006),
-    dict(name="C cok yumusak",  e_low=0.35, crease=0.000),
-    dict(name="D orta, olugsuz",e_low=0.22, crease=0.000),
+    dict(name="A blok",      pec_e_low=0.06, pec_crease=0.030, pec_fat_pad=0.0, pec_clav_head=0.22, pec_amp=0.115, **_C),
+    dict(name="B blok+guclu",pec_e_low=0.06, pec_crease=0.040, pec_fat_pad=0.0, pec_clav_head=0.30, pec_amp=0.130, **_C),
+    dict(name="C orta",      pec_e_low=0.10, pec_crease=0.030, pec_fat_pad=0.0, pec_clav_head=0.26, pec_amp=0.120, **_C),
+    dict(name="D ince blok", pec_e_low=0.06, pec_crease=0.030, pec_fat_pad=0.0, pec_clav_head=0.22, pec_amp=0.095, **_C),
 ]
 
 
@@ -82,9 +87,12 @@ def main():
 
     for var in VARIANTS:
         anatomy.PEC.update(base)
-        anatomy.PEC.update({k: v for k, v in var.items() if k != "name"})
+        anatomy.PEC.update({k[4:]: v for k, v in var.items() if k.startswith("pec_")})
+        weights = dict(anatomy.MALE)
+        weights.update({k: v for k, v in var.items()
+                        if k != "name" and not k.startswith("pec_")})
 
-        f = anatomy.anatomy_field(V0, N0, minY, H, anatomy.MALE)
+        f = anatomy.anatomy_field(V0, N0, minY, H, weights)
         V = V0 + N0 * (f * 0.85)[:, None]
         Nn = rp.smooth_normals(V, tris)
 

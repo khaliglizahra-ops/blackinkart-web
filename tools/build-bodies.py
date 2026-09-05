@@ -87,21 +87,27 @@ def male_corrections(V, F):
         y0, y1 = minY+a*H, minY+b*H; fe = f*H
         return sstep((V[:,1]-(y0-fe))/fe) * sstep(((y1+fe)-V[:,1])/fe)
 
-    # Erase the nipples, keep the ribcage. The previous version relaxed the whole chest
-    # (fy 0.645–0.800) eighteen times, which did remove the nipples but also sanded the
-    # chest into a flat slab — the anatomy field then had to rebuild a pectoral from
-    # nothing, and never convincingly did. Now the smoothing is confined to the nipple
-    # band and run gently, so the underlying chest form survives for the pec to sit on.
+    # Remove the breast lobes. The base mesh — even with MakeHuman's flat-chest morph at
+    # full strength — still carries two rounded lobes with an under-crease and a nipple
+    # bump. Rendered without any muscle field on top, that substrate reads unmistakably
+    # female, and no amount of pectoral shaping above it fixes that; every earlier attempt
+    # was decorating a breast.
+    #
+    # The mask has to be sized to the LOBE, not to "the chest": an early version relaxed
+    # fy 0.645–0.800 and flattened the ribcage along with it, so the pectoral had to be
+    # rebuilt from nothing. This one spans the lobe and fades out at its edges, and the
+    # ribcage keeps its shape because the surrounding vertices are never touched — and
+    # its depth is restored explicitly a few lines below.
     fyv = (V[:,1] - minY) / H
-    chest = (sstep((fyv - 0.702) / 0.014) * sstep((0.734 - fyv) / 0.014)
-             * sstep((np.abs(V[:,0]) - 0.60) / 0.22)
-             * sstep((1.32 - np.abs(V[:,0])) / 0.28)
-             * sstep((V[:,2] - 0.55) / 0.30) * FADE)
-    for _ in range(7):
+    chest = (sstep((fyv - 0.664) / 0.030) * sstep((0.796 - fyv) / 0.030)
+             * sstep((np.abs(V[:,0]) - 0.22) / 0.20)
+             * sstep((1.58 - np.abs(V[:,0])) / 0.30)
+             * sstep((V[:,2] - 0.45) / 0.35) * FADE)
+    for _ in range(16):
         Q = V.copy()
         for i in np.where(chest > 0.02)[0]:
             n = neigh[i]
-            if len(n): Q[i] = V[i] + 0.45*chest[i]*(V[n].mean(axis=0) - V[i])
+            if len(n): Q[i] = V[i] + 0.55*chest[i]*(V[n].mean(axis=0) - V[i])
         V = Q
 
     # Silhouette. Measured on the previous build, the male read hip/chest = 1.12 and

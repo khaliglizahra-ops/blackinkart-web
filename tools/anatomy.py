@@ -43,20 +43,20 @@ PEC = dict(
     # kırılması tarif ediyor ve bir süre öyle yapıldı; ama sahibinin verdiği referans
     # figürde alt sınır YUMUŞAK, göğüs karına akarak bağlanıyor. Keskin kenar burada
     # kavisli bir memealtı çizgisi üretiyordu. Referans kazandı.
-    e_low=0.35,
+    e_low=0.10,
     e_up=0.18,       # how far below the clavicle the plate starts fading
     lat=1.95,        # how far out the plate reaches, in mesh units
     e_out=0.20,      # outer transition, tucking under the deltoid
     wrap=0.55,       # how much of the pectoral survives where the ribcage turns away
-    clav_head=0.16,  # extra thickness of the clavicular head, upper-outer
-    fat_pad=0.12,    # extra thickness at the lower-outer corner (the "boxy" corner)
+    clav_head=0.24,  # extra thickness of the clavicular head, upper-outer
+    fat_pad=0.00,    # extra thickness at the lower-outer corner (the "boxy" corner)
     # Deliberately low. Once the ribcage carries its real barrel depth (build-bodies.py
     # widens it in z), the bone supplies most of the chest's forward curve — which is
     # how it works on a real body. Leaving the muscle amplitude high on top of that
     # counts the curve twice and the chest rounds back into a breast; swept side by
     # side, the flatter settings read unmistakably more male.
-    amp=0.095,       # peak displacement of the muscle itself
-    crease=0.000,    # undercut below the free lower edge
+    amp=0.115,       # peak displacement of the muscle itself
+    crease=0.025,    # undercut below the free lower edge
     fossa=0.010,     # infraclavicular hollow
     dpg=0.028,       # deltopectoral groove
 )
@@ -229,7 +229,7 @@ def anatomy_field(P, N, minY, H, weights):
 # low on purpose, because a visible six-pack is the single thing that tips a figure from
 # "fit" into "bodybuilder", and `stern` is eased back now that the pec plate creates the
 # sternal separation on its own.
-MALE = dict(pec=1.00, pecedge=1.10, arm_blend=0.30, abs_rows=2, stern=0.38, clav=0.50, clav_out=1.10, clav_soft=0.22, abs=0.32, obliq=0.40, spine=0.62, scap=0.52, lat=0.58,
+MALE = dict(pec=1.00, pecedge=1.10, arm_blend=0.30, abs_rows=3, stern=0.52, clav=0.50, clav_out=1.10, clav_soft=0.22, abs=0.44, obliq=0.40, spine=0.62, scap=0.52, lat=0.58,
             trap=0.56, glute=0.80, delt=0.62, bic=0.50, tri=0.50, fore=0.45,
             quad=0.62, knee=0.58, calf=0.66, shin=0.40, ham=0.52)
 

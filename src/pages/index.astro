@@ -3,10 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import { site } from '../data/site';
 import { topPortfolio, studioPhotos } from '../data/gallery';
+import { tattooPricing } from '../data/prices';
 import { getCollection } from 'astro:content';
 
 const artists = await getCollection('sanatcilar');
-const artist = artists[0];
+const artist = artists[0];   // panelden silinebilir; aşağıda koşullu render ediliyor
 const teaserImages = topPortfolio.slice(0, 8);
 const studioTeaser = studioPhotos.slice(0, 3);
 ---
@@ -43,7 +44,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
           <img src={teaserImages[0] ?? '/brand/og-default.jpg'} alt="Dövme" loading="lazy" />
           <div class="service-overlay">
             <h3>Dövme</h3>
-            <p>Stiller, teknikler, bakım ve {`750`} TL'den başlayan fiyatlarla kalıcı sanat.</p>
+            <p>Stiller, teknikler, bakım ve {tattooPricing.openingPrice.toLocaleString('tr-TR')} {tattooPricing.currency}'den başlayan fiyatlarla kalıcı sanat.</p>
             <span class="btn btn-outline">Dövme Rehberi</span>
           </div>
         </a>
@@ -95,19 +96,21 @@ const studioTeaser = studioPhotos.slice(0, 3);
     </div>
   </section>
 
-  <section class="section artist-teaser">
-    <div class="container artist-inner">
-      <div class="artist-photo" data-reveal>
-        <img src={artist.data.photo} alt={artist.data.name} width="440" height="550" />
+  {artist && (
+    <section class="section artist-teaser">
+      <div class="container artist-inner">
+        <div class="artist-photo" data-reveal>
+          <img src={artist.data.photo} alt={artist.data.name} width="440" height="550" />
+        </div>
+        <div class="artist-copy">
+          <p class="eyebrow">Kurucu</p>
+          <h2>{artist.data.name}</h2>
+          <p>{artist.data.description}</p>
+          <a href={`/sanatcilar/${artist.slug}`} class="btn btn-outline">Hikayesini Oku</a>
+        </div>
       </div>
-      <div class="artist-copy">
-        <p class="eyebrow">Kurucu</p>
-        <h2>{artist.data.name}</h2>
-        <p>{artist.data.description}</p>
-        <a href={`/sanatcilar/${artist.slug}`} class="btn btn-outline">Hikayesini Oku</a>
-      </div>
-    </div>
-  </section>
+    </section>
+  )}
 
   <section class="section studio-teaser">
     <div class="container">
