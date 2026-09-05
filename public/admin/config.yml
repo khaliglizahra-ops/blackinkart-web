@@ -42,8 +42,8 @@ media_processing:
 
 # Varsayılan medya klasörü. Her koleksiyon aşağıda kendi klasörünü belirtiyor —
 # tek bir havuz olsaydı 200+ fotoğraf tek listede birikir ve seçmek zorlaşırdı.
-media_folder: /public/images
-public_folder: /images
+media_folder: public/images/yuklemeler
+public_folder: /images/yuklemeler
 
 # Sağdaki ham önizleme paneli sitenin gerçek görünümünü göstermiyor ve özellikle
 # telefonda formun yarısını yiyordu. Bunun yerine her bölümde "Siteyi gör" linki var.
@@ -61,15 +61,18 @@ collections:
         description: >-
           Ana sayfadaki öne çıkanlar, stile göre kategoriler ve stüdyo fotoğrafları.
           Yeni fotoğraf eklemek için ilgili bölümü açıp en alttaki "Ekle" düğmesine basın.
-        media_folder: /public/images/portfolyo
-        public_folder: /images/portfolyo
         fields:
           - name: featured
             label: Öne Çıkanlar (ana sayfada görünür)
             widget: list
             collapsed: true
             minimize_collapsed: true
-            field: { name: image, label: Fotoğraf, widget: image }
+            field:
+              name: image
+              label: Fotoğraf
+              widget: image
+              media_folder: /public/images/portfolyo/top30
+              public_folder: /images/portfolyo/top30
             hint: Ana sayfada ve portfolyo sayfasının en üstünde gösterilir.
           - name: categories
             label: Stil Kategorileri
@@ -90,15 +93,27 @@ collections:
                 widget: list
                 collapsed: true
                 minimize_collapsed: true
-                field: { name: image, label: Fotoğraf, widget: image }
+                field:
+                  name: image
+                  label: Fotoğraf
+                  widget: image
+                  media_folder: /public/images/portfolyo
+                  public_folder: /images/portfolyo
+                hint: >-
+                  Kategori fotoğrafları her kategorinin kendi klasöründe duruyor ve panel
+                  liste satırı başına ayrı klasör gösteremiyor; bu yüzden seçici boş açılır.
+                  Yeni fotoğrafı doğrudan yükleyin, doğru yere kaydedilir.
           - name: studio
             label: Stüdyo Fotoğrafları
             widget: list
             collapsed: true
             minimize_collapsed: true
-            media_folder: /public/images/studio
-            public_folder: /images/studio
-            field: { name: image, label: Fotoğraf, widget: image }
+            field:
+              name: image
+              label: Fotoğraf
+              widget: image
+              media_folder: /public/images/studio
+              public_folder: /images/studio
             hint: Ana sayfada ve Hijyen ve Güvenlik sayfasında gösterilir.
 
   # ------------------------------------------------------- İLETİŞİM VE SAATLER
@@ -245,8 +260,8 @@ collections:
     summary: '{{order}} — {{title}}'
     sortable_fields: [order, title]
     preview_path: 'piercing/{{slug}}'
-    media_folder: /public/images/piercing
-    public_folder: /images/piercing
+    media_folder: '/public/images/piercing/{{slug}}'
+    public_folder: '/images/piercing/{{slug}}'
     fields:
       - { name: title, label: Başlık, widget: string }
       - { name: description, label: Arama motoru açıklaması, widget: text, hint: 'Google sonuçlarında başlığın altında görünen 1-2 cümle.' }
@@ -284,8 +299,8 @@ collections:
     summary: '{{order}} — {{title}}'
     sortable_fields: [order, title]
     preview_path: 'dovme/{{slug}}'
-    media_folder: /public/images/portfolyo
-    public_folder: /images/portfolyo
+    media_folder: /public/images/portfolyo/top30
+    public_folder: /images/portfolyo/top30
     fields:
       - { name: title, label: Başlık, widget: string }
       - { name: description, label: Arama motoru açıklaması, widget: text, hint: 'Google sonuçlarında başlığın altında görünen 1-2 cümle.' }
@@ -321,8 +336,8 @@ collections:
     summary: '{{order}} — {{title}}'
     sortable_fields: [order, title]
     preview_path: 'piercing/{{slug}}'
-    media_folder: /public/images/piercing
-    public_folder: /images/piercing
+    media_folder: /public/images/piercing/kulak
+    public_folder: /images/piercing/kulak
     fields:
       - { name: title, label: Başlık, widget: string }
       - { name: description, label: Arama motoru açıklaması, widget: text }
