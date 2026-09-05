@@ -83,16 +83,18 @@ adres `www.blackinkart.com.tr/admin` olur.
 
 ## Panelde neler var
 
+Bölümler, en sık kullanacağınız iş en üstte olacak şekilde sıralandı:
+
 | Bölüm | Ne değiştirebilirsiniz |
 |---|---|
-| **Fiyatlar** | Dövme makine açılış fiyatı, fiyat notları ve 5 piercing tablosunun tüm satırları (çelik / taşlı / titanyum). Satır ekleyip silebilirsiniz. |
-| **Sanatçılar** | Sanatçı ekleme, silme, fotoğraf ve biyografi düzenleme. |
+| **Portfolyo** | Öne çıkan fotoğraflar, stil kategorileri (blackwork, minimal, portre…) ve stüdyo fotoğrafları. En sık yapacağınız iş olduğu için en üstte. |
+| **İletişim ve Saatler** | Çalışma saatleri (en üstte), telefon, WhatsApp, Instagram, e-posta, adres, harita, randevu linki. |
+| **Fiyatlar** | Dövme makine açılış fiyatı, fiyat notları ve 5 piercing tablosunun tüm satırları (çelik / taşlı / titanyum). |
+| **Piercing Bölgeleri** | 10 bölge sayfası: metin, iyileşme süresi, acı seviyesi, fotoğraflar. |
 | **Dövme Rehberi** | 7 dövme yazısının başlığı, metni ve üst görseli. Yeni yazı ekleyebilirsiniz. |
 | **Piercing Rehberi** | 6 piercing yazısı — aynı şekilde. |
-| **Piercing Bölgeleri** | 10 bölge sayfası: metin, iyileşme süresi, acı seviyesi, fotoğraflar. |
-| **Portfolyo** | Öne çıkan fotoğraflar, stil kategorileri (blackwork, minimal, portre…) ve stüdyo fotoğrafları. |
 | **3D Hazır Tasarımlar** | Müşterilerin 3D modelde deneyebildiği 12 hazır dövme tasarımı. |
-| **İletişim ve Saatler** | Telefon, WhatsApp, Instagram, e-posta, adres, harita, çalışma saatleri, randevu linki. |
+| **Sanatçılar** | Sanatçı ekleme, fotoğraf ve biyografi düzenleme. |
 
 Hijyen ve Güvenlik sayfası bilinçli olarak panele eklenmedi — sertifika ve
 protokol bilgileri sabit kalsın diye.
@@ -105,8 +107,15 @@ protokol bilgileri sabit kalsın diye.
 4. 1-2 dakika sonra site güncellenmiş olur. Sayfayı yenileyip kontrol edin.
 
 **Fotoğraf yüklerken:** telefondan çektiğiniz büyük fotoğrafları doğrudan
-yükleyebilirsiniz. Yayın sırasında otomatik olarak küçültülüp sıkıştırılırlar,
-sitenin hızı bozulmaz. Boyut düşünmenize gerek yok.
+yükleyebilirsiniz. Yükleme sırasında telefonunuzda küçültülürler ve fotoğrafın
+içindeki **konum (GPS) bilgisi silinir** — bu önemli, çünkü telefon fotoğrafları
+çekildikleri adresi içinde taşır. Yayın sırasında bir kez daha optimize edilirler.
+
+Her bölüm kendi fotoğraf klasörünü açar (portfolyo, piercing, stüdyo, sanatçı),
+yani "Fotoğraf seç" dediğinizde doğrudan o kategorideki fotoğrafları görürsünüz.
+
+**Uzun listeler kapalı gelir.** Portfolyodaki yüzlerce fotoğraf tek tek açılmaz;
+başlığa dokununca açılır. Telefonda kullanmayı bu mümkün kılıyor.
 
 **Fiyat değiştirirken:** sadece sayıyı yazın, "TL" yazmayın — o otomatik eklenir.
 Bir uygulamanın fiyatını göstermek istemiyorsanız fiyat kutularını boş bırakıp

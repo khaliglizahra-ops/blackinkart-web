@@ -6,12 +6,137 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>Black Ink Art — Yönetim Paneli</title>
     <link rel="icon" type="image/png" href="/brand/favicon-32.png" />
+
     <style>
-      body { background: #0a0a0a; }
-      /* the CMS mounts its own UI here */
+      /* ---------------------------------------------------------------- açılış
+         Panel betiği ~1 MB; yavaş bir bağlantıda önce uzun süre bomboş siyah bir
+         ekran görünüyordu ve internet yoksa sonsuza kadar öyle kalıyordu. Bu
+         ekran anında boyanır, panel geldiğinde kendini siler, gecikirse durumu
+         söyler. */
+      :root {
+        --bia-gold: #f2a900;
+        --bia-ink: #0a0a0a;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--bia-ink);
+      }
+      #bia-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.4rem;
+        background: radial-gradient(ellipse at 50% 40%, #16120a 0%, #0a0a0a 70%);
+        color: #efe9df;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        text-align: center;
+        padding: 2rem;
+      }
+      #bia-splash img {
+        width: min(180px, 55vw);
+        height: auto;
+      }
+      #bia-splash p {
+        margin: 0;
+        font-size: 0.92rem;
+        letter-spacing: 0.04em;
+        color: #b3aca1;
+      }
+      #bia-bar {
+        width: min(220px, 60vw);
+        height: 2px;
+        background: #2c2822;
+        overflow: hidden;
+      }
+      #bia-bar span {
+        display: block;
+        width: 40%;
+        height: 100%;
+        background: var(--bia-gold);
+        animation: bia-slide 1.5s ease-in-out infinite;
+      }
+      @keyframes bia-slide {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(350%); }
+      }
+      #bia-splash.is-error #bia-bar { display: none; }
+      #bia-splash.is-error p { color: #f2a900; }
+
+      /* ------------------------------------------------------------ giriş ekranı
+         Yalnızca panelin "çerçevesi" (giriş ekranı ve üst çubuk) markalanıyor.
+         Form alanlarına dokunulmuyor: koyu temaya çevirmek, yazı ile zemin
+         renginin uyuşmaması hâlinde alanları okunmaz hâle getirme riski taşıyor
+         ve panelin kullanılabilirliği görünüşünden önce gelir. */
+      #nc-root [class*='-LoginPage'],
+      #nc-root section[class*='Login'] {
+        background: radial-gradient(ellipse at 50% 35%, #16120a 0%, #0a0a0a 75%) !important;
+      }
+      #nc-root button[class*='-LoginButton'] {
+        background: var(--bia-gold);
+        color: #0a0a0a;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        border: 0;
+      }
+      #nc-root button[class*='-LoginButton']:hover {
+        background: #ffc23d;
+      }
+
+      /* Üst çubuk: "Yayınla" düğmesini panelin en görünür ögesi yap. */
+      #nc-root [class*='-ToolbarContainer'] {
+        border-bottom: 1px solid #2c2822;
+      }
     </style>
   </head>
   <body>
+    <div id="bia-splash">
+      <img src="/brand/logo-mark.png" alt="Black Ink Art" width="220" height="102" />
+      <p id="bia-msg">Yönetim paneli açılıyor…</p>
+      <div id="bia-bar"><span></span></div>
+    </div>
+
+    <script>
+      // Panel gerçekten ekrana geldiğinde açılışı kaldır. Decap kendi kökünü
+      // (#nc-root) baştan oluşturur ama bir süre boş kalır, o yüzden "kök var mı"
+      // yetmiyor — içine gerçek bir arayüz ögesi gelmiş mi diye bakıyoruz.
+      (function () {
+        var splash = document.getElementById('bia-splash');
+        var msg = document.getElementById('bia-msg');
+        var start = Date.now();
+
+        function ready() {
+          var root = document.getElementById('nc-root');
+          if (!root) return false;
+          return !!root.querySelector('section, header, main, form, button, a') ||
+                 root.getBoundingClientRect().height > 80;
+        }
+
+        var timer = setInterval(function () {
+          if (ready()) {
+            clearInterval(timer);
+            splash.style.transition = 'opacity .25s';
+            splash.style.opacity = '0';
+            setTimeout(function () { splash.remove(); }, 260);
+            return;
+          }
+          var waited = Date.now() - start;
+          if (waited > 30000) {
+            clearInterval(timer);
+            splash.classList.add('is-error');
+            msg.textContent =
+              'Panel yüklenemedi. İnternet bağlantınızı kontrol edip sayfayı yenileyin.';
+          } else if (waited > 8000) {
+            msg.textContent = 'Bağlantı yavaş görünüyor, yükleme sürüyor…';
+          }
+        }, 200);
+      })();
+    </script>
+
     <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
   </body>
 </html>
