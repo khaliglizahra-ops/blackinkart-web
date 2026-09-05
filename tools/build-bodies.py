@@ -142,7 +142,7 @@ def report(V, name):
 mV, mU, mF = extract_body(BV
                           + target("t_male.target")*0.58         # trains, but not a bodybuilder
                           + target("t_male_weight.target")*0.36  # a little leaner than before
-                          + target("t_prop_m.target")*0.32
+                          + target("t_prop_m.target")*0.38
                           + target("t_chest_flat.target")*1.0)   # flat male chest
 mV = male_corrections(mV, mF)
 save(mV, mU, mF, "human-body-male.obj"); report(mV, "human-body-male.obj")

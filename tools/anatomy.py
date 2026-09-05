@@ -39,8 +39,15 @@ def band(v, lo, hi, soft=0.02):
 # 12.9 mm — inside the 10–14 mm band that published measurements give for a man who
 # trains but is not a bodybuilder.
 PEC = dict(
-    e_low=0.10,      # lower-border transition. Small = crisp edge, large = it disappears.
-    e_up=0.40,       # upper transition into the clavicle (no real edge there)
+    # Alt kenar geçişi. Küçük = keskin kenar. Anatomi kaynakları keskin bir düzlem
+    # kırılması tarif ediyor ve bir süre öyle yapıldı; ama sahibinin verdiği referans
+    # figürde alt sınır YUMUŞAK, göğüs karına akarak bağlanıyor. Keskin kenar burada
+    # kavisli bir memealtı çizgisi üretiyordu. Referans kazandı.
+    e_low=0.35,
+    e_up=0.18,       # how far below the clavicle the plate starts fading
+    lat=1.95,        # how far out the plate reaches, in mesh units
+    e_out=0.20,      # outer transition, tucking under the deltoid
+    wrap=0.55,       # how much of the pectoral survives where the ribcage turns away
     clav_head=0.16,  # extra thickness of the clavicular head, upper-outer
     fat_pad=0.12,    # extra thickness at the lower-outer corner (the "boxy" corner)
     # Deliberately low. Once the ribcage carries its real barrel depth (build-bodies.py
@@ -48,9 +55,9 @@ PEC = dict(
     # how it works on a real body. Leaving the muscle amplitude high on top of that
     # counts the curve twice and the chest rounds back into a breast; swept side by
     # side, the flatter settings read unmistakably more male.
-    amp=0.080,       # peak displacement of the muscle itself
-    crease=0.012,    # undercut below the free lower edge
-    fossa=0.038,     # infraclavicular hollow
+    amp=0.095,       # peak displacement of the muscle itself
+    crease=0.000,    # undercut below the free lower edge
+    fossa=0.010,     # infraclavicular hollow
     dpg=0.028,       # deltopectoral groove
 )
 
@@ -84,7 +91,7 @@ def pec_plate(fy, ax):
 
     Returns (mass, under-crease, infraclavicular fossa, deltopectoral groove).
     """
-    u = np.clip(ax / 1.58, 0.0, 1.12)                 # 0 = sternum, 1 = lateral border
+    u = np.clip(ax / PEC['lat'], 0.0, 1.12)           # 0 = sternum, 1 = lateral border
 
     # Lower border runs near-horizontal across the chest and only sweeps up at the very
     # outside, into the anterior axillary fold. Upper border follows the clavicle.
@@ -96,9 +103,9 @@ def pec_plate(fy, ax):
     # Five edges, five falloffs. Multiplying separable ramps (rather than using a radial
     # distance) is what keeps the lower-outer corner square instead of round.
     e_low = _s((v + 0.02) / PEC['e_low'])             # short ramp: the plane break
-    e_up = _s((0.98 - v) / PEC['e_up'])               # long ramp: no edge at the clavicle
+    e_up = _s((1.06 - v) / PEC['e_up'])               # fades only right at the clavicle
     e_in = _s((u - 0.012) / (0.075 + 0.115 * _s(v)))  # V-shaped sternal gap
-    e_out = _s((1.05 - u) / 0.17)                     # tucks under the deltoid
+    e_out = _s((1.05 - u) / PEC['e_out'])             # tucks under the deltoid
     plate = e_low * e_up * e_in * e_out
 
     # Thinnest over the sternum, thickest upper-outer (the clavicular head is the meatiest
@@ -148,10 +155,16 @@ def anatomy_field(P, N, minY, H, weights):
         v = np.zeros(t.sum())
         # Shaping and amplitudes both live in the PEC block at the top of this file.
         pec_mass, pec_crease, pec_fossa, pec_dpg = pec_plate(fyt, axt)
-        v += w["pec"] * PEC['amp'] * pec_mass
-        v -= w["pecedge"] * PEC['crease'] * pec_crease      # step under the free lower edge
-        v -= w["pecedge"] * PEC['fossa'] * pec_fossa       # hollow under the outer clavicle
-        v -= w["pecedge"] * PEC['dpg'] * pec_dpg         # deltopectoral groove
+        # The pectoral is kept OUT of `v` because everything in `v` gets multiplied by
+        # `ft`, the front-facing weight, which falls to nothing as the ribcage turns
+        # towards the armpit. A real pectoral does not stop where the body stops facing
+        # forward — it wraps onto the side of the ribcage and tucks under the deltoid.
+        # Weighting it that hard left an empty gap between chest and shoulder, which is
+        # what made the upper chest read as narrow and hollow.
+        v_pec = (w["pec"] * PEC['amp'] * pec_mass
+                 - w["pecedge"] * PEC['crease'] * pec_crease    # step under the lower edge
+                 - w["pecedge"] * PEC['fossa'] * pec_fossa      # hollow under the clavicle
+                 - w["pecedge"] * PEC['dpg'] * pec_dpg)         # deltopectoral groove
         v -= w["stern"] * 0.055 * g(axt / 0.13, (fyt - 0.752) / 0.040)           # sternum line
         v += w["clav"] * 0.10 * g((fyt - (0.818 - 0.014 * axt)) / 0.0105) \
              * band(axt, 0.10, w["clav_out"], w["clav_soft"])
@@ -162,7 +175,7 @@ def anatomy_field(P, N, minY, H, weights):
         v -= w["abs"] * 0.09 * g(axt / 0.075) * band(fyt, 0.565, 0.700, 0.03)      # linea alba
         v += w["obliq"] * 0.11 * g((axt - 0.82) / 0.27, (fyt - 0.605) / 0.045)
         v += w["obliq"] * 0.09 * g((fyt - (0.487 + 0.075 * axt)) / 0.012) * band(axt, 0.15, 0.85, 0.18)
-        f[t] += v * ft * tw[t]
+        f[t] += (v * ft + v_pec * (PEC['wrap'] + (1.0 - PEC['wrap']) * ft)) * tw[t]
 
     # ---------------- back torso ----------------
     b = torso & (back > 0.05)
@@ -216,8 +229,8 @@ def anatomy_field(P, N, minY, H, weights):
 # low on purpose, because a visible six-pack is the single thing that tips a figure from
 # "fit" into "bodybuilder", and `stern` is eased back now that the pec plate creates the
 # sternal separation on its own.
-MALE = dict(pec=1.00, pecedge=1.10, arm_blend=0.30, abs_rows=2, stern=0.50, clav=0.50, clav_out=1.10, clav_soft=0.22, abs=0.32, obliq=0.40, spine=0.62, scap=0.52, lat=0.58,
-            trap=0.56, glute=0.80, delt=0.55, bic=0.50, tri=0.50, fore=0.45,
+MALE = dict(pec=1.00, pecedge=1.10, arm_blend=0.30, abs_rows=2, stern=0.38, clav=0.50, clav_out=1.10, clav_soft=0.22, abs=0.32, obliq=0.40, spine=0.62, scap=0.52, lat=0.58,
+            trap=0.56, glute=0.80, delt=0.62, bic=0.50, tri=0.50, fore=0.45,
             quad=0.62, knee=0.58, calf=0.66, shin=0.40, ham=0.52)
 
 FEMALE = dict(pec=0.0, pecedge=0.0, stern=0.25, clav=0.60, clav_out=1.30, clav_soft=0.25, abs=0.10, obliq=0.22, spine=0.50, scap=0.35, lat=0.28,

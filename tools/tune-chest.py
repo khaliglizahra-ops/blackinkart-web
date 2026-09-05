@@ -33,10 +33,10 @@ _spec.loader.exec_module(rp)
 
 
 VARIANTS = [
-    dict(name="amp .125 (simdi)", amp=0.125),
-    dict(name="amp .105",         amp=0.105),
-    dict(name="amp .090",         amp=0.090),
-    dict(name="amp .075",         amp=0.075),
+    dict(name="A keskin kenar", e_low=0.10, crease=0.012),
+    dict(name="B yumusak",      e_low=0.22, crease=0.006),
+    dict(name="C cok yumusak",  e_low=0.35, crease=0.000),
+    dict(name="D orta, olugsuz",e_low=0.22, crease=0.000),
 ]
 
 
@@ -89,8 +89,8 @@ def main():
         Nn = rp.smooth_normals(V, tris)
 
         tiles = [
-            rp.view(V, Nn, tris, 0.0, (mid, minY + 0.745 * H), 900.0 / H * 2.4, 400, 470,
-                    (-0.20, 0.93, 0.30)),
+            rp.view(V, Nn, tris, 0.0, (mid, minY + 0.720 * H), 900.0 / H * 1.55, 400, 470,
+                    (-0.30, 0.55, 0.78)),
             rp.view(V, Nn, tris, math.radians(40), (mid, minY + 0.745 * H), 900.0 / H * 2.4,
                     400, 470, (-0.72, 0.34, 0.60)),
         ]
