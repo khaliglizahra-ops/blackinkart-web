@@ -3,8 +3,7 @@ title: "Dövme Teknikleri"
 description: "Makineli (Batı) tekniğinden hand-poke'a kadar dövme yapım yöntemleri ve stüdyomuzda kullanılan yaklaşım."
 order: 3
 updatedAt: "2026-02-01"
-heroArt: "radiate"
-heroSeed: 2
+heroImage: "/images/surec/surec-01.jpg"
 ---
 
 Dünya genelinde farklı kültürler farklı dövme teknikleri geliştirmiştir. Bugün de bu tekniklerin bir kısmı hâlâ uygulanmaktadır:

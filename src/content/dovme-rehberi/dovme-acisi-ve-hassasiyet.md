@@ -3,8 +3,7 @@ title: "Dövme Acısı: Bölgelere Göre Hassasiyet Rehberi"
 description: "Dövme yaptırırken acı seviyesini etkileyen faktörler ve bölgeye göre genel hassasiyet beklentisi."
 order: 6
 updatedAt: "2026-02-01"
-heroArt: "scatter"
-heroSeed: 5
+heroImage: "/images/portfolyo/black-work/black-work-14.jpg"
 ---
 
 Dövme acısı kişiden kişiye, ağrı eşiğine ve o gün genel fiziksel/duygusal duruma göre büyük farklılık gösterir. Yine de genel bir eğilimden söz edilebilir:

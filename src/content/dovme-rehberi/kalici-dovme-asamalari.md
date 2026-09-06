@@ -3,8 +3,7 @@ title: "Kalıcı Dövme Nasıl Yapılır? Uygulama Aşamaları"
 description: "Desen seçiminden dövme sonrası bakıma kadar kalıcı dövme uygulamasının tüm aşamaları."
 order: 4
 updatedAt: "2026-02-01"
-heroArt: "steps"
-heroSeed: 3
+heroImage: "/images/surec/surec-02.jpg"
 ---
 
 Kaliteli bir dövme, doğru sırayla ilerleyen bir süreçtir. Black Ink Art'ta izlediğimiz adımlar:

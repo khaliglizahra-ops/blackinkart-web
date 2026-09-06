@@ -3,8 +3,7 @@ title: "Piercing İyileşme Süreleri Rehberi"
 description: "Kulak, burun, dudak, dil, göbek ve diğer bölgelere göre piercing iyileşme süreleri."
 order: 6
 updatedAt: "2026-02-01"
-heroArt: "radiate"
-heroSeed: 11
+heroImage: "/images/piercing/burun/burun-02.jpg"
 ---
 
 İyileşme süresi; bölgeye, bireysel iyileşme hızınıza ve bakıma gösterdiğiniz özene göre değişir. Aşağıdaki süreler ortalama değerlerdir:

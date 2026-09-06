@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import GuideHero from '../../components/GuideHero.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
 import { site } from '../../data/site';
+import { thumb } from '../../data/images';
 
 const guides = (await getCollection('piercing-rehberi')).sort((a, b) => a.data.order - b.data.order);
 const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.order - b.data.order);
@@ -43,7 +44,7 @@ const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.
           <a href={`/piercing/${g.slug}`} class="guide-card surface" data-reveal>
             <div class="thumb">
               {g.data.heroImage ? (
-                <img src={g.data.heroImage} alt="" loading="lazy" />
+                <img src={thumb(g.data.heroImage)} alt="" loading="lazy" />
               ) : (
                 <ArtBackground variant={g.data.heroArt ?? 'flow'} seed={g.data.heroSeed ?? g.data.order} />
               )}
@@ -69,7 +70,7 @@ const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.
           return (
             <a href={`/piercing/${a.slug}`} class="area-card" data-reveal>
               <div class="area-thumb">
-                {photo ? <img src={photo} alt="" loading="lazy" /> : <ArtBackground variant="ornament" seed={a.data.order} />}
+                {photo ? <img src={thumb(photo)} alt="" loading="lazy" /> : <ArtBackground variant="ornament" seed={a.data.order} />}
               </div>
               <span>{a.data.title}</span>
             </a>

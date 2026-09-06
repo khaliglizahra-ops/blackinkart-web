@@ -3,8 +3,7 @@ title: "Dini Açıdan Dövme"
 description: "İslam dini açısından kalıcı dövme konusundaki görüş ve bu konuda merak edilenler."
 order: 7
 updatedAt: "2026-02-01"
-heroArt: "ornament"
-heroSeed: 6
+heroImage: "/images/portfolyo/black-work/black-work-09.jpg"
 ---
 
 Dövme yaptırmanın müşterilerimiz tarafından sıkça sorulan bir boyutu da dini bakış açısıdır. Bu sayfada, konuyla ilgili genel kabul gören dini görüşü bilgi amaçlı paylaşıyoruz; nihai karar elbette kişinin kendi inancına ve tercihine aittir.

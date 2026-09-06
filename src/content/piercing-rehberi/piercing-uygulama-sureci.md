@@ -3,8 +3,7 @@ title: "Piercing Uygulama Süreci"
 description: "Steril setup, dezenfeksiyon ve delim adımlarıyla profesyonel piercing uygulaması nasıl yapılır?"
 order: 3
 updatedAt: "2026-02-01"
-heroArt: "steps"
-heroSeed: 8
+heroImage: "/images/piercing/kas/kas-02.jpg"
 ---
 
 Güvenli bir piercing deneyimi, uygulama öncesi hazırlıkla başlar. Black Ink Art'taki sürecimiz:

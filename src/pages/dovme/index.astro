@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GuideHero from '../../components/GuideHero.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
+import { thumb } from '../../data/images';
 
 const guides = (await getCollection('dovme-rehberi')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -40,7 +41,7 @@ const guides = (await getCollection('dovme-rehberi')).sort((a, b) => a.data.orde
           <a href={`/dovme/${g.slug}`} class="guide-card surface" data-reveal>
             <div class="thumb">
               {g.data.heroImage ? (
-                <img src={g.data.heroImage} alt="" loading="lazy" />
+                <img src={thumb(g.data.heroImage)} alt="" loading="lazy" />
               ) : (
                 <ArtBackground variant={g.data.heroArt ?? 'flow'} seed={g.data.heroSeed ?? g.data.order} />
               )}

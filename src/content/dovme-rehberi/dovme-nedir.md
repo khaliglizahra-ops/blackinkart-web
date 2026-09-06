@@ -3,8 +3,7 @@ title: "Dövme Nedir?"
 description: "Dövmenin tanımı, kısa tarihçesi ve günümüzdeki anlamı. Ankara'da kalıcı dövme yaptırmadan önce bilmeniz gerekenler."
 order: 1
 updatedAt: "2026-02-01"
-heroArt: "flow"
-heroSeed: 1
+heroImage: "/images/portfolyo/top30/top-06.jpg"
 ---
 
 Dövme, renk verici pigmentlerin iğne yardımıyla cildin **dermis** tabakasına işlenerek kalıcı bir motif oluşturulmasıdır. Epidermis (derinin dış katmanı) zamanla yenilense de dermise ulaşan pigment orada kalır; bu yüzden dövme kalıcıdır.

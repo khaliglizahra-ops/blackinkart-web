@@ -292,29 +292,36 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 </style>
 
 <script>
-  const header = document.getElementById('site-header');
-  const onScroll = () => {
-    if (!header) return;
-    header.classList.toggle('is-scrolled', window.scrollY > 12);
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  const toggle = document.getElementById('menu-toggle');
-  const menu = document.getElementById('mobile-menu');
-  const scrim = document.getElementById('mobile-menu-scrim');
+  /**
+   * Header, her sayfada bulunan bir bileşen; bu modül belge başına BİR KEZ çalışır.
+   * ClientRouter ile istemci tarafı gezinmede gövde baştan yazılıyor ve buradaki
+   * eleman referansları ölü düğümlere işaret ediyordu. Sonuç: ilk tıklamadan
+   * sonra menü düğmesi hiç açılmıyor, header da kaydırınca siyaha dönmüyordu.
+   * Bu yüzden global dinleyiciler bir kez bağlanıyor, elemanlar her sayfa
+   * yüklemesinde yeniden bulunuyor.
+   */
+  function els() {
+    return {
+      header: document.getElementById('site-header'),
+      toggle: document.getElementById('menu-toggle'),
+      menu: document.getElementById('mobile-menu'),
+      scrim: document.getElementById('mobile-menu-scrim'),
+    };
+  }
 
   function closeMenu() {
+    const { toggle, menu, scrim } = els();
     toggle?.setAttribute('aria-expanded', 'false');
     menu?.classList.remove('is-open');
     scrim?.classList.remove('is-open');
     // inert: hem odağı hem ekran okuyucuyu dışarıda tutar. aria-hidden tek başına
-    // odağı engellemiyordu, o yüzden kapalı menüdeki 10 bağlantı Tab'lanabiliyordu.
+    // odağı engellemiyordu, kapalı menüdeki bağlantılar Tab'lanabiliyordu.
     menu?.setAttribute('inert', '');
     document.body.style.overflow = '';
   }
 
   function openMenu() {
+    const { toggle, menu, scrim } = els();
     toggle?.setAttribute('aria-expanded', 'true');
     menu?.classList.add('is-open');
     scrim?.classList.add('is-open');
@@ -322,14 +329,46 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     document.body.style.overflow = 'hidden';
   }
 
-  toggle?.addEventListener('click', () => {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    isOpen ? closeMenu() : openMenu();
-  });
-  scrim?.addEventListener('click', closeMenu);
-  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMenu();
-  });
-  document.addEventListener('astro:before-preparation', closeMenu);
+  function syncHeader() {
+    const { header } = els();
+    if (!header) return;
+    header.classList.toggle('is-scrolled', window.scrollY > 12);
+  }
+
+  function bindOnce() {
+    const w = window as any;
+    if (w.__hdrBound) return;
+    w.__hdrBound = true;
+
+    window.addEventListener('scroll', syncHeader, { passive: true });
+
+    // Delegasyon: düğmeler her gezinmede yeniden oluşuyor, bu yüzden
+    // dinleyiciyi düğmeye değil belgeye bağlıyoruz.
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest('#menu-toggle')) {
+        const { toggle } = els();
+        toggle?.getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
+      } else if (t.closest('#mobile-menu-scrim')) {
+        closeMenu();
+      } else if (t.closest('#mobile-menu a')) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    document.addEventListener('astro:before-preparation', closeMenu);
+  }
+
+  function init() {
+    closeMenu();     // gezinme sonrası menü kapalı ve inert başlasın
+    syncHeader();    // yeni sayfada doğru header durumuyla aç
+  }
+
+  bindOnce();
+  init();
+  document.addEventListener('astro:page-load', init);
 </script>

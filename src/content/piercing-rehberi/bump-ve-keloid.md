@@ -3,8 +3,7 @@ title: "Bump ve Keloid: Nedenleri ve Ev Tedavisi"
 description: "Piercing bump ve keloid oluşumunun nedenleri, aspirin ve Fucicort ile ev bakım protokolü."
 order: 5
 updatedAt: "2026-02-01"
-heroArt: "scatter"
-heroSeed: 10
+heroImage: "/images/piercing/dermal/dermal-01.jpg"
 ---
 
 ## Bump nedir, neden oluşur?

@@ -3,8 +3,7 @@ title: "Piercing Malzemeleri: Titanyum, Cerrahi Çelik ve Bioplastik"
 description: "Titanyum, 316L cerrahi çelik ve bioplastik (PTFE) piercing malzemelerinin karşılaştırması ve ilk delim için doğru seçim."
 order: 2
 updatedAt: "2026-02-01"
-heroArt: "lattice"
-heroSeed: 7
+heroImage: "/images/piercing/kulak/kulak-02.jpg"
 ---
 
 Piercing takısının malzemesi, iyileşme sürecinizi doğrudan etkiler. Stüdyomuzda üç ana malzeme kullanıyoruz:

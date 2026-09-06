@@ -3,8 +3,7 @@ title: "Dövme Bakımı ve İyileşme Süreci"
 description: "Cerrahi bant ve streç film yöntemleriyle dövme bakımı, iyileşme süresi ve dikkat edilmesi gerekenler."
 order: 5
 updatedAt: "2026-02-01"
-heroArt: "waves"
-heroSeed: 4
+heroImage: "/images/portfolyo/minimaller/minimaller-05.jpg"
 ---
 
 Dövmenin görünümü kadar iyileşme süreci de bakımınıza bağlıdır. İnsan derisi ortalama 21 günde yenilenir, ancak kişiden kişiye değiştiği için bakımı **30 gün** boyunca sürdürmenizi öneririz. Aşağıdaki iki yöntemden birini uygulayabilirsiniz — ikisi de geçerli alternatiflerdir.

@@ -3,8 +3,7 @@ title: "Piercing Bakımı"
 description: "Tuzlu su protokolü, vazelin kullanımı ve piercing sonrası ilk günlerde dikkat edilmesi gerekenler."
 order: 4
 updatedAt: "2026-02-01"
-heroArt: "waves"
-heroSeed: 9
+heroImage: "/images/piercing/gobek/gobek-01.jpg"
 ---
 
 Piercingin uygulanması kadar sonrasındaki bakım da iyileşme sürecinin sağlıklı geçmesi için kritiktir.
