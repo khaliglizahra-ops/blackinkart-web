@@ -2,8 +2,10 @@
 import { site } from '../data/site';
 import { topPortfolio } from '../data/gallery';
 
-// Hand-picked large-scale pieces that read well as a dark, moody hero background.
-const HERO_SLIDE_INDEXES = [12, 6, 13, 10, 24];
+// Öne çıkanların ilk beşi bilerek hero için seçilmiş büyük ölçekli işler:
+// koyu, yüksek kontrastlı ve merkezi kalabalık olmayan kareler — üzerine yazı biniyor.
+// Sıralamayı panelden değiştirmek hero'yu da değiştirir.
+const HERO_SLIDE_INDEXES = [0, 1, 2, 3, 4];
 const heroSlides = HERO_SLIDE_INDEXES.map((i) => topPortfolio[i]).filter(Boolean);
 const slideDuration = heroSlides.length * 6; // seconds for one full loop
 ---
