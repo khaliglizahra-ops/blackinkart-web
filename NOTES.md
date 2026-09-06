@@ -31,7 +31,6 @@ Hepsi tek yerde: yönetim panelindeki **İletişim ve Saatler** bölümü (dosya
 - `phone`, `whatsapp`, `email` — gerçek iletişim bilgileri
 - `instagram.handle` / `instagram.url`
 - `jewelryShopUrl` — piercing takı e-ticaret sitesinin gerçek adresi
-- `calcomUrl` — Cal.com hesabı kurulduğunda gerçek randevu linki (`src/pages/randevu.astro` bunu otomatik kullanır)
 - `address` (sokak/kapı no, posta kodu) ve `geo` (enlem/boylam) — Google Business Profile onaylandığında
 - `mapsEmbedSrc` — gerçek Google Maps embed linki
 - `hours` — gerçek çalışma saatleri
@@ -39,6 +38,25 @@ Hepsi tek yerde: yönetim panelindeki **İletişim ve Saatler** bölümü (dosya
 
 `astro.config.mjs` içindeki `SITE_URL` sabiti de gerçek alan adıyla güncellenmeli (sitemap ve SEO
 canonical linkleri için).
+
+## Randevu Akışı
+
+`/randevu` bir takvim değil, **WhatsApp'a giden yapılandırılmış bir form**. Ziyaretçi ne
+istediğini seçiyor (dövme stili/tasarımı ya da piercing bölgesi + adet), tercih ettiği günü
+ve saat aralığını belirtiyor; form bunları düzgün bir Türkçe mesaja çevirip kendi
+WhatsApp'ında açıyor. Gönderdiğinde stüdyoya tek mesajda her şey ulaşıyor, saati stüdyo
+belirliyor.
+
+Neden takvim değil: gerçek "boş saat" göstermek bir takvim sunucusu, hesap ve aylık ücret
+gerektirir. Bu akış hiçbir arka uç istemiyor, site tamamen statik kalıyor ve sahibinin
+onaylamadığı bir randevu asla kesinleşmiş görünmüyor.
+
+- Numara `src/data/site.json` içindeki `whatsapp` alanından geliyor; panelden değiştirilince
+  form da otomatik olarak yeni numaraya yazıyor.
+- Dövme stilleri `portfolio.json`'daki kategorilerden, piercing bölgeleri
+  `src/content/piercing-bolgeleri/` içeriğinden okunuyor — panelden yeni bölge eklenince
+  formdaki listeye de kendiliğinden geliyor.
+- Cal.com entegrasyonu kaldırıldı (Eylül 2026): stüdyo sahibi harici hesap istemedi.
 
 ## Fiyatlar
 

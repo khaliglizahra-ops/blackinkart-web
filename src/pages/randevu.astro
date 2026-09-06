@@ -2,44 +2,212 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { site } from '../data/site';
+import { getCollection } from 'astro:content';
+import portfolio from '../data/portfolio.json';
 
-const calEmbedUrl = `${site.calcomUrl}?theme=dark&layout=month_view`;
+/**
+ * Randevu talebi — takvim değil, WhatsApp'a giden yapılandırılmış bir form.
+ *
+ * Ziyaretçi ne istediğini seçiyor, form bunu düzgün bir mesaja çeviriyor ve
+ * kendi WhatsApp'ında açıyor; gönderdiğinde stüdyoya tek mesajda her şey
+ * ulaşıyor. Saati stüdyo belirliyor, yani burada "boş saat" göstermek gerekmiyor
+ * — zaten göstermek için bir takvim sunucusu, hesap ve aylık ücret gerekirdi.
+ * Site tamamen statik olduğu için bu akış hiçbir arka uç gerektirmiyor.
+ */
+const areas = (await getCollection('piercing-bolgeleri'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((e) => e.data.title);
+
+const styles = portfolio.categories.map((c) => c.label);
 ---
 
 <BaseLayout
   title="Randevu Al"
-  description="Black Ink Art Tattoo Piercing'de online takvim üzerinden dövme veya piercing randevunuzu hemen alın."
+  description="Black Ink Art Tattoo Piercing'de dövme veya piercing randevu talebinizi WhatsApp üzerinden iletin. Saat, stüdyo onayıyla birlikte belirlenir."
   path="/randevu"
 >
   <section class="section-tight">
     <div class="container narrow">
       <Breadcrumbs items={[{ label: 'Randevu' }]} />
       <p class="eyebrow">Randevu</p>
-      <h1>Randevunuzu Alın</h1>
+      <h1>Randevu Talebi Oluşturun</h1>
       <p class="lead">
-        Uygun tarih ve saati seçin, randevunuz anında onaylansın. Depozito gerekmez.
+        Aşağıdaki formu doldurun; bilgileriniz tek mesajda WhatsApp'a aktarılsın.
+        Uygunluğu değerlendirip saati birlikte netleştiriyoruz.
       </p>
+
+      <ol class="steps">
+        <li><span>1</span> Ne yaptırmak istediğinizi seçin</li>
+        <li><span>2</span> WhatsApp'tan gönderin</li>
+        <li><span>3</span> Saati birlikte belirleyelim</li>
+      </ol>
     </div>
   </section>
 
   <section class="section-tight">
     <div class="container">
       <div class="booking-layout">
-        <div class="calendar-wrap surface" data-reveal>
-          <iframe
-            src={calEmbedUrl}
-            title="Randevu takvimi"
-            loading="lazy"
-            allow="camera; microphone; autoplay; encrypted-media;"
-          ></iframe>
+        <form class="request surface" id="randevu-form" novalidate>
+          <fieldset class="block">
+            <legend>1. Ne yaptırmak istiyorsunuz?</legend>
+            <div class="choice-row">
+              <label class="choice">
+                <input type="radio" name="tur" value="Dövme" checked />
+                <span>Dövme</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="tur" value="Piercing" />
+                <span>Piercing</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Dövme alanları -->
+          <fieldset class="block" data-group="Dövme">
+            <legend>2. Dövme detayları</legend>
+
+            <label class="field">
+              <span class="label">Stil</span>
+              <select name="stil">
+                <option value="">Emin değilim, birlikte karar verelim</option>
+                {styles.map((s) => <option value={s}>{s}</option>)}
+              </select>
+            </label>
+
+            <label class="field">
+              <span class="label">Ne yaptırmak istiyorsunuz?</span>
+              <textarea
+                name="tasarim"
+                rows="3"
+                placeholder="Örn. Ön kola, ince çizgili bir dağ manzarası"
+              ></textarea>
+            </label>
+
+            <div class="field-row">
+              <label class="field">
+                <span class="label">Vücut bölgesi</span>
+                <input type="text" name="dovme_bolge" placeholder="Örn. Sol ön kol" />
+              </label>
+              <label class="field">
+                <span class="label">Yaklaşık boyut</span>
+                <input type="text" name="boyut" placeholder="Örn. 10 cm" />
+              </label>
+            </div>
+
+            <div class="choice-row tight">
+              <span class="label">İlk dövmeniz mi?</span>
+              <label class="choice sm"><input type="radio" name="ilk" value="Evet" /><span>Evet</span></label>
+              <label class="choice sm"><input type="radio" name="ilk" value="Hayır" /><span>Hayır</span></label>
+            </div>
+          </fieldset>
+
+          <!-- Piercing alanları -->
+          <fieldset class="block" data-group="Piercing" hidden>
+            <legend>2. Piercing detayları</legend>
+
+            <div class="field-row">
+              <label class="field">
+                <span class="label">Bölge</span>
+                <select name="piercing_bolge">
+                  <option value="">Emin değilim, birlikte karar verelim</option>
+                  {areas.map((a) => <option value={a}>{a}</option>)}
+                </select>
+              </label>
+              <label class="field narrow-field">
+                <span class="label">Adet</span>
+                <input type="number" name="adet" min="1" max="10" value="1" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span class="label">Eklemek istediğiniz bir şey var mı?</span>
+              <textarea
+                name="piercing_not"
+                rows="2"
+                placeholder="Örn. Titanyum takı tercih ediyorum"
+              ></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>3. Ne zaman gelmek istersiniz?</legend>
+            <p class="note">
+              Kesin saati stüdyo belirliyor — burada yalnızca tercihinizi belirtiyorsunuz.
+            </p>
+
+            <div class="field-row">
+              <label class="field">
+                <span class="label">Tercih ettiğiniz gün</span>
+                <input type="date" name="gun" id="gun" />
+              </label>
+              <label class="field">
+                <span class="label">Saat tercihi</span>
+                <select name="saat">
+                  <option>Fark etmez</option>
+                  <option>Öğleden önce (11:00 – 14:00)</option>
+                  <option>Öğleden sonra (14:00 – 17:00)</option>
+                  <option>Akşam (17:00 – 20:00)</option>
+                </select>
+              </label>
+            </div>
+            <p class="note hours-note">
+              {site.hours.map((h) => <span>{h.day}: {h.hours}</span>)}
+            </p>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>4. Sizi nasıl çağıralım?</legend>
+
+            <label class="field">
+              <span class="label">Ad Soyad <em>*</em></span>
+              <input type="text" name="ad" id="ad" required placeholder="Adınız ve soyadınız" />
+            </label>
+
+            <label class="field">
+              <span class="label">Yaş durumu <em>*</em></span>
+              <select name="yas" id="yas" required>
+                <option value="">Seçin…</option>
+                <option value="18 yaşından büyüğüm">18 yaşından büyüğüm</option>
+                <option value="18 yaşından küçüğüm — veli/vasi ile geleceğim">
+                  18 yaşından küçüğüm (veli/vasi ile geleceğim)
+                </option>
+              </select>
+              <span class="hint">
+                18 yaş altına yalnızca veli veya yasal vasi eşliğinde ve onayıyla uygulama yapılır.
+                <a href="/yas-ve-onam-politikasi">Detaylar</a>
+              </span>
+            </label>
+
+            <label class="field">
+              <span class="label">Eklemek istediğiniz not</span>
+              <textarea name="not" rows="2" placeholder="İsteğe bağlı"></textarea>
+            </label>
+          </fieldset>
+
+          <div class="block preview-block">
+            <p class="label">Gönderilecek mesaj</p>
+            <pre class="msg-preview" id="msg-preview" aria-live="polite"></pre>
+          </div>
+
+          <button type="submit" class="btn btn-primary send-btn">
+            WhatsApp ile Gönder
+          </button>
+          <p class="note send-note">
+            Butona bastığınızda WhatsApp açılır ve mesaj hazır gelir — göndermeden önce
+            değiştirebilirsiniz. Randevunuz, stüdyo onayladıktan sonra kesinleşir.
+          </p>
+
           <noscript>
-            <p class="fallback-note">Takvimi görüntülemek için lütfen <a href={site.calcomUrl} target="_blank" rel="noopener">bu bağlantıyı</a> kullanın.</p>
+            <p class="note">
+              Formun çalışması için tarayıcınızda JavaScript gerekiyor. Dilerseniz doğrudan
+              <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">WhatsApp'tan yazın</a>.
+            </p>
           </noscript>
-        </div>
+        </form>
 
         <aside class="alt-contact">
-          <h2>Takvim Açılmıyorsa</h2>
-          <p>Aşağıdaki kanallardan bize doğrudan ulaşabilirsiniz:</p>
+          <h2>Doğrudan Ulaşın</h2>
+          <p>Form yerine bize doğrudan da yazabilirsiniz:</p>
           <ul>
             <li>
               <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener" class="contact-link">
@@ -72,13 +240,141 @@ const calEmbedUrl = `${site.calcomUrl}?theme=dark&layout=month_view`;
   </section>
 </BaseLayout>
 
+<script define:vars={{ waNumber: site.whatsapp }}>
+  function initRandevu() {
+    const form = document.getElementById('randevu-form');
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = '1';
+
+    const preview = document.getElementById('msg-preview');
+    const gun = document.getElementById('gun');
+
+    // Geçmiş bir gün seçilememeli.
+    if (gun) gun.min = new Date().toISOString().slice(0, 10);
+
+    const val = (name) => {
+      const el = form.elements[name];
+      if (!el) return '';
+      if (el instanceof RadioNodeList) return el.value.trim();
+      return (el.value || '').trim();
+    };
+
+    function prettyDate(iso) {
+      if (!iso) return '';
+      // Tarayıcı yerelini beklemeden Türkçe yaz: ziyaretçinin telefonu İngilizce
+      // olsa bile mesaj stüdyoya Türkçe ulaşsın.
+      const d = new Date(iso + 'T00:00:00');
+      if (Number.isNaN(d.getTime())) return iso;
+      const gunler = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+      const p = (n) => String(n).padStart(2, '0');
+      return `${p(d.getDate())}.${p(d.getMonth() + 1)}.${d.getFullYear()} ${gunler[d.getDay()]}`;
+    }
+
+    function buildMessage() {
+      const tur = val('tur');
+      const lines = ['Merhaba, randevu talebim var.', ''];
+
+      if (tur === 'Piercing') {
+        const bolge = val('piercing_bolge') || 'Birlikte karar verelim';
+        const adet = val('adet') || '1';
+        lines.push(`İşlem: Piercing — ${bolge}`);
+        lines.push(`Adet: ${adet}`);
+        if (val('piercing_not')) lines.push(`Not: ${val('piercing_not')}`);
+      } else {
+        lines.push('İşlem: Dövme');
+        if (val('stil')) lines.push(`Stil: ${val('stil')}`);
+        if (val('tasarim')) lines.push(`Tasarım: ${val('tasarim')}`);
+        if (val('dovme_bolge')) lines.push(`Bölge: ${val('dovme_bolge')}`);
+        if (val('boyut')) lines.push(`Boyut: ${val('boyut')}`);
+        if (val('ilk')) lines.push(`İlk dövme: ${val('ilk')}`);
+      }
+
+      lines.push('');
+      lines.push(`Tercih ettiğim gün: ${prettyDate(val('gun')) || 'Belirtilmedi'}`);
+      lines.push(`Saat tercihi: ${val('saat') || 'Fark etmez'}`);
+      lines.push('');
+      lines.push(`Ad Soyad: ${val('ad') || '—'}`);
+      if (val('yas')) lines.push(`Yaş: ${val('yas')}`);
+      if (val('not')) lines.push(`Ek not: ${val('not')}`);
+      lines.push('');
+      lines.push('(Black Ink Art web sitesindeki randevu formundan gönderildi)');
+
+      return lines.join('\n');
+    }
+
+    function refresh() {
+      const tur = val('tur');
+      form.querySelectorAll('[data-group]').forEach((el) => {
+        el.hidden = el.dataset.group !== tur;
+      });
+      if (preview) preview.textContent = buildMessage();
+    }
+
+    form.addEventListener('input', refresh);
+    form.addEventListener('change', refresh);
+    refresh();
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Zorunlu alanları tarayıcının kendi uyarısıyla kontrol et.
+      const ad = form.elements['ad'];
+      const yas = form.elements['yas'];
+      for (const el of [ad, yas]) {
+        if (el && !el.value.trim()) {
+          el.reportValidity?.();
+          el.focus();
+          return;
+        }
+      }
+
+      const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(buildMessage())}`;
+      const win = window.open(url, '_blank', 'noopener');
+      // Açılır pencere engellendiyse aynı sekmede devam et.
+      if (!win) window.location.href = url;
+    });
+  }
+
+  initRandevu();
+  document.addEventListener('astro:page-load', initRandevu);
+</script>
+
 <style>
   .narrow {
     max-width: 780px;
   }
 
   .lead {
-    max-width: 56ch;
+    max-width: 60ch;
+  }
+
+  .steps {
+    list-style: none;
+    margin: 1.8rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.4rem;
+  }
+
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .steps span {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    font-size: 0.78rem;
+    flex-shrink: 0;
   }
 
   .booking-layout {
@@ -88,24 +384,174 @@ const calEmbedUrl = `${site.calcomUrl}?theme=dark&layout=month_view`;
     align-items: start;
   }
 
-  .calendar-wrap {
-    overflow: hidden;
-    min-height: 720px;
-    display: flex;
+  .request {
+    padding: clamp(1.4rem, 3vw, 2.2rem);
   }
 
-  .calendar-wrap iframe {
-    width: 100%;
-    min-height: 720px;
+  .block {
     border: 0;
+    padding: 0;
+    margin: 0 0 2rem;
   }
 
-  .fallback-note {
-    padding: 2rem;
+  .block legend {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--color-ivory);
+    margin-bottom: 1rem;
+    padding: 0;
   }
 
-  .fallback-note a {
+  .field {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .narrow-field {
+    max-width: 120px;
+  }
+
+  .label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--color-ivory-dim);
+    margin-bottom: 0.4rem;
+  }
+
+  .label em {
     color: var(--color-gold);
+    font-style: normal;
+  }
+
+  .hint {
+    display: block;
+    font-size: 0.76rem;
+    color: var(--color-ivory-faint);
+    margin-top: 0.4rem;
+  }
+
+  .hint a {
+    color: var(--color-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  input[type='text'],
+  input[type='date'],
+  input[type='number'],
+  select,
+  textarea {
+    width: 100%;
+    background: var(--color-ink-900);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    color: var(--color-ivory);
+    font: inherit;
+    font-size: 0.92rem;
+    padding: 0.7em 0.9em;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-gold);
+  }
+
+  .choice-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .choice-row.tight {
+    margin-top: 0.4rem;
+  }
+
+  .choice-row.tight .label {
+    margin: 0 0.4rem 0 0;
+  }
+
+  .choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7em 1.2em;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+  }
+
+  .choice.sm {
+    padding: 0.45em 0.9em;
+    font-size: 0.86rem;
+  }
+
+  .choice input {
+    accent-color: var(--color-gold);
+  }
+
+  .choice:has(input:checked) {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .note {
+    font-size: 0.8rem;
+    color: var(--color-ivory-faint);
+    margin: 0 0 0.9rem;
+  }
+
+  .hours-note {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 1.2rem;
+    margin-top: 0.8rem;
+    margin-bottom: 0;
+  }
+
+  .preview-block .label {
+    margin-bottom: 0.6rem;
+  }
+
+  /* Mesajın birebir önizlemesi: ziyaretçi ne göndereceğini görsün. */
+  .msg-preview {
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.1rem;
+    font-family: var(--font-body);
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: var(--color-ivory-dim);
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  .send-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.98rem;
+  }
+
+  .send-note {
+    margin: 0.9rem 0 0;
   }
 
   .alt-contact {
@@ -138,6 +584,7 @@ const calEmbedUrl = `${site.calcomUrl}?theme=dark&layout=month_view`;
 
   .contact-link .label {
     color: var(--color-ivory-faint);
+    margin: 0;
   }
 
   .contact-link .value {
@@ -161,9 +608,19 @@ const calEmbedUrl = `${site.calcomUrl}?theme=dark&layout=month_view`;
     .booking-layout {
       grid-template-columns: 1fr;
     }
-    .calendar-wrap,
-    .calendar-wrap iframe {
-      min-height: 600px;
+  }
+
+  @media (max-width: 560px) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+    .narrow-field {
+      max-width: none;
+    }
+    /* Dar ekranda "Evet"/"Hayır" ikiye bölünüyordu; soru kendi satırına alınıyor. */
+    .choice-row.tight .label {
+      flex-basis: 100%;
+      margin-bottom: 0.5rem;
     }
   }
 </style>

@@ -154,10 +154,6 @@ collections:
             fields:
               - { name: handle, label: Kullanıcı adı, widget: string, hint: 'Başında @ olmadan. Örn. blackinkart' }
               - { name: url, label: Profil adresi, widget: string, pattern: ['^https://', 'https:// ile başlamalı.'] }
-          - name: calcomUrl
-            label: Randevu linki (Cal.com)
-            widget: string
-            pattern: ['^https://', 'https:// ile başlamalı.']
           - name: address
             label: Adres
             widget: object
