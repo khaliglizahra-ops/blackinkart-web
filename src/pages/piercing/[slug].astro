@@ -8,6 +8,7 @@ import MaterialCards from '../../components/MaterialCards.astro';
 import HealingChart from '../../components/HealingChart.astro';
 import { site } from '../../data/site';
 import { allPiercingPriceTables } from '../../data/prices';
+import { thumb } from '../../data/images';
 
 export async function getStaticPaths() {
   const guides = (await getCollection('piercing-rehberi')).sort((a, b) => a.data.order - b.data.order);
@@ -105,7 +106,7 @@ const gallerySansHero = areaPhotos.slice(1);
         {gallerySansHero.length > 0 && (
           <div class="area-gallery" data-reveal>
             {gallerySansHero.map((src) => (
-              <img src={src} loading="lazy" alt={`${entry.data.title} örneği — Black Ink Art`} width="400" height="500" data-lightbox="bolge" />
+              <img src={thumb(src)} data-full={src} loading="lazy" alt={`${entry.data.title} örneği — Black Ink Art`} width="400" height="500" data-lightbox="bolge" />
             ))}
           </div>
         )}

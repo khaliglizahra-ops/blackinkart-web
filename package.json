@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/optimize-images.mjs && astro build",
+    "build": "node scripts/optimize-images.mjs && node scripts/make-thumbs.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "thumbs": "node scripts/make-thumbs.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

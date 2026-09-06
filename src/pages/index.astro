@@ -5,6 +5,7 @@ import { site } from '../data/site';
 import { topPortfolio, studioPhotos } from '../data/gallery';
 import { tattooPricing } from '../data/prices';
 import { getCollection } from 'astro:content';
+import { thumb } from '../data/images';
 
 const artists = await getCollection('sanatcilar');
 const artist = artists[0];   // panelden silinebilir; aşağıda koşullu render ediliyor
@@ -18,17 +19,17 @@ const studioTeaser = studioPhotos.slice(0, 3);
   <section class="section pillars" id="hero-next">
     <div class="container pillar-grid">
       <div class="pillar" data-reveal>
-        <h3>Steril Standartlar</h3>
+        <h2>Steril Standartlar</h2>
         <p>Tek kullanımlık iğne, otoklavda sterilize edilmiş ekipman ve MEB onaylı hijyen eğitimleri.</p>
         <a href="/hijyen-ve-guvenlik" class="btn-ghost">Detaylı Bilgi →</a>
       </div>
       <div class="pillar" data-reveal>
-        <h3>Deneyimli Sanatçılık</h3>
+        <h2>Deneyimli Sanatçılık</h2>
         <p>2014'ten bu yana piercing, 2017'den bu yana dövme sanatında uzmanlaşmış bir ekip.</p>
         <a href="/sanatcilar" class="btn-ghost">Sanatçıları Gör →</a>
       </div>
       <div class="pillar" data-reveal>
-        <h3>Şeffaf Fiyatlandırma</h3>
+        <h2>Şeffaf Fiyatlandırma</h2>
         <p>Malzeme ve uygulamaya göre net fiyat listesi; sürpriz ücret yok.</p>
         <a href="/dovme/fiyatlar" class="btn-ghost">Fiyatları Gör →</a>
       </div>
@@ -89,7 +90,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
       <div class="teaser-grid">
         {teaserImages.map((src, i) => (
           <div class="tile" data-reveal>
-            <img src={src} alt="Black Ink Art dövme çalışması" loading={i < 4 ? 'eager' : 'lazy'} width="400" height="400" data-lightbox="portfolyo" />
+            <img src={thumb(src)} data-full={src} alt="Black Ink Art dövme çalışması" loading={i < 4 ? 'eager' : 'lazy'} width="400" height="400" data-lightbox="portfolyo" />
           </div>
         ))}
       </div>
@@ -123,7 +124,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
       <div class="studio-grid">
         {studioTeaser.map((src) => (
           <div class="tile" data-reveal>
-            <img src={src} alt="Black Ink Art stüdyo" loading="lazy" width="500" height="400" data-lightbox="studyo" />
+            <img src={thumb(src)} data-full={src} alt="Black Ink Art stüdyo" loading="lazy" width="500" height="400" data-lightbox="studyo" />
           </div>
         ))}
       </div>
@@ -182,7 +183,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
     gap: 2rem;
   }
 
-  .pillar h3 {
+  .pillar h2 {
     margin: 0 0 0.5em;
   }
 

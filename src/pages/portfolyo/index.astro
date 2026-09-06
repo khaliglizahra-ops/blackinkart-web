@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { dovmeGalleries, topPortfolio } from '../../data/gallery';
+import { thumb } from '../../data/images';
 ---
 
 <BaseLayout
@@ -24,7 +25,7 @@ import { dovmeGalleries, topPortfolio } from '../../data/gallery';
       <div class="featured-grid">
         {topPortfolio.map((src, i) => (
           <div class="tile" data-reveal>
-            <img src={src} alt="Black Ink Art dövme çalışması" loading={i < 6 ? 'eager' : 'lazy'} width="500" height="500" data-lightbox="one-cikanlar" />
+            <img src={thumb(src)} data-full={src} alt="Black Ink Art dövme çalışması" loading={i < 6 ? 'eager' : 'lazy'} width="500" height="500" data-lightbox="one-cikanlar" />
           </div>
         ))}
       </div>
@@ -45,7 +46,7 @@ import { dovmeGalleries, topPortfolio } from '../../data/gallery';
         {dovmeGalleries.map((g) =>
           g.images.map((src) => (
             <div class="tile" data-category={g.key} data-reveal>
-              <img src={src} alt={`${g.label} dövme örneği — Black Ink Art`} loading="lazy" width="500" height="500" data-lightbox="stiller" data-caption={`${g.label} — Black Ink Art`} />
+              <img src={thumb(src)} data-full={src} alt={`${g.label} dövme örneği — Black Ink Art`} loading="lazy" width="500" height="500" data-lightbox="stiller" data-caption={`${g.label} — Black Ink Art`} />
               <span class="tag">{g.label}</span>
             </div>
           ))

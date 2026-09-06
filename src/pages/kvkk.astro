@@ -33,7 +33,8 @@ import { site } from '../data/site';
           <li>Kimlik ve iletişim bilgileri (ad soyad, telefon, e-posta)</li>
           <li>Randevu ve hizmet geçmişi bilgileri</li>
           <li>Sağlık beyanı niteliğindeki bilgiler (alerji, cilt durumu, hamilelik vb. — yalnızca güvenli uygulama için sözlü olarak alınır, ayrı bir sağlık kaydı tutulmaz)</li>
-          <li>Randevu takvimi (Cal.com) üzerinden paylaşılan bilgiler</li>
+          <li>Randevu formu üzerinden WhatsApp ile ilettiğiniz bilgiler (ad soyad, tercih ettiğiniz
+              tarih ve saat, talep ettiğiniz uygulama ve eklediğiniz notlar)</li>
           <li>Web sitesi iletişim formu üzerinden gönderilen mesajlar</li>
         </ul>
 
@@ -52,9 +53,18 @@ import { site } from '../data/site';
 
         <h2>5. Aktarım</h2>
         <p>
-          Randevu bilgileriniz, randevu altyapımızı sağlayan Cal.com ile; iletişim formu verileriniz
-          ise site barındırma hizmeti sağlayıcımızla (Netlify/Vercel) sınırlı olarak paylaşılabilir.
-          Verileriniz pazarlama amacıyla üçüncü taraflarla paylaşılmaz veya satılmaz.
+          Sitedeki randevu formu bir veri tabanına kayıt yapmaz; doldurduğunuz bilgiler, siz
+          gönder tuşuna bastığınızda kendi WhatsApp uygulamanız üzerinden bize iletilir. Bu
+          nedenle randevu talebinizin içeriği, WhatsApp hizmetini sağlayan <strong>Meta Platforms
+          Ireland Ltd.</strong> tarafından kendi gizlilik politikası kapsamında işlenir ve
+          şirketin sunucularının bulunduğu ülkelere aktarılabilir. WhatsApp kullanmak
+          istemiyorsanız telefon, e-posta veya doğrudan stüdyoya gelerek de randevu
+          oluşturabilirsiniz.
+        </p>
+        <p>
+          İletişim formu verileriniz, site barındırma hizmeti sağlayıcımız Netlify ile sınırlı
+          olarak paylaşılır. Verileriniz pazarlama amacıyla üçüncü taraflarla paylaşılmaz veya
+          satılmaz.
         </p>
 
         <h2>6. Haklarınız</h2>

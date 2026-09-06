@@ -13,14 +13,14 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="col">
-      <h4>Keşfet</h4>
+      <h2>Keşfet</h2>
       <ul>
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </div>
 
     <div class="col">
-      <h4>İletişim</h4>
+      <h2>İletişim</h2>
       <ul>
         <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
         <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
@@ -30,7 +30,7 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="col">
-      <h4>Diğer</h4>
+      <h2>Diğer</h2>
       <ul>
         <li><a href={site.jewelryShopUrl} target="_blank" rel="noopener">Piercing Takı Mağazası ↗</a></li>
         {legalNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
@@ -76,7 +76,9 @@ const year = new Date().getFullYear();
     color: var(--color-ivory-faint);
   }
 
-  h4 {
+  /* Görsel olarak küçük bir etiket ama belge yapısında h2 — h4 kullanılınca her
+     sayfada h2'den h4'e atlama oluşuyordu. Boyut zaten burada belirleniyor. */
+  .col h2 {
     font-family: var(--font-body);
     font-size: 0.72rem;
     letter-spacing: 0.18em;

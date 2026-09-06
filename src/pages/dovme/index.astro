@@ -34,6 +34,7 @@ const guides = (await getCollection('dovme-rehberi')).sort((a, b) => a.data.orde
 
   <section class="section-tight">
     <div class="container">
+      <h2>Rehberler</h2>
       <div class="guide-grid">
         {guides.map((g) => (
           <a href={`/dovme/${g.slug}`} class="guide-card surface" data-reveal>

@@ -26,7 +26,7 @@
     <figcaption id="lb-caption"></figcaption>
   </figure>
 
-  <span class="lb-counter" id="lb-counter" aria-hidden="true"></span>
+  <span class="lb-counter" id="lb-counter" aria-live="polite"></span>
 </div>
 
 <style is:global>
@@ -261,10 +261,37 @@
 
     document.addEventListener('keydown', (e) => {
       const { root } = dom();
-      if (!root || root.hasAttribute('hidden')) return;
+
+      // Kapalıyken: odaklanmış bir tetikleyici üzerinde Enter/Space görseli açsın.
+      if (!root || root.hasAttribute('hidden')) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const t = (e.target as HTMLElement)?.closest<HTMLImageElement>('img[data-lightbox]');
+        if (!t) return;
+        e.preventDefault();
+        open(t.dataset.lightbox!, t.dataset.full || t.currentSrc || t.src);
+        return;
+      }
+
       if (e.key === 'Escape') close();
       else if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'ArrowRight') step(1);
+    });
+  }
+
+  /**
+   * Tetikleyici görselleri klavyeyle erişilebilir yap.
+   * Sayfalarda 247 görsel var; hepsini elle <button>'a sarmak yerine burada
+   * bir kez işaretleniyor. role="button" + tabindex, ekran okuyucuya da
+   * "bu tıklanabilir" bilgisini veriyor.
+   */
+  function markTriggers() {
+    document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach((img) => {
+      if (img.dataset.lbReady) return;
+      img.dataset.lbReady = '1';
+      img.setAttribute('role', 'button');
+      img.setAttribute('tabindex', '0');
+      const label = img.dataset.caption || img.alt || 'Görsel';
+      img.setAttribute('aria-label', `${label} — büyütmek için etkinleştirin`);
     });
   }
 
@@ -282,7 +309,12 @@
     });
   }
 
+  function init() {
+    bindPanel();
+    markTriggers();
+  }
+
   bindGlobalOnce();
-  bindPanel();
-  document.addEventListener('astro:page-load', bindPanel);
+  init();
+  document.addEventListener('astro:page-load', init);
 </script>

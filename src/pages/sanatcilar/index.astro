@@ -24,7 +24,7 @@ const artists = await getCollection('sanatcilar');
           <a href={`/sanatcilar/${artist.slug}`} class="artist-card surface" data-reveal>
             <img src={artist.data.photo} alt={artist.data.name} width="400" height="500" />
             <div class="info">
-              <h3>{artist.data.name}</h3>
+              <h2>{artist.data.name}</h2>
               <p class="role">{artist.data.role}</p>
               <p>{artist.data.description}</p>
               <span class="read-more">Profili Gör →</span>

@@ -6,3 +6,6 @@ blackinkart-web-netlify-drop.zip
 *.zip
 .netlify/
 .vscode/
+
+# build sırasında üretilen ızgara küçük resimleri
+public/images/_thumbs/

@@ -218,8 +218,13 @@ import { site } from '../data/site';
 
   input:focus,
   textarea:focus {
-    outline: none;
     border-color: var(--color-gold);
+  }
+
+  /* Yalnızca fareyle odaklanınca halkayı gizle; klavyeyle gezende görünür kalsın. */
+  input:focus:not(:focus-visible),
+  textarea:focus:not(:focus-visible) {
+    outline: none;
   }
 
   .contact-form .btn {

@@ -42,7 +42,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
   </div>
 </header>
 
-<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+<div class="mobile-menu" id="mobile-menu" inert>
   <nav aria-label="Mobil menü">
     <ul>
       {nav.map((item, i) => (
@@ -233,9 +233,13 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     color: var(--color-gold);
   }
 
-  .mobile-cta {
+  /* Seçici bilerek `.mobile-menu a.mobile-cta`: yukarıdaki `.mobile-menu a` kuralı
+     (özgüllük 0-1-1) tek başına `.mobile-cta`yı (0-1-0) yeniyor ve .btn-primary'nin
+     koyu metin rengini eziyordu — altın zemin üzerinde krem yazı 1.72:1 kalıyordu. */
+  .mobile-menu a.mobile-cta {
     width: 100%;
     margin-bottom: 1rem;
+    color: #150f00;
   }
 
   .mobile-whatsapp {
@@ -304,7 +308,9 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     toggle?.setAttribute('aria-expanded', 'false');
     menu?.classList.remove('is-open');
     scrim?.classList.remove('is-open');
-    menu?.setAttribute('aria-hidden', 'true');
+    // inert: hem odağı hem ekran okuyucuyu dışarıda tutar. aria-hidden tek başına
+    // odağı engellemiyordu, o yüzden kapalı menüdeki 10 bağlantı Tab'lanabiliyordu.
+    menu?.setAttribute('inert', '');
     document.body.style.overflow = '';
   }
 
@@ -312,7 +318,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     toggle?.setAttribute('aria-expanded', 'true');
     menu?.classList.add('is-open');
     scrim?.classList.add('is-open');
-    menu?.setAttribute('aria-hidden', 'false');
+    menu?.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
   }
 

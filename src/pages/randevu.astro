@@ -461,9 +461,10 @@ const styles = portfolio.categories.map((c) => c.label);
     resize: vertical;
   }
 
-  input:focus,
-  select:focus,
-  textarea:focus {
+  /* Yalnızca fareyle odaklanınca halkayı gizle; klavyeyle gezende görünür kalsın. */
+  input:focus:not(:focus-visible),
+  select:focus:not(:focus-visible),
+  textarea:focus:not(:focus-visible) {
     outline: none;
     border-color: var(--color-gold);
   }
