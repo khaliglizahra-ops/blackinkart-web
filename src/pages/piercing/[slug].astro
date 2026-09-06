@@ -118,6 +118,15 @@ const gallerySansHero = areaPhotos.slice(1);
         )}
         <p class="see-all"><a href="/piercing/fiyatlar">Tüm piercing fiyat listesini görüntüle →</a></p>
 
+        <!-- Fiyatı gördükten hemen sonra takıya bakmak için en doğru an. -->
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="jewelry-note" data-reveal>
+          <span class="jewelry-note-brand">Kendi Markamız</span>
+          <span class="jewelry-note-text">
+            {entry.data.title} için takı modellerini <strong>Piercingland</strong>'da inceleyin
+          </span>
+          <span class="jewelry-note-go">İncele ↗</span>
+        </a>
+
         <div class="cta surface" data-reveal>
           <div>
             <h3>{entry.data.title} için randevu alın</h3>
@@ -180,6 +189,53 @@ const gallerySansHero = areaPhotos.slice(1);
 
   .see-all a {
     color: var(--color-gold);
+  }
+
+  /* İnce bir şerit: sayfayı bölmeden hatırlatsın, reklam gibi durmasın. */
+  .jewelry-note {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    margin: 1.6rem 0 0;
+    padding: 0.95rem 1.2rem;
+    border: 1px solid var(--color-hairline);
+    border-left: 2px solid var(--color-gold);
+    border-radius: var(--radius-sm);
+    background: var(--color-ink-950);
+    transition: border-color var(--dur-fast), background var(--dur-fast);
+  }
+
+  .jewelry-note:hover {
+    border-color: var(--color-gold-35);
+    border-left-color: var(--color-gold);
+    background: var(--color-ink-900);
+  }
+
+  .jewelry-note-brand {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    flex-shrink: 0;
+  }
+
+  .jewelry-note-text {
+    flex: 1;
+    min-width: 12rem;
+    font-size: 0.9rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .jewelry-note-text strong {
+    color: var(--color-ivory);
+    font-weight: 600;
+  }
+
+  .jewelry-note-go {
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    white-space: nowrap;
   }
 
   .cta {

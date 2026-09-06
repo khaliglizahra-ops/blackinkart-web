@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GuideHero from '../../components/GuideHero.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
+import { site } from '../../data/site';
 
 const guides = (await getCollection('piercing-rehberi')).sort((a, b) => a.data.order - b.data.order);
 const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.order - b.data.order);
@@ -29,6 +30,7 @@ const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.
       <div class="hub-actions">
         <a href="/piercing/fiyatlar" class="btn btn-primary">Fiyatları Gör</a>
         <a href="/piercing/bolgeler" class="btn btn-outline">Bölgeleri Karşılaştır</a>
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="btn btn-outline">Takıları İncele ↗</a>
       </div>
     </div>
   </section>
@@ -76,6 +78,36 @@ const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.
       </div>
     </div>
   </section>
+
+  <section class="section-tight">
+    <div class="container jewelry-inner surface" data-reveal>
+      <div class="jewelry-visual">
+        <img
+          src="/brand/piercingland-logo.png"
+          alt="Piercingland — piercing takı markamız"
+          loading="lazy"
+          width="900"
+          height="709"
+        />
+      </div>
+      <div class="jewelry-copy">
+        <p class="eyebrow">Kendi Markamız</p>
+        <h2>Takınızı Önceden Seçin</h2>
+        <p>
+          Uyguladığımız piercing takıları kendi markamız Piercingland'a ait. Cerrahi çelik,
+          titanyum ve altın seçenekleriyle helixten septuma, dilden göbeğe kadar geniş bir
+          koleksiyon üretiyoruz.
+        </p>
+        <p>
+          Randevunuzdan önce modelleri inceleyip seçiminizi yapabilir, beğendiğiniz takıyı
+          uygulamada bize söyleyebilirsiniz.
+        </p>
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="btn btn-primary">
+          Piercing Takılarını İncele ↗
+        </a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -93,6 +125,53 @@ const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.
 
   h2 {
     margin-bottom: 1.5rem;
+  }
+
+  /* Piercingland kartı — ana sayfadakiyle aynı düzen, marka tanınırlığı için
+     bilinçli olarak tutarlı. */
+  .jewelry-inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1.4fr;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .jewelry-visual {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    /* Logonun zemini saf siyah; kart zemini #0a0a0a. Kutunun kenarı belli
+       olmasın diye eşitleniyor. */
+    background: #000;
+    padding: clamp(1.5rem, 4vw, 2.6rem);
+  }
+
+  .jewelry-visual img {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+  }
+
+  .jewelry-copy {
+    padding: clamp(1.8rem, 4vw, 3rem);
+  }
+
+  .jewelry-copy h2 {
+    margin-bottom: 0.4em;
+  }
+
+  .jewelry-copy p {
+    max-width: 50ch;
+  }
+
+  .jewelry-copy p + p {
+    margin-top: 0.9em;
+  }
+
+  .jewelry-copy .btn {
+    margin-top: 1.6rem;
   }
 
   .guide-grid {
@@ -219,5 +298,14 @@ const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.
 
   .area-card:hover span {
     color: var(--color-gold);
+  }
+
+  @media (max-width: 860px) {
+    .jewelry-inner {
+      grid-template-columns: 1fr;
+    }
+    .jewelry-visual {
+      min-height: 170px;
+    }
   }
 </style>
