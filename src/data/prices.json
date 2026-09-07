@@ -8,6 +8,11 @@
       "5 cm’e kadar çizgisel, detaysız minimal dövmeler makine açılış fiyatından uygulanır.",
       "Bir kişi üzerinde uygulanacak 3 minimal dövme toplam 2000 TL olarak fiyatlandırılır.",
       "Detaylı ve büyük dövmeler; boyut, malzeme ve işçilik detayına göre fiyatlandırılır. Net fiyat için lütfen iletişime geçin."
+    ],
+    "notesEn": [
+      "Minimal line-work tattoos without detail, up to 5 cm, are done at the machine set-up price.",
+      "Three minimal tattoos on one person are priced at 2,000 TRY in total.",
+      "Detailed and large tattoos are priced according to size, materials and the work involved. Please contact us for an exact price."
     ]
   },
   "piercingTables": [
@@ -105,7 +110,8 @@
           "stoneRing": 900,
           "titanium": 1000
         }
-      ]
+      ],
+      "titleEn": "Ear Piercings"
     },
     {
       "slug": "burun",
@@ -171,7 +177,8 @@
           "stoneRing": 1600,
           "titanium": 1700
         }
-      ]
+      ],
+      "titleEn": "Nose Piercings"
     },
     {
       "slug": "dudak",
@@ -291,7 +298,8 @@
           "stoneRing": 5600,
           "titanium": 6400
         }
-      ]
+      ],
+      "titleEn": "Lip Piercings"
     },
     {
       "slug": "dil",
@@ -332,30 +340,35 @@
           "steel": null,
           "stoneRing": null,
           "titanium": null,
-          "note": "Fiyat için iletişime geçin"
+          "note": "Fiyat için iletişime geçin",
+          "noteEn": "Contact us for pricing"
         },
         {
           "name": "Uvula Piercing",
           "steel": null,
           "stoneRing": null,
           "titanium": null,
-          "note": "Fiyat için iletişime geçin"
+          "note": "Fiyat için iletişime geçin",
+          "noteEn": "Contact us for pricing"
         },
         {
           "name": "Vampire Piercing",
           "steel": null,
           "stoneRing": null,
           "titanium": null,
-          "note": "Fiyat için iletişime geçin"
+          "note": "Fiyat için iletişime geçin",
+          "noteEn": "Contact us for pricing"
         },
         {
           "name": "Dental Piercing",
           "steel": null,
           "stoneRing": null,
           "titanium": null,
-          "note": "Fiyat için iletişime geçin"
+          "note": "Fiyat için iletişime geçin",
+          "noteEn": "Contact us for pricing"
         }
-      ]
+      ],
+      "titleEn": "Tongue Piercings"
     },
     {
       "slug": "diger",
@@ -402,9 +415,13 @@
           "steel": null,
           "stoneRing": null,
           "titanium": null,
-          "note": "Başlangıç fiyatı 1800–2500 TL arası (bölgeye göre)"
+          "note": "Başlangıç fiyatı 1800–2500 TL arası (bölgeye göre)",
+          "noteEn": "Başlangıç fiyatı 1800–2500 TL arası (bölgeye göre)"
         }
-      ]
+      ],
+      "titleEn": "Other Piercings"
     }
-  ]
+  ],
+  "kdvNoteEn": "VAT is not included in our prices.",
+  "multiPiercingNoteEn": "Three steel piercings at 700 TRY each on one person are priced at 1,800 TRY in total; three titanium piercings at 900 TRY each are priced at 2,400 TRY."
 }

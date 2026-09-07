@@ -1,0 +1,115 @@
+---
+import { langFromPath, localizePath, LANG_LABELS } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (p: string) => localizePath(p, lang);
+const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { tattooPricing, tattooNotes, kdvNote } from '../../data/prices';
+---
+
+<BaseLayout
+  title={t('tprice.pageTitle')}
+  description={t('tprice.pageDesc')}
+  path={L('/dovme/fiyatlar')}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: t('nav.tattoo'), href: L('/dovme') }, { label: t('nav.prices') }]} />
+      <p class="eyebrow">{t('nav.tattoo')}</p>
+      <h1>{t('tprice.pageTitle')}</h1>
+      <div class="gold-rule"></div>
+
+      <div class="opening-price surface" data-reveal>
+        <span class="label">{t('tprice.opening')}</span>
+        <span class="value">{tattooPricing.openingPrice.toLocaleString('tr-TR')} {tattooPricing.currency}</span>
+      </div>
+
+      <ul class="notes" data-reveal>
+        {tattooNotes(lang).map((n) => <li>{n}</li>)}
+      </ul>
+
+      <p class="kdv-note">{kdvNote(lang)}</p>
+
+      <div class="cta surface" data-reveal>
+        <div>
+          <h2>Net fiyat teklifi ister misiniz?</h2>
+          <p>{t('tprice.ctaText')}</p>
+        </div>
+        <div class="cta-actions">
+          <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('cta.book')}</a>
+          <a href={L('/hakkimizda-iletisim')} class="btn btn-outline">{t('cta.contact')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+
+  .opening-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1.6rem 1.8rem;
+    margin: 2rem 0 1.5rem;
+  }
+
+  .opening-price .label {
+    font-size: 0.9rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .opening-price .value {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    color: var(--color-gold);
+  }
+
+  .notes {
+    color: var(--color-ivory-dim);
+    padding-left: 1.2em;
+  }
+
+  .notes li {
+    margin-bottom: 0.6em;
+  }
+
+  .kdv-note {
+    font-size: 0.8rem;
+    color: var(--color-ivory-faint);
+    font-style: italic;
+    margin-top: -0.5rem;
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .cta h2 {
+    margin-bottom: 0.3em;
+  }
+
+  .cta p {
+    margin: 0;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+</style>

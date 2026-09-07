@@ -14,7 +14,11 @@ const dateString = z
 
 const artVariant = z.enum(['flow', 'radiate', 'steps', 'waves', 'bodymap', 'ornament', 'scatter', 'lattice']);
 
+/** İki dildeki aynı yazıyı eşleştirir; dil değiştirici bunu kullanıyor. */
+const translationKey = z.string().optional();
+
 const guideSchema = z.object({
+  translationKey,
   title: z.string(),
   description: z.string(),
   order: z.number(),
@@ -38,6 +42,7 @@ const piercingRehberi = defineCollection({
 const piercingBolgeleri = defineCollection({
   type: 'content',
   schema: z.object({
+    translationKey,
     title: z.string(),
     description: z.string(),
     order: z.number(),
@@ -52,6 +57,7 @@ const piercingBolgeleri = defineCollection({
 const sanatcilar = defineCollection({
   type: 'content',
   schema: z.object({
+    translationKey,
     name: z.string(),
     role: z.string(),
     since: z.string(),

@@ -1,5 +1,7 @@
 ---
 import type { PriceTableData } from '../data/prices';
+import { useTranslations } from '../i18n/ui';
+import { langFromPath, LANG_LABELS } from '../i18n/config';
 
 interface Props {
   table: PriceTableData;
@@ -7,10 +9,13 @@ interface Props {
 }
 
 const { table, compact = false } = Astro.props;
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const locale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
 
 function fmt(v: number | null) {
   if (v === null) return '—';
-  return `${v.toLocaleString('tr-TR')} TL`;
+  return `${v.toLocaleString(locale)} ${t('price.currency')}`;
 }
 ---
 
@@ -20,10 +25,10 @@ function fmt(v: number | null) {
     <table>
       <thead>
         <tr>
-          <th scope="col">Uygulama</th>
-          <th scope="col">Cerrahi Çelik</th>
-          <th scope="col">Taşlı &amp; Ring</th>
-          <th scope="col">Titanyum</th>
+          <th scope="col">{t('price.service')}</th>
+          <th scope="col">{t('price.steel')}</th>
+          <th scope="col">{t('price.gemmed')}</th>
+          <th scope="col">{t('price.titanium')}</th>
         </tr>
       </thead>
       <tbody>

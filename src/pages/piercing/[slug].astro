@@ -1,265 +1,37 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import GuideArticle from '../../components/GuideArticle.astro';
-import GuideHero from '../../components/GuideHero.astro';
-import PriceTable from '../../components/PriceTable.astro';
-import MaterialCards from '../../components/MaterialCards.astro';
-import HealingChart from '../../components/HealingChart.astro';
-import { site } from '../../data/site';
-import { allPiercingPriceTables } from '../../data/prices';
-import { thumb } from '../../data/images';
+import PiercingSlugPage from '../../components/pages/PiercingSlugPage.astro';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 
+/** Piercing bölümünde iki koleksiyon aynı adres uzayını paylaşıyor:
+ *  rehber yazıları ve bölge sayfaları. */
 export async function getStaticPaths() {
-  const guides = (await getCollection('piercing-rehberi')).sort((a, b) => a.data.order - b.data.order);
-  const areas = (await getCollection('piercing-bolgeleri')).sort((a, b) => a.data.order - b.data.order);
+  const lang = 'tr' as const;
+  const guides = await getLocalizedCollection('piercing-rehberi', lang);
+  const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
 
-  const guidePaths = guides.map((entry, i) => ({
-    params: { slug: entry.slug },
-    props: {
-      kind: 'guide' as const,
-      entry,
-      prev: i > 0 ? guides[i - 1] : null,
-      next: i < guides.length - 1 ? guides[i + 1] : null,
-    },
-  }));
+  const build = (list: typeof guides | typeof areas, kind: 'guide' | 'area') =>
+    list.map((entry, i) => {
+      const at = (n: number) => {
+        const e = list[n];
+        return e ? { title: e.data.title, slug: cleanSlug(e.slug) } : null;
+      };
+      return {
+        params: { slug: cleanSlug(entry.slug) },
+        props: {
+          kind,
+          entry,
+          slug: cleanSlug(entry.slug),
+          lang,
+          prev: i > 0 ? at(i - 1) : null,
+          next: i < list.length - 1 ? at(i + 1) : null,
+        },
+      };
+    });
 
-  const areaPaths = areas.map((entry, i) => ({
-    params: { slug: entry.slug },
-    props: {
-      kind: 'area' as const,
-      entry,
-      prev: i > 0 ? areas[i - 1] : null,
-      next: i < areas.length - 1 ? areas[i + 1] : null,
-    },
-  }));
-
-  return [...guidePaths, ...areaPaths];
+  return [...build(guides, 'guide'), ...build(areas, 'area')];
 }
 
-const { kind, entry, prev, next } = Astro.props;
-const { Content } = await render(entry);
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: entry.data.title,
-  description: entry.data.description,
-  dateModified: entry.data.updatedAt,
-  author: { '@type': 'Person', name: site.founder },
-  publisher: { '@type': 'Organization', name: site.name },
-};
-
-const areaPhotos = kind === 'area' ? ((entry.data as any).photos ?? []) : [];
-// Panelden silinebilir ya da kimliği değiştirilebilir — bulunamazsa sayfa çökmemeli.
-const priceTable = kind === 'area'
-  ? allPiercingPriceTables.find((t) => t.slug === (entry.data as any).priceSlug) ?? null
-  : null;
-const areaHeroImage = areaPhotos[0];
-const gallerySansHero = areaPhotos.slice(1);
+const props = Astro.props;
 ---
 
-<BaseLayout
-  title={entry.data.title}
-  description={entry.data.description}
-  path={`/piercing/${entry.slug}`}
-  jsonLd={jsonLd}
->
-  {kind === 'guide' && (
-    <GuideArticle
-      hubLabel="Piercing Rehberi"
-      hubHref="/piercing"
-      title={entry.data.title}
-      updatedAt={entry.data.updatedAt}
-      heroImage={entry.data.heroImage}
-      heroArt={entry.data.heroArt}
-      heroSeed={entry.data.heroSeed}
-      prev={prev ? { title: prev.data.title, href: `/piercing/${prev.slug}` } : null}
-      next={next ? { title: next.data.title, href: `/piercing/${next.slug}` } : null}
-    >
-      <Content />
-      {entry.slug === 'piercing-malzemeleri' && <MaterialCards />}
-      {entry.slug === 'piercing-iyilesme-sureleri' && <HealingChart />}
-    </GuideArticle>
-  )}
-
-  {kind === 'area' && (
-    <article class="area-page">
-      <GuideHero
-        eyebrow="Piercing Bölgesi"
-        title={entry.data.title}
-        breadcrumbs={[{ label: 'Piercing', href: '/piercing' }, { label: entry.data.title }]}
-        image={areaHeroImage}
-        art={areaHeroImage ? undefined : 'ornament'}
-        seed={entry.data.order}
-      />
-      <div class="container narrow section-tight">
-        <div class="badges" data-reveal>
-          <span class="badge">İyileşme: {entry.data.healingTime}</span>
-          <span class="badge">Acı Seviyesi: {entry.data.painLevel}</span>
-        </div>
-
-        <div class="prose" data-reveal>
-          <Content />
-        </div>
-
-        {gallerySansHero.length > 0 && (
-          <div class="area-gallery" data-reveal>
-            {gallerySansHero.map((src) => (
-              <img src={thumb(src)} data-full={src} loading="lazy" alt={`${entry.data.title} örneği — Black Ink Art`} width="400" height="500" data-lightbox="bolge" />
-            ))}
-          </div>
-        )}
-
-        <h2>Fiyatlar</h2>
-        {priceTable ? (
-          <PriceTable table={priceTable} compact />
-        ) : (
-          <p class="price-missing">Bu bölge için fiyat listesi hazırlanıyor. Güncel fiyat için bize ulaşın.</p>
-        )}
-        <p class="see-all"><a href="/piercing/fiyatlar">Tüm piercing fiyat listesini görüntüle →</a></p>
-
-        <!-- Fiyatı gördükten hemen sonra takıya bakmak için en doğru an. -->
-        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="jewelry-note" data-reveal>
-          <span class="jewelry-note-brand">Kendi Markamız</span>
-          <span class="jewelry-note-text">
-            {entry.data.title} için takı modellerini <strong>Piercingland</strong>'da inceleyin
-          </span>
-          <span class="jewelry-note-go">İncele ↗</span>
-        </a>
-
-        <div class="cta surface" data-reveal>
-          <div>
-            <h3>{entry.data.title} için randevu alın</h3>
-            <p>Steril ekipman ve deneyimli uygulama ile hayalinizdeki piercingi yaptırın.</p>
-          </div>
-          <div class="cta-actions">
-            <a href="/randevu" class="btn btn-primary">Randevu Al</a>
-            <a href="/hakkimizda-iletisim" class="btn btn-outline">İletişime Geç</a>
-          </div>
-        </div>
-      </div>
-    </article>
-  )}
-</BaseLayout>
-
-<style>
-  .price-missing {
-    color: var(--color-ivory-dim);
-    font-size: 0.9rem;
-  }
-
-  .narrow {
-    max-width: 760px;
-  }
-
-  .badges {
-    display: flex;
-    gap: 0.7rem;
-    flex-wrap: wrap;
-    margin: 1.6rem 0 0.5rem;
-  }
-
-  .badge {
-    font-size: 0.76rem;
-    font-weight: 600;
-    padding: 0.4em 0.9em;
-    border: 1px solid var(--color-hairline);
-    border-radius: 20px;
-    color: var(--color-ivory-dim);
-  }
-
-  .area-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.6rem;
-    margin: 2rem 0 2.5rem;
-  }
-
-  .area-gallery img {
-    width: 100%;
-    height: 170px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-hairline);
-  }
-
-  .see-all {
-    font-size: 0.9rem;
-  }
-
-  .see-all a {
-    color: var(--color-gold);
-  }
-
-  /* İnce bir şerit: sayfayı bölmeden hatırlatsın, reklam gibi durmasın. */
-  .jewelry-note {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.6rem 1rem;
-    margin: 1.6rem 0 0;
-    padding: 0.95rem 1.2rem;
-    border: 1px solid var(--color-hairline);
-    border-left: 2px solid var(--color-gold);
-    border-radius: var(--radius-sm);
-    background: var(--color-ink-950);
-    transition: border-color var(--dur-fast), background var(--dur-fast);
-  }
-
-  .jewelry-note:hover {
-    border-color: var(--color-gold-35);
-    border-left-color: var(--color-gold);
-    background: var(--color-ink-900);
-  }
-
-  .jewelry-note-brand {
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-gold);
-    flex-shrink: 0;
-  }
-
-  .jewelry-note-text {
-    flex: 1;
-    min-width: 12rem;
-    font-size: 0.9rem;
-    color: var(--color-ivory-dim);
-  }
-
-  .jewelry-note-text strong {
-    color: var(--color-ivory);
-    font-weight: 600;
-  }
-
-  .jewelry-note-go {
-    font-size: 0.85rem;
-    color: var(--color-gold);
-    white-space: nowrap;
-  }
-
-  .cta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    padding: 2rem;
-    margin-top: 2rem;
-  }
-
-  .cta h3 {
-    margin-bottom: 0.3em;
-  }
-
-  .cta p {
-    margin: 0;
-  }
-
-  .cta-actions {
-    display: flex;
-    gap: 0.8rem;
-    flex-wrap: wrap;
-  }
-</style>
+<PiercingSlugPage {...props} />

@@ -1,5 +1,7 @@
 ---
 import { site } from '../data/site';
+import { LANGS, LANG_LABELS, DEFAULT_LANG, langFromPath } from '../i18n/config';
+import { alternatesFor } from '../i18n/routes';
 
 interface Props {
   title: string;
@@ -12,7 +14,21 @@ interface Props {
 
 const { title, description, path, image, noindex = false, jsonLd } = Astro.props;
 
+const lang = langFromPath(path);
 const canonical = new URL(path, site.url).toString();
+
+/**
+ * hreflang: aynı sayfanın öbür dildeki karşılığını arama motoruna bildirir.
+ * Olmazsa iki dil birbirinin kopyası sanılıp biri dizinden düşebiliyor.
+ * `x-default`, dil tercihi bilinmeyen ziyaretçi için Türkçeyi gösteriyor —
+ * stüdyo Ankara'da ve ziyaretçilerin çoğunluğu Türkiye'den geliyor.
+ */
+const altPaths = await alternatesFor(path);
+const alternates = LANGS.map((l) => ({
+  hreflang: LANG_LABELS[l].htmlLang,
+  href: new URL(altPaths[l], site.url).toString(),
+}));
+const xDefault = new URL(altPaths[DEFAULT_LANG], site.url).toString();
 const ogImage = new URL(image ?? '/brand/og-default.jpg', site.url).toString();
 
 const localBusinessSchema = {
@@ -54,6 +70,8 @@ const schemas = [localBusinessSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? json
 <title>{title} · {site.shortName}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
+{alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+<link rel="alternate" hreflang="x-default" href={xDefault} />
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <meta property="og:type" content="website" />
@@ -62,7 +80,7 @@ const schemas = [localBusinessSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? json
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:locale" content="tr_TR" />
+<meta property="og:locale" content={LANG_LABELS[lang].ogLocale} />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />

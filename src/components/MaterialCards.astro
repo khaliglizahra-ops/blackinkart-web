@@ -1,21 +1,25 @@
 ---
+import { langFromPath } from '../i18n/config';
+
+const lang = langFromPath(Astro.url.pathname);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
 const materials = [
   {
-    name: 'Titanyum',
-    tag: 'İlk delim önerisi',
-    trait: 'Biyo-uyumlu, nikel içermez, %50 daha hafif',
+    name: L('Titanyum', 'Titanium'),
+    tag: L('İlk delim önerisi', 'Recommended for a first piercing'),
+    trait: L('Biyo-uyumlu, nikel içermez, %50 daha hafif', 'Biocompatible, nickel-free, 50% lighter'),
     icon: 'M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2Z',
   },
   {
-    name: '316L Cerrahi Çelik',
-    tag: 'Doğru alaşımda güvenli',
-    trait: 'Nikel oranı ≤ %0,01 mg/cm² olmalı',
+    name: L('316L Cerrahi Çelik', '316L Surgical Steel'),
+    tag: L('Doğru alaşımda güvenli', 'Safe in the correct alloy'),
+    trait: L('Nikel oranı ≤ %0,01 mg/cm² olmalı', 'Nickel content must be ≤ 0.01 mg/cm²'),
     icon: 'M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4',
   },
   {
-    name: 'Bioplastik (PTFE)',
-    tag: 'Hareketli bölgeler için',
-    trait: 'Esnek, pürüzsüz yüzey, MRI-uyumlu',
+    name: L('Bioplastik (PTFE)', 'Bioplast (PTFE)'),
+    tag: L('Hareketli bölgeler için', 'For areas that move'),
+    trait: L('Esnek, pürüzsüz yüzey, MRI-uyumlu', 'Flexible, smooth surface, MRI-safe'),
     icon: 'M12 3c4 3 7 6.5 7 10a7 7 0 1 1-14 0c0-3.5 3-7 7-10Z',
   },
 ];

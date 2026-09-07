@@ -1,0 +1,98 @@
+---
+import { langFromPath, localizePath, LANG_LABELS } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (p: string) => localizePath(p, lang);
+const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PriceTable from '../../components/PriceTable.astro';
+import { piercingPriceTables, kdvNote, multiPiercingNote } from '../../data/prices';
+---
+
+<BaseLayout
+  title={t('pprice.pageTitle')}
+  description={t('pprice.pageDesc')}
+  path={L('/piercing/fiyatlar')}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: 'Piercing', href: '/piercing' }, { label: 'Fiyatlar' }]} />
+      <p class="eyebrow">Piercing</p>
+      <h1>{t('pprice.h1')}</h1>
+      <p class="lead">
+        {t('pprice.lead')}
+        <a href="/piercing/piercing-malzemeleri">Piercing Malzemeleri</a>.
+      </p>
+      <div class="gold-rule"></div>
+
+      {piercingPriceTables(lang).map((table) => <PriceTable table={table} />)}
+
+      <p class="note">{multiPiercingNote(lang)}</p>
+      <p class="kdv-note">{kdvNote(lang)}</p>
+
+      <div class="cta surface" data-reveal>
+        <div>
+          <h2>{t('pprice.ctaTitle')}</h2>
+          <p>{t('pprice.ctaText')}</p>
+        </div>
+        <div class="cta-actions">
+          <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('cta.book')}</a>
+          <a href={L('/hakkimizda-iletisim')} class="btn btn-outline">{t('cta.contact')}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 820px;
+  }
+
+  .lead {
+    max-width: 60ch;
+  }
+
+  .lead a {
+    color: var(--color-gold);
+  }
+
+  .note {
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .kdv-note {
+    font-size: 0.8rem;
+    color: var(--color-ivory-faint);
+    font-style: italic;
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem;
+    margin-top: 1.5rem;
+  }
+
+  .cta h2 {
+    margin-bottom: 0.3em;
+  }
+
+  .cta p {
+    margin: 0;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+</style>

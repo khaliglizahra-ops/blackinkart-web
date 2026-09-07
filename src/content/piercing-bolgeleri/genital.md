@@ -1,5 +1,6 @@
 ---
 title: "Genital Piercing"
+translationKey: "genital"
 description: "Genital piercing uygulaması, iyileşme süresi ve fiyatı hakkında bilgi."
 order: 9
 updatedAt: "2026-02-01"

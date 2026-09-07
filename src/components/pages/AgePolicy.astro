@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { site } from '../../data/site';
+import { langFromPath, localizePath } from '../../i18n/config';
+
+// Yasal metinler sayfaya özgü; iki dil yan yana duruyor ki bir madde
+// değişince öbür dildeki karşılığı gözden kaçmasın.
+const lang = langFromPath(Astro.url.pathname);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
+---
+
+<BaseLayout
+  title={L('18 Yaş ve Onam Politikası', 'Age & Consent Policy')}
+  description={L("Black Ink Art Tattoo Piercing'de yaş sınırı, veli onamı ve bilgilendirilmiş onam süreci hakkında politikamız.", 'Our policy on the age limit, parental consent and the informed consent process at Black Ink Art Tattoo Piercing.')}
+  path={localizePath('/yas-ve-onam-politikasi', lang)}
+  noindex={true}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: L('18 Yaş ve Onam Politikası', 'Age & Consent Policy') }]} />
+      <p class="eyebrow">{L('Yasal', 'Legal')}</p>
+      <h1>{L('18 Yaş ve Onam Politikası', 'Age & Consent Policy')}</h1>
+      <div class="prose">
+        <p>
+          {L('Dövme ve piercing, kalıcı veya uzun süreli etkileri olan vücut değişiklikleridir. Bu nedenle stüdyomuzda aşağıdaki yaş ve onam kurallarını uyguluyoruz.', 'Tattoos and piercings are body modifications with permanent or long-lasting effects. For that reason, our studio applies the following rules on age and consent.')}
+        </p>
+
+        <h2>{L('Yaş Sınırı', 'Age Limit')}</h2>
+        <p>
+          <strong>{L('18 yaşından küçüklere kural olarak dövme ve piercing uygulanmaz.', 'As a rule, we do not tattoo or pierce anyone under 18.')}</strong>{' '}
+          {L('Uygulama öncesi kimlik ile yaş doğrulaması istenir.', 'Age is verified with photo ID before any procedure.')}
+        </p>
+        <p>
+          <strong>{L('Tek istisna, veli veya yasal vasinin onayıdır.', 'The only exception is the consent of a parent or legal guardian.')}</strong>{' '}
+          {L('18 yaşından küçük bir müşteriye uygulama yapılabilmesi için aşağıdaki koşulların tamamı gerekir:', 'For a customer under 18 to be worked on, every one of the following conditions must be met:')}
+        </p>
+        <ul>
+          <li>{L('Veli ya da yasal vasi uygulama sırasında stüdyoda', 'The parent or legal guardian must be')} <strong>{L('bizzat bulunmalıdır', 'physically present in the studio')}</strong>{L('; telefonla ya da yazılı mesajla verilen onay kabul edilmez.', ' during the procedure. Consent given by phone or text message is not accepted.')}</li>
+          <li>{L('Velinin kimliği ve', "The guardian's ID and")} <strong>{L('çocukla akrabalık bağını gösteren belge', 'a document proving their relationship to the child')}</strong>{L(' (nüfus kayıt örneği, vukuatlı nüfus kayıt örneği vb.) ibraz edilmelidir.', ' (a civil registry extract or equivalent) must be presented.')}</li>
+          <li>{L('Veli, bilgilendirilmiş onam formunu', 'The guardian signs the informed consent form')} <strong>{L('çocuk adına imzalar', "on the child's behalf")}</strong>.</li>
+          <li>{L('Çocuğun kendisi de uygulamayı istemelidir; isteksiz olduğunu gözlemlediğimizde uygulamayı yapmayız.', 'The child must want the procedure themselves. If we see any reluctance, we will not go ahead.')}</li>
+        </ul>
+        <p>
+          {L('Veli onayı olsa dahi, uygulamayı', 'Even with a guardian\'s consent, we')} <strong>{L('reddetme hakkımız saklıdır', 'reserve the right to refuse')}</strong>{L(' — tasarımın kalıcılığı, yeri, çocuğun yaşı veya sağlık durumu nedeniyle uygun bulmadığımız talepleri geri çeviririz.', ' — we will turn down any request we consider unsuitable because of the permanence of the design, its placement, the child\'s age, or their state of health.')}
+        </p>
+
+        <h2>{L('Bilgilendirilmiş Onam', 'Informed Consent')}</h2>
+        <p>
+          {L('Her müşteriden, uygulama öncesinde süreç, olası riskler ve bakım süreci hakkında bilgilendirildiğine dair yazılı onam alınır. Onam formu, uygulamanın türüne göre sağlık beyanı (alerji, hamilelik, kronik rahatsızlık, kan sulandırıcı kullanımı vb.) sorularını da içerir.', 'Every customer gives written consent confirming they have been informed about the procedure, its possible risks and the aftercare involved. Depending on the procedure, the consent form also includes health declaration questions — allergies, pregnancy, chronic conditions, blood-thinning medication and so on.')}
+        </p>
+
+        <h2>{L('Sağlık Durumu Beyanı', 'Health Declaration')}</h2>
+        <p>
+          {L('Hamilelik, emzirme dönemi, kontrolsüz diyabet, kan pıhtılaşma bozuklukları, ciddi cilt hastalıkları veya bağışıklık sistemini baskılayan tedavi görüyor olmak gibi durumlarda, güvenliğiniz için uygulama ertelenebilir veya bir sağlık kuruluşuna danışmanız istenebilir.', 'In cases such as pregnancy, breastfeeding, uncontrolled diabetes, blood clotting disorders, serious skin conditions, or immunosuppressive treatment, we may postpone the procedure for your safety or ask you to consult a medical professional first.')}
+        </p>
+
+        <h2>{L('Alkol ve Madde Kullanımı', 'Alcohol and Drug Use')}</h2>
+        <p>
+          {L('Alkol veya uyuşturucu etkisi altında olan müşterilere hiçbir uygulama yapılmaz.', 'We will not carry out any procedure on a customer who is under the influence of alcohol or drugs.')}
+        </p>
+
+        <h2>{L('İletişim', 'Contact')}</h2>
+        <p>{L(`Bu politika hakkında sorularınız için ${site.email} adresinden bize ulaşabilirsiniz.`, `If you have questions about this policy, you can reach us at ${site.email}.`)}</p>
+
+        <blockquote>
+          {L('Bu metin genel bir bilgilendirme amacıyla hazırlanmıştır; yayınlanmadan önce bir hukuk danışmanı tarafından gözden geçirilmesi önerilir.', 'This text is provided for general information. We recommend having it reviewed by a legal adviser before publication.')}
+        </blockquote>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+</style>

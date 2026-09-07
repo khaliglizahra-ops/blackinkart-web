@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { site } from '../../data/site';
+import { langFromPath, localizePath } from '../../i18n/config';
+
+// Yasal metin sayfaya özgü; iki dil yan yana duruyor.
+const lang = langFromPath(Astro.url.pathname);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
+---
+
+<BaseLayout
+  title={L('KVKK Aydınlatma Metni', 'Privacy Notice (KVKK)')}
+  description={L('6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında Black Ink Art Tattoo Piercing aydınlatma metni.', 'Black Ink Art Tattoo Piercing privacy notice under Turkish Personal Data Protection Law No. 6698 (KVKK).')}
+  path={localizePath('/kvkk', lang)}
+  noindex={true}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: L('KVKK Aydınlatma Metni', 'Privacy Notice (KVKK)') }]} />
+      <p class="eyebrow">{L('Yasal', 'Legal')}</p>
+      <h1>{L('KVKK Aydınlatma Metni', 'Privacy Notice (KVKK)')}</h1>
+      <div class="prose">
+        <p>
+          {L(`6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, ${site.name} ("Black Ink Art", "Stüdyo") olarak veri sorumlusu sıfatıyla, aşağıda açıklanan kapsamda kişisel verilerinizi işlemekteyiz.`, `Under Turkish Personal Data Protection Law No. 6698 ("KVKK"), ${site.name} ("Black Ink Art", "the Studio") processes your personal data as data controller, within the scope set out below.`)}
+        </p>
+
+        <h2>{L('1. Veri Sorumlusu', '1. Data Controller')}</h2>
+        <p>
+          {L(`${site.name}, ${site.address.full} adresinde faaliyet göstermektedir. Kişisel verilerinizle ilgili taleplerinizi ${site.email} adresine iletebilirsiniz.`, `${site.name} operates at ${site.address.full}. You can send any request concerning your personal data to ${site.email}.`)}
+        </p>
+
+        <h2>{L('2. Kişisel Veriler', '2. Personal Data We Process')}</h2>
+        <ul>
+          <li>{L('Kimlik ve iletişim bilgileri (ad soyad, telefon, e-posta)', 'Identity and contact details (full name, phone, email)')}</li>
+          <li>{L('Randevu ve hizmet geçmişi bilgileri', 'Appointment and service history')}</li>
+          <li>{L('Sağlık beyanı niteliğindeki bilgiler (alerji, cilt durumu, hamilelik vb. — yalnızca güvenli uygulama için sözlü olarak alınır, ayrı bir sağlık kaydı tutulmaz)', 'Health declaration information (allergies, skin conditions, pregnancy and so on — taken verbally for safe practice only; no separate health record is kept)')}</li>
+          <li>{L('Randevu formu üzerinden WhatsApp ile ilettiğiniz bilgiler (ad soyad, tercih ettiğiniz tarih ve saat, talep ettiğiniz uygulama ve eklediğiniz notlar)', 'Information you send us via WhatsApp through the booking form (full name, preferred date and time, the service you are requesting, and any notes you add)')}</li>
+          <li>{L('Web sitesi iletişim formu üzerinden gönderilen mesajlar', 'Messages sent through the contact form on the website')}</li>
+        </ul>
+
+        <h2>{L('3. İşleme Amaçları', '3. Purposes of Processing')}</h2>
+        <ul>
+          <li>{L('Randevu planlama ve hizmetin güvenli şekilde sunulması', 'Scheduling appointments and delivering the service safely')}</li>
+          <li>{L('Müşteri talep ve sorularının yanıtlanması', 'Responding to customer requests and questions')}</li>
+          <li>{L('Yasal yükümlülüklerin yerine getirilmesi', 'Meeting our legal obligations')}</li>
+        </ul>
+
+        <h2>{L('4. Hukuki Sebep', '4. Legal Basis')}</h2>
+        <p>
+          {L('Kişisel verileriniz, KVKK m.5/2 kapsamında bir sözleşmenin kurulması veya ifasıyla doğrudan ilgili olması ve meşru menfaat hukuki sebeplerine dayanılarak işlenmektedir.', 'Your personal data is processed under Article 5/2 of the KVKK, on the grounds that it is directly related to the formation or performance of a contract, and on the basis of legitimate interest.')}
+        </p>
+
+        <h2>{L('5. Aktarım', '5. Data Transfers')}</h2>
+        <p>
+          {L('Sitedeki randevu formu bir veri tabanına kayıt yapmaz; doldurduğunuz bilgiler, siz gönder tuşuna bastığınızda kendi WhatsApp uygulamanız üzerinden bize iletilir. Bu nedenle randevu talebinizin içeriği, WhatsApp hizmetini sağlayan', 'The booking form on this site writes to no database. The details you fill in are sent to us through your own WhatsApp app when you press send. The content of your booking request is therefore processed by')}{' '}<strong>Meta Platforms Ireland Ltd.</strong>{L(' tarafından kendi gizlilik politikası kapsamında işlenir ve şirketin sunucularının bulunduğu ülkelere aktarılabilir. WhatsApp kullanmak istemiyorsanız telefon, e-posta veya doğrudan stüdyoya gelerek de randevu oluşturabilirsiniz.', ', the provider of WhatsApp, under its own privacy policy, and may be transferred to the countries where its servers are located. If you would rather not use WhatsApp, you can also book by phone, by email, or by coming to the studio in person.')}
+        </p>
+        <p>
+          {L('İletişim formu verileriniz, site barındırma hizmeti sağlayıcımız Netlify ile sınırlı olarak paylaşılır. Verileriniz pazarlama amacıyla üçüncü taraflarla paylaşılmaz veya satılmaz.', 'Data from the contact form is shared only with Netlify, our website hosting provider. Your data is never shared with or sold to third parties for marketing purposes.')}
+        </p>
+
+        <h2>{L('6. Haklarınız', '6. Your Rights')}</h2>
+        <p>{L('KVKK m.11 uyarınca; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işlenme amacını öğrenme, yurt içinde/dışında aktarıldığı üçüncü kişileri bilme, eksik/yanlış işlenmişse düzeltilmesini isteme, silinmesini/yok edilmesini isteme ve itiraz etme haklarına sahipsiniz.', 'Under Article 11 of the KVKK you have the right to: learn whether your personal data is being processed; request information about it if so; learn the purpose of processing; know the third parties inside or outside Turkey to whom it has been transferred; request correction if it is incomplete or inaccurate; request its erasure or destruction; and object to its processing.')}</p>
+        <p>{L(`Bu haklarınızı kullanmak için ${site.email} adresinden bizimle iletişime geçebilirsiniz.`, `To exercise these rights, contact us at ${site.email}.`)}</p>
+
+        <blockquote>
+          {L('Bu metin genel bir bilgilendirme amacıyla hazırlanmıştır ve hukuki danışmanlık yerine geçmez; yayınlanmadan önce bir hukuk danışmanı tarafından gözden geçirilmesi önerilir.', 'This text is provided for general information and is not a substitute for legal advice. We recommend having it reviewed by a legal adviser before publication.')}
+        </blockquote>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+</style>

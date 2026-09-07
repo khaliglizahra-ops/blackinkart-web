@@ -1,5 +1,6 @@
 ---
 title: "Dini Açıdan Dövme"
+translationKey: "tattoos-and-religion"
 description: "İslam dini açısından kalıcı dövme konusundaki görüş ve bu konuda merak edilenler."
 order: 7
 updatedAt: "2026-02-01"

@@ -259,6 +259,7 @@ collections:
     media_folder: '/public/images/piercing/{{slug}}'
     public_folder: '/images/piercing/{{slug}}'
     fields:
+      - { name: translationKey, label: İngilizce eşleşme anahtarı (değiştirmeyin), widget: string, required: false, hint: 'Bu sayfayı İngilizce karşılığına bağlar. Dil değiştirici bunu kullanıyor.' }
       - { name: title, label: Başlık, widget: string }
       - { name: description, label: Arama motoru açıklaması, widget: text, hint: 'Google sonuçlarında başlığın altında görünen 1-2 cümle.' }
       - { name: order, label: Sıra, widget: number, value_type: int, min: 1, hint: 'Küçük sayı üstte görünür.' }
@@ -298,6 +299,7 @@ collections:
     media_folder: /public/images/portfolyo/top30
     public_folder: /images/portfolyo/top30
     fields:
+      - { name: translationKey, label: İngilizce eşleşme anahtarı (değiştirmeyin), widget: string, required: false, hint: 'Bu sayfayı İngilizce karşılığına bağlar. Dil değiştirici bunu kullanıyor.' }
       - { name: title, label: Başlık, widget: string }
       - { name: description, label: Arama motoru açıklaması, widget: text, hint: 'Google sonuçlarında başlığın altında görünen 1-2 cümle.' }
       - { name: order, label: Sıra, widget: number, value_type: int, min: 1, hint: 'Küçük sayı üstte görünür.' }
@@ -335,6 +337,7 @@ collections:
     media_folder: /public/images/piercing/kulak
     public_folder: /images/piercing/kulak
     fields:
+      - { name: translationKey, label: İngilizce eşleşme anahtarı (değiştirmeyin), widget: string, required: false, hint: 'Bu sayfayı İngilizce karşılığına bağlar. Dil değiştirici bunu kullanıyor.' }
       - { name: title, label: Başlık, widget: string }
       - { name: description, label: Arama motoru açıklaması, widget: text }
       - { name: order, label: Sıra, widget: number, value_type: int, min: 1, hint: 'Küçük sayı üstte görünür.' }
@@ -394,6 +397,147 @@ collections:
     media_folder: /public/images/artists
     public_folder: /images/artists
     fields:
+      - { name: translationKey, label: İngilizce eşleşme anahtarı (değiştirmeyin), widget: string, required: false, hint: 'Bu sayfayı İngilizce karşılığına bağlar. Dil değiştirici bunu kullanıyor.' }
+      - { name: name, label: Ad Soyad, widget: string }
+      - { name: role, label: Ünvan, widget: string, default: 'Dövme ve Piercing Sanatçısı' }
+      - { name: since, label: Mesleğe başlangıç yılı, widget: string }
+      - { name: photo, label: Fotoğraf, widget: image }
+      - { name: description, label: Kısa tanıtım, widget: text, hint: Sanatçılar sayfasındaki kartta ve arama sonuçlarında görünür. }
+      - { name: body, label: Biyografi, widget: markdown }
+
+
+  # ------------------------------------------------ DÖVME REHBERİ (İNGİLİZCE)
+  - name: dovme-rehberi-en
+    label: Dövme Rehberi — İngilizce
+    label_singular: İngilizce dövme yazısı
+    folder: src/content/dovme-rehberi/en
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    identifier_field: title
+    summary: '{{order}} — {{title}}'
+    sortable_fields: [order, title]
+    preview_path: 'en/tattoo/{{slug}}'
+    media_folder: /public/images/portfolyo/top30
+    public_folder: /images/portfolyo/top30
+    fields:
+      - { name: translationKey, label: Türkçe eşleşme anahtarı (değiştirmeyin), widget: string, hint: 'Bu sayfayı Türkçe karşılığına bağlar. Türkçe dosyadakiyle birebir aynı olmalı.' }
+      - { name: title, label: Başlık, widget: string }
+      - { name: description, label: Arama motoru açıklaması, widget: text, hint: 'Google sonuçlarında başlığın altında görünen 1-2 cümle.' }
+      - { name: order, label: Sıra, widget: number, value_type: int, min: 1, hint: 'Küçük sayı üstte görünür.' }
+      - { name: heroImage, label: Üst görsel (fotoğraf), widget: image, required: false, hint: 'Boş bırakırsanız aşağıdaki desen kullanılır.' }
+      - name: heroArt
+        label: Üst görsel (desen)
+        widget: select
+        required: false
+        hint: Fotoğraf seçmediyseniz sayfanın üstünde bu desen çizilir.
+        options:
+          - { label: 'Akış çizgileri', value: flow }
+          - { label: 'Işınlar', value: radiate }
+          - { label: 'Basamaklar', value: steps }
+          - { label: 'Dalgalar', value: waves }
+          - { label: 'Vücut haritası', value: bodymap }
+          - { label: 'Süsleme', value: ornament }
+          - { label: 'Serpme noktalar', value: scatter }
+          - { label: 'Kafes', value: lattice }
+      - { name: heroSeed, label: Desen varyasyonu, widget: number, value_type: int, required: false, hint: 'Sayıyı değiştirince aynı desenin farklı bir çizimi oluşur.' }
+      - { name: updatedAt, label: Güncelleme tarihi, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - { name: body, label: İçerik, widget: markdown }
+
+  # --------------------------------------------- PIERCING REHBERİ (İNGİLİZCE)
+  - name: piercing-rehberi-en
+    label: Piercing Rehberi — İngilizce
+    label_singular: İngilizce piercing yazısı
+    folder: src/content/piercing-rehberi/en
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    identifier_field: title
+    summary: '{{order}} — {{title}}'
+    sortable_fields: [order, title]
+    preview_path: 'en/piercing/{{slug}}'
+    media_folder: /public/images/piercing/kulak
+    public_folder: /images/piercing/kulak
+    fields:
+      - { name: translationKey, label: Türkçe eşleşme anahtarı (değiştirmeyin), widget: string, hint: 'Bu sayfayı Türkçe karşılığına bağlar. Türkçe dosyadakiyle birebir aynı olmalı.' }
+      - { name: title, label: Başlık, widget: string }
+      - { name: description, label: Arama motoru açıklaması, widget: text }
+      - { name: order, label: Sıra, widget: number, value_type: int, min: 1, hint: 'Küçük sayı üstte görünür.' }
+      - { name: heroImage, label: Üst görsel (fotoğraf), widget: image, required: false }
+      - name: heroArt
+        label: Üst görsel (desen)
+        widget: select
+        required: false
+        hint: Fotoğraf seçmediyseniz sayfanın üstünde bu desen çizilir.
+        options:
+          - { label: 'Akış çizgileri', value: flow }
+          - { label: 'Işınlar', value: radiate }
+          - { label: 'Basamaklar', value: steps }
+          - { label: 'Dalgalar', value: waves }
+          - { label: 'Vücut haritası', value: bodymap }
+          - { label: 'Süsleme', value: ornament }
+          - { label: 'Serpme noktalar', value: scatter }
+          - { label: 'Kafes', value: lattice }
+      - { name: heroSeed, label: Desen varyasyonu, widget: number, value_type: int, required: false }
+      - { name: updatedAt, label: Güncelleme tarihi, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - { name: body, label: İçerik, widget: markdown }
+
+  # -------------------------------------------- PIERCING BÖLGELERİ (İNGİLİZCE)
+  - name: piercing-bolgeleri-en
+    label: Piercing Bölgeleri — İngilizce
+    label_singular: İngilizce bölge sayfası
+    folder: src/content/piercing-bolgeleri/en
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    identifier_field: title
+    summary: '{{order}} — {{title}}'
+    sortable_fields: [order, title]
+    preview_path: 'en/piercing/{{slug}}'
+    media_folder: '/public/images/piercing/{{slug}}'
+    public_folder: '/images/piercing/{{slug}}'
+    fields:
+      - { name: translationKey, label: Türkçe eşleşme anahtarı (değiştirmeyin), widget: string, hint: 'Bu sayfayı Türkçe karşılığına bağlar. Türkçe dosyadakiyle birebir aynı olmalı.' }
+      - { name: title, label: Başlık, widget: string }
+      - { name: description, label: Arama motoru açıklaması, widget: text, hint: 'Google sonuçlarında başlığın altında görünen 1-2 cümle.' }
+      - { name: order, label: Sıra, widget: number, value_type: int, min: 1, hint: 'Küçük sayı üstte görünür.' }
+      - name: photos
+        label: Fotoğraflar
+        widget: list
+        required: false
+        collapsed: true
+        minimize_collapsed: true
+        field: { name: image, label: Fotoğraf, widget: image }
+        hint: İlk fotoğraf sayfanın üst görseli olarak kullanılır.
+      - { name: healingTime, label: İyileşme süresi, widget: string, hint: 'Örn. "2 – 4 ay"' }
+      - name: painLevel
+        label: Acı seviyesi
+        widget: select
+        options: ['Düşük', 'Orta', 'Orta-Yüksek', 'Yüksek']
+      - name: priceSlug
+        label: Fiyat tablosu
+        widget: select
+        options: [kulak, burun, dudak, dil, diger]
+        hint: Bu sayfada hangi fiyat tablosunun gösterileceği.
+      - { name: updatedAt, label: Güncelleme tarihi, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+      - { name: body, label: İçerik, widget: markdown }
+
+  # ---------------------------------------------------- SANATÇILAR (İNGİLİZCE)
+  - name: sanatcilar-en
+    label: Sanatçılar — İngilizce
+    label_singular: İngilizce sanatçı
+    folder: src/content/sanatcilar/en
+    create: true
+    delete: false          # son sanatçı silinirse ana sayfadaki tanıtım bölümü kaybolur
+    slug: '{{slug}}'
+    extension: md
+    identifier_field: name
+    summary: '{{name}}'
+    preview_path: 'en/artists/{{slug}}'
+    media_folder: /public/images/artists
+    public_folder: /images/artists
+    fields:
+      - { name: translationKey, label: Türkçe eşleşme anahtarı (değiştirmeyin), widget: string, hint: 'Bu sayfayı Türkçe karşılığına bağlar. Türkçe dosyadakiyle birebir aynı olmalı.' }
       - { name: name, label: Ad Soyad, widget: string }
       - { name: role, label: Ünvan, widget: string, default: 'Dövme ve Piercing Sanatçısı' }
       - { name: since, label: Mesleğe başlangıç yılı, widget: string }

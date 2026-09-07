@@ -1,0 +1,315 @@
+---
+import { langFromPath, localizePath } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (p: string) => localizePath(p, lang);
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GuideHero from '../../components/GuideHero.astro';
+import ArtBackground from '../../components/ArtBackground.astro';
+import { site } from '../../data/site';
+import { thumb } from '../../data/images';
+
+const guides = await getLocalizedCollection('piercing-rehberi', lang);
+const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
+---
+
+<BaseLayout
+  title={t('piercing.pageTitle')}
+  description={t('piercing.pageDesc')}
+  path={L('/piercing')}
+>
+  <GuideHero
+    eyebrow={t('nav.piercing')}
+    title={t('piercing.hubTitle')}
+    breadcrumbs={[{ label: t('nav.piercing') }]}
+    image="/images/piercing/burun/burun-01.jpg"
+  />
+
+  <section class="section-tight hub-hero">
+    <div class="container">
+      <p class="lead">
+        {t('piercing.hubLead')}
+      </p>
+      <div class="hub-actions">
+        <a href={L('/piercing/fiyatlar')} class="btn btn-primary">{t('cta.seePrices')}</a>
+        <a href={L('/piercing/bolgeler')} class="btn btn-outline">{t('cta.comparePlacements')}</a>
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="btn btn-outline">{t('cta.viewJewelry')}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <h2>{t('guide.guides')}</h2>
+      <div class="guide-grid">
+        {guides.map((g) => (
+          <a href={`${L('/piercing')}/${cleanSlug(g.slug)}`} class="guide-card surface" data-reveal>
+            <div class="thumb">
+              {g.data.heroImage ? (
+                <img src={thumb(g.data.heroImage)} alt="" loading="lazy" />
+              ) : (
+                <ArtBackground variant={g.data.heroArt ?? 'flow'} seed={g.data.heroSeed ?? g.data.order} />
+              )}
+              <span class="index">0{g.data.order}</span>
+            </div>
+            <div class="card-body">
+              <h3>{g.data.title}</h3>
+              <p>{g.data.description}</p>
+              <span class="read-more">{t('cta.readMore')}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight areas">
+    <div class="container">
+      <h2>{t('piercing.byArea')}</h2>
+      <div class="area-grid">
+        {areas.map((a) => {
+          const photo = a.data.photos?.[0];
+          return (
+            <a href={`${L('/piercing')}/${cleanSlug(a.slug)}`} class="area-card" data-reveal>
+              <div class="area-thumb">
+                {photo ? <img src={thumb(photo)} alt="" loading="lazy" /> : <ArtBackground variant="ornament" seed={a.data.order} />}
+              </div>
+              <span>{a.data.title}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container jewelry-inner surface" data-reveal>
+      <div class="jewelry-visual">
+        <img
+          src="/brand/piercingland-logo.png"
+          alt={t('jewelry.alt')}
+          loading="lazy"
+          width="900"
+          height="709"
+        />
+      </div>
+      <div class="jewelry-copy">
+        <p class="eyebrow">{t('jewelry.eyebrow')}</p>
+        <h2>{t('jewelry.title')}</h2>
+        <p>
+          {t('jewelry.body1')}
+        </p>
+        <p>
+          {t('jewelry.body2')}
+        </p>
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="btn btn-primary">
+          {t('cta.viewJewelryLong')}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hub-hero .lead {
+    max-width: 62ch;
+    font-size: 1.05rem;
+  }
+
+  .hub-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Piercingland kartı — ana sayfadakiyle aynı düzen, marka tanınırlığı için
+     bilinçli olarak tutarlı. */
+  .jewelry-inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1.4fr;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .jewelry-visual {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    /* Logonun zemini saf siyah; kart zemini #0a0a0a. Kutunun kenarı belli
+       olmasın diye eşitleniyor. */
+    background: #000;
+    padding: clamp(1.5rem, 4vw, 2.6rem);
+  }
+
+  .jewelry-visual img {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+  }
+
+  .jewelry-copy {
+    padding: clamp(1.8rem, 4vw, 3rem);
+  }
+
+  .jewelry-copy h2 {
+    margin-bottom: 0.4em;
+  }
+
+  .jewelry-copy p {
+    max-width: 50ch;
+  }
+
+  .jewelry-copy p + p {
+    margin-top: 0.9em;
+  }
+
+  .jewelry-copy .btn {
+    margin-top: 1.6rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .guide-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: border-color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+  }
+
+  .guide-card:hover {
+    border-color: var(--color-gold-35);
+    transform: translateY(-3px);
+  }
+
+  .thumb {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms var(--ease-out);
+  }
+
+  .guide-card:hover .thumb img {
+    transform: scale(1.06);
+  }
+
+  .thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.6));
+  }
+
+  .index {
+    position: absolute;
+    left: 1rem;
+    bottom: 0.7rem;
+    z-index: 1;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--color-gold-bright);
+  }
+
+  .card-body {
+    padding: 1.4rem 1.6rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+  }
+
+  .guide-card h3 {
+    margin-bottom: 0.2em;
+    font-size: 1.25rem;
+  }
+
+  .guide-card p {
+    font-size: 0.9rem;
+    flex-grow: 1;
+  }
+
+  .read-more {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-gold);
+  }
+
+  .areas {
+    padding-top: 0;
+  }
+
+  .area-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+  }
+
+  .area-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    text-align: center;
+  }
+
+  .area-thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--color-hairline);
+    position: relative;
+    transition: border-color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+  }
+
+  .area-card:hover .area-thumb {
+    border-color: var(--color-gold);
+    transform: translateY(-4px);
+  }
+
+  .area-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .area-card span {
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+    transition: color var(--dur-fast);
+  }
+
+  .area-card:hover span {
+    color: var(--color-gold);
+  }
+
+  @media (max-width: 860px) {
+    .jewelry-inner {
+      grid-template-columns: 1fr;
+    }
+    .jewelry-visual {
+      min-height: 170px;
+    }
+  }
+</style>

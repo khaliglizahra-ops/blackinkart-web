@@ -1,5 +1,6 @@
 ---
 title: "Göbek (Belly) Piercing"
+translationKey: "navel"
 description: "Göbek piercing uygulaması, iyileşme süresi, bakımı ve fiyatı."
 order: 6
 updatedAt: "2026-02-01"

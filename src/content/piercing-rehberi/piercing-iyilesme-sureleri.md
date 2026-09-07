@@ -1,5 +1,6 @@
 ---
 title: "Piercing İyileşme Süreleri Rehberi"
+translationKey: "piercing-healing-times"
 description: "Kulak, burun, dudak, dil, göbek ve diğer bölgelere göre piercing iyileşme süreleri."
 order: 6
 updatedAt: "2026-02-01"

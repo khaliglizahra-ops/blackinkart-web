@@ -1,5 +1,6 @@
 ---
 title: "Kalıcı Dövme Nasıl Yapılır? Uygulama Aşamaları"
+translationKey: "the-tattoo-process"
 description: "Desen seçiminden dövme sonrası bakıma kadar kalıcı dövme uygulamasının tüm aşamaları."
 order: 4
 updatedAt: "2026-02-01"

@@ -1,5 +1,6 @@
 ---
 title: "Piercing Uygulama Süreci"
+translationKey: "the-piercing-process"
 description: "Steril setup, dezenfeksiyon ve delim adımlarıyla profesyonel piercing uygulaması nasıl yapılır?"
 order: 3
 updatedAt: "2026-02-01"

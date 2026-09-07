@@ -1,0 +1,16 @@
+---
+import ArtistPage from '../../../components/pages/ArtistPage.astro';
+import { getLocalizedCollection, cleanSlug } from '../../../i18n/content';
+
+export async function getStaticPaths() {
+  const artists = await getLocalizedCollection('sanatcilar', 'en');
+  return artists.map((entry) => {
+    const slug = cleanSlug(entry.slug);
+    return { params: { slug }, props: { entry, slug, lang: 'en' as const } };
+  });
+}
+
+const props = Astro.props;
+---
+
+<ArtistPage {...props} />

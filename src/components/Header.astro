@@ -1,16 +1,34 @@
 ---
-import { nav, site } from '../data/site';
+import { site } from '../data/site';
+import { getNav } from '../i18n/nav';
+import { useTranslations } from '../i18n/ui';
+import { LANGS, LANG_LABELS, langFromPath, localizePath } from '../i18n/config';
+import { alternatesFor } from '../i18n/routes';
 
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const lang = langFromPath(currentPath);
+const t = useTranslations(lang);
+const nav = getNav(lang);
+
+// Dil değiştirici aynı sayfanın öbür dildeki karşılığına gider — ana sayfaya
+// değil. Ziyaretçi fiyat sayfasındayken dil değiştirince yine fiyat
+// sayfasında kalıyor.
+const alternates = await alternatesFor(currentPath);
+const langLinks = LANGS.map((l) => ({
+  code: l,
+  ...LANG_LABELS[l],
+  href: alternates[l],
+  current: l === lang,
+}));
 ---
 
 <header class="site-header" id="site-header">
   <div class="container bar">
-    <a href="/" class="brand" aria-label={`${site.shortName} — Ana Sayfa`}>
+    <a href={localizePath('/', lang)} class="brand" aria-label={`${site.shortName} — ${t('nav.home.aria')}`}>
       <img src="/brand/logo-mark.png" alt={site.shortName} width="220" height="102" />
     </a>
 
-    <nav class="desktop-nav" aria-label="Ana menü">
+    <nav class="desktop-nav" aria-label={t('nav.menu')}>
       <ul>
         {nav.map((item) => (
           <li>
@@ -26,13 +44,27 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     </nav>
 
     <div class="actions">
-      <a href="/randevu" class="btn btn-primary">Randevu Al</a>
+      <div class="lang-switch" role="group" aria-label={t('lang.switch')}>
+        {langLinks.map((l) => (
+          <a
+            href={l.href}
+            class="lang-opt"
+            hreflang={l.htmlLang}
+            lang={l.htmlLang}
+            aria-current={l.current ? 'true' : undefined}
+            title={l.label}
+          >
+            {l.short}
+          </a>
+        ))}
+      </div>
+      <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('cta.book')}</a>
       <button
         class="menu-toggle"
         id="menu-toggle"
         aria-expanded="false"
         aria-controls="mobile-menu"
-        aria-label="Menüyü aç"
+        aria-label={t('nav.openMenu')}
       >
         <span></span>
         <span></span>
@@ -43,7 +75,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 </header>
 
 <div class="mobile-menu" id="mobile-menu" inert>
-  <nav aria-label="Mobil menü">
+  <nav aria-label={t('nav.mobileMenu')}>
     <ul>
       {nav.map((item, i) => (
         <li style={`--i:${i}`}>
@@ -53,9 +85,22 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
         </li>
       ))}
     </ul>
-    <a href="/randevu" class="btn btn-primary mobile-cta">Randevu Al</a>
+    <div class="mobile-lang" role="group" aria-label={t('lang.switch')}>
+      {langLinks.map((l) => (
+        <a
+          href={l.href}
+          class="mobile-lang-opt"
+          hreflang={l.htmlLang}
+          lang={l.htmlLang}
+          aria-current={l.current ? 'true' : undefined}
+        >
+          {l.label}
+        </a>
+      ))}
+    </div>
+    <a href={localizePath('/randevu', lang)} class="btn btn-primary mobile-cta">{t('cta.book')}</a>
     <a href={`https://wa.me/${site.whatsapp}`} class="mobile-whatsapp" target="_blank" rel="noopener">
-      WhatsApp'tan Yaz
+      {t('cta.whatsapp')}
     </a>
   </nav>
 </div>
@@ -140,6 +185,60 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+
+  /* İki harfli, ayraçlı bir çift — açılır menü değil. Yalnızca iki dil var,
+     tek dokunuşla geçmek menü açtırmaktan hızlı. */
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+  }
+
+  .lang-opt {
+    padding: 0.35em 0.5em;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-ivory-faint);
+    border-radius: 3px;
+    transition: color var(--dur-fast), background var(--dur-fast);
+  }
+
+  .lang-opt + .lang-opt {
+    border-left: 1px solid var(--color-hairline);
+  }
+
+  .lang-opt:hover {
+    color: var(--color-ivory);
+  }
+
+  .lang-opt[aria-current='true'] {
+    color: var(--color-gold);
+  }
+
+  .mobile-lang {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mobile-menu a.mobile-lang-opt {
+    flex: 1;
+    padding: 0.7em 0.5em;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-ivory-dim);
+    border: 1px solid var(--color-hairline);
+    border-bottom: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+  }
+
+  .mobile-menu a.mobile-lang-opt[aria-current='true'] {
+    color: var(--color-gold);
+    border-color: var(--color-gold-35);
   }
 
   .actions .btn-primary {

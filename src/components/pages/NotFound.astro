@@ -1,0 +1,69 @@
+---
+import { langFromPath, localizePath } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (p: string) => localizePath(p, lang);
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title={t('404.pageTitle')}
+  description={t('404.text')}
+  path="/404"
+  noindex={true}
+>
+  <section class="not-found">
+    <div class="container">
+      <img src="/brand/logo-mark.png" alt="Black Ink Art" width="200" height="93" class="logo" />
+      <p class="code">404</p>
+      <h1>{t('404.h1')}</h1>
+      <p>{t('404.text')}</p>
+      <div class="actions">
+        <a href={L('/')} class="btn btn-primary">{t('404.home')}</a>
+        <a href={L('/portfolyo')} class="btn btn-outline">{t('cta.viewPortfolio')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-block: 6rem 4rem;
+  }
+
+  .logo {
+    height: 40px;
+    width: auto;
+    margin: 0 auto 2rem;
+    opacity: 0.8;
+  }
+
+  .code {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    color: var(--color-gold);
+    line-height: 1;
+    margin-bottom: 0.2em;
+  }
+
+  .not-found p {
+    max-width: 46ch;
+    margin-inline: auto;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+</style>

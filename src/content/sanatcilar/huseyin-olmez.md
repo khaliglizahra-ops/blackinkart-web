@@ -1,5 +1,6 @@
 ---
 name: "Hüseyin Ölmez"
+translationKey: "huseyin-olmez"
 role: "Kurucu · Dövme ve Piercing Sanatçısı"
 since: "2014"
 photo: "/images/artists/huseyin-olmez.jpg"

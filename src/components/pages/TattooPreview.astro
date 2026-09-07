@@ -1,0 +1,1097 @@
+---
+import { langFromPath, localizePath } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import templateData from '../../data/templates.json';
+
+const templates = templateData.templates;
+
+const regions = [
+  { key: 'full', label: L('Tam Vücut', 'Full Body') },
+  { key: 'onkol', label: L('Ön Kol', 'Forearm') },
+  { key: 'ustkol', label: L('Üst Kol / Omuz', 'Upper Arm / Shoulder') },
+  { key: 'gogus', label: L('Göğüs', 'Chest') },
+  { key: 'sirt', label: L('Sırt', 'Back') },
+  { key: 'bacak', label: L('Bacak / Baldır', 'Leg / Calf') },
+];
+---
+
+<BaseLayout
+  title={L('3D Dövme Önizleme', '3D Tattoo Preview')}
+  description={L('Dövme tasarımınızı 3D vücut modeli üzerinde deneyin: bölgeyi seçin, modeli döndürün, dövmeyi yerleştirin; boyut, açı ve opaklığı ayarlayın.', 'Try your tattoo design on a 3D body model: choose a placement, rotate the model, position the design, and adjust its size, angle and opacity.')}
+  path={localizePath('/dovme-onizleme', lang)}
+>
+  <section class="section-tight tool-hero">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: L('3D Dövme Önizleme', '3D Tattoo Preview') }]} />
+      <p class="eyebrow">{L('Beta Araç', 'Beta Tool')}</p>
+      <h1>{t('home.preview.h')}</h1>
+      <p class="lead">
+        {L('Hazır tasarımlardan birini seçin ya da kendi tasarımınızı yükleyin; 3D vücut modelini döndürüp istediğiniz bölgeye yerleştirin, boyut ve açısını ayarlayın.', 'Pick one of our ready-made designs or upload your own, then rotate the 3D body model, place the design where you want it, and adjust its size and angle.')}
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="studio">
+        <!-- 3D viewport -->
+        <div class="viewport-col">
+          <div class="gender-switch" role="group" aria-label={L('Model seçimi', 'Model selection')}>
+            <button type="button" class="gender-btn is-active" data-model="/models/human-body-female.obj">{L('Kadın', 'Female')}</button>
+            <button type="button" class="gender-btn" data-model="/models/human-body-male.obj">{L('Erkek', 'Male')}</button>
+          </div>
+          <div class="viewport" id="viewport">
+            <div class="loading" id="loading">
+              <div class="spinner"></div>
+              <span id="loading-label">{L('3D model yükleniyor…', 'Loading 3D model…')}</span>
+            </div>
+            <div class="zoom-controls">
+              <button type="button" id="btn-zoom-in" aria-label={L('Yakınlaştır', 'Zoom in')}>+</button>
+              <button type="button" id="btn-zoom-out" aria-label={L('Uzaklaştır', 'Zoom out')}>−</button>
+              <button type="button" id="btn-zoom-fit" aria-label={L('Sığdır', 'Fit')} title={L('Sığdır', 'Fit')}>⤢</button>
+            </div>
+            <div class="pan-pad" aria-label={L('Görünümü kaydır', 'Pan the view')}>
+              <button type="button" data-pan="up" aria-label={L('Yukarı kaydır', 'Pan up')}>▲</button>
+              <div class="pan-row">
+                <button type="button" data-pan="left" aria-label={L('Sola kaydır', 'Pan left')}>◀</button>
+                <button type="button" data-pan="right" aria-label={L('Sağa kaydır', 'Pan right')}>▶</button>
+              </div>
+              <button type="button" data-pan="down" aria-label={L('Aşağı kaydır', 'Pan down')}>▼</button>
+            </div>
+            <p class="viewport-hint" id="viewport-hint">
+              {L('Döndür: sürükle · Kaydır: ok tuşları ya da Shift+sürükle · Yakınlaş: çift tık', 'Rotate: drag · Pan: arrow buttons or Shift+drag · Zoom: double-click')}
+            </p>
+          </div>
+
+          <div class="region-bar">
+            {regions.map((r, i) => (
+              <button type="button" class="region-btn" class:list={[{ 'is-active': i === 0 }]} data-region={r.key}>
+                {r.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <aside class="panel">
+          <div class="panel-block">
+            <h2>{L('1. Tasarım seçin', '1. Choose a design')}</h2>
+            <div class="template-grid" id="template-grid">
+              {templates.map((t) => (
+                <button type="button" class="tpl-btn" data-src={t.image} title={lang === 'en' && (t as any).labelEn ? (t as any).labelEn : t.label}>
+                  <img src={t.image} alt={lang === 'en' && (t as any).labelEn ? (t as any).labelEn : t.label} loading="lazy" />
+                </button>
+              ))}
+            </div>
+
+            <label class="upload-drop" id="upload-drop" for="tattoo-file">
+              <input type="file" id="tattoo-file" accept="image/*" hidden />
+              <span id="upload-label">{L('…veya kendi tasarımınızı yükleyin', '…or upload your own design')}</span>
+            </label>
+            <div class="processing" id="processing" hidden>
+              <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+              <span id="progress-label">{L('Arka plan kaldırılıyor…', 'Removing background…')}</span>
+            </div>
+            <p class="privacy">{L('🔒 Yüklediğiniz fotoğraf cihazınızdan çıkmaz; arka plan kaldırma tamamen tarayıcınızda yapılır.', '🔒 The photo you upload never leaves your device — the background is removed entirely in your browser.')}</p>
+          </div>
+
+          <div class="panel-block">
+            <h2>{L('2. Yerleştirin', '2. Position it')}</h2>
+            <p class="tiny" id="place-hint">{L('Modeli döndürüp dövmeyi koymak istediğiniz yere tıklayın.', 'Rotate the model and click where you want the tattoo.')}</p>
+            <label class="ctl">
+              <span>Boyut</span>
+              <input type="range" id="ctl-scale" min="4" max="60" value="20" />
+            </label>
+            <label class="ctl">
+              <span>{L('Açı', 'Angle')}</span>
+              <input type="range" id="ctl-rotate" min="-180" max="180" value="0" />
+            </label>
+            <label class="ctl">
+              <span>{L('Opaklık', 'Opacity')}</span>
+              <input type="range" id="ctl-opacity" min="20" max="100" value="92" />
+            </label>
+            <div class="panel-actions">
+              <button type="button" id="btn-clear" class="btn btn-outline">Temizle</button>
+              <button type="button" id="btn-shot" class="btn btn-outline">{L('Görseli İndir', 'Download image')}</button>
+            </div>
+          </div>
+
+          <div class="panel-block cta-block">
+            <p>{L('Beğendiğiniz bir yerleşim mi buldunuz?', 'Found a placement you like?')}</p>
+            <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('cta.book')}</a>
+          </div>
+        </aside>
+      </div>
+
+      <p class="disclaimer">
+        {L('Bu araç bir simülasyondur: 3D model temsilîdir, gerçek sonuç vücut hatlarınıza, cilt tonunuza, tasarımın uygulanma tekniğine ve sanatçı yorumuna göre farklılık gösterir.', 'This tool is a simulation. The 3D model is representative only — the real result will vary with your body shape, skin tone, the technique used and the artist\'s interpretation.')}
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 780px;
+  }
+
+  .lead {
+    max-width: 62ch;
+  }
+
+  .studio {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .viewport-col {
+    min-width: 0;
+  }
+
+  .gender-switch {
+    display: inline-flex;
+    gap: 0.3rem;
+    padding: 0.3rem;
+    margin-bottom: 0.7rem;
+    border: 1px solid var(--color-hairline);
+    border-radius: 30px;
+    background: var(--color-ink-950);
+  }
+
+  .gender-btn {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.45em 1.3em;
+    border-radius: 30px;
+    border: 0;
+    background: transparent;
+    color: var(--color-ivory-faint);
+    cursor: pointer;
+    transition: background var(--dur-fast), color var(--dur-fast);
+  }
+
+  .gender-btn:hover {
+    color: var(--color-ivory);
+  }
+
+  .gender-btn.is-active {
+    background: var(--color-gold);
+    color: #150f00;
+  }
+
+  .viewport {
+    position: relative;
+    height: min(72vh, 640px);
+    background: radial-gradient(ellipse at 50% 30%, #17130d 0%, #050505 70%);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  .viewport :global(canvas) {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .viewport-hint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.7rem;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--color-ivory-faint);
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .zoom-controls {
+    position: absolute;
+    right: 0.8rem;
+    bottom: 2.4rem;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .pan-pad {
+    position: absolute;
+    left: 0.8rem;
+    bottom: 5.2rem;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .pan-row {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .pan-pad button {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--color-hairline);
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--color-ivory-faint);
+    font-size: 0.6rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+  }
+
+  .pan-pad button:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+
+
+
+  .zoom-controls button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--color-hairline);
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--color-ivory-dim);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+  }
+
+  .zoom-controls button:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 2;
+    font-size: 0.85rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .loading[hidden] {
+    display: none;
+  }
+
+  .spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--color-hairline);
+    border-top-color: var(--color-gold);
+    border-radius: 50%;
+    animation: spin 800ms linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spinner {
+      animation-duration: 2.4s;
+    }
+  }
+
+  .region-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+  }
+
+  .region-btn {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.5em 1em;
+    border-radius: 30px;
+    border: 1px solid var(--color-hairline);
+    background: transparent;
+    color: var(--color-ivory-dim);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast);
+  }
+
+  .region-btn:hover {
+    border-color: var(--color-gold-35);
+    color: var(--color-ivory);
+  }
+
+  .region-btn.is-active {
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: #150f00;
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .panel-block {
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    padding: 1.3rem 1.4rem;
+  }
+
+  .panel-block h2 {
+    font-size: 1.05rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .tpl-btn {
+    aspect-ratio: 1;
+    padding: 0.3rem;
+    background: #f4f1ea;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast);
+  }
+
+  .tpl-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .tpl-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .tpl-btn.is-active {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 2px var(--color-gold-35);
+  }
+
+  .upload-drop {
+    display: block;
+    margin-top: 0.9rem;
+    padding: 0.9rem;
+    text-align: center;
+    font-size: 0.8rem;
+    border: 1.5px dashed var(--color-hairline);
+    border-radius: var(--radius-sm);
+    color: var(--color-ivory-dim);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+  }
+
+  .upload-drop:hover,
+  .upload-drop.is-dragover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+
+  .processing {
+    margin-top: 0.8rem;
+  }
+
+  .progress-track {
+    height: 5px;
+    background: var(--color-ink-800);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-gold-dim), var(--color-gold));
+    transition: width 200ms ease-out;
+  }
+
+  #progress-label {
+    font-size: 0.75rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .privacy,
+  .tiny {
+    font-size: 0.72rem;
+    color: var(--color-ivory-faint);
+    margin: 0.8rem 0 0;
+  }
+
+  .tiny {
+    margin: 0 0 1rem;
+  }
+
+  .ctl {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--color-ivory-dim);
+    margin-bottom: 0.7rem;
+  }
+
+  .ctl span {
+    min-width: 4.2em;
+  }
+
+  .ctl input[type='range'] {
+    flex: 1;
+    accent-color: var(--color-gold);
+  }
+
+  .panel-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem;
+  }
+
+  .panel-actions .btn {
+    flex: 1;
+    padding: 0.7em 1em;
+    font-size: 0.8rem;
+  }
+
+  .cta-block {
+    text-align: center;
+  }
+
+  .cta-block p {
+    font-size: 0.85rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .cta-block .btn {
+    width: 100%;
+  }
+
+  .disclaimer {
+    font-size: 0.76rem;
+    color: var(--color-ivory-faint);
+    margin-top: 1.5rem;
+    max-width: 80ch;
+  }
+
+  @media (max-width: 960px) {
+    .studio {
+      grid-template-columns: 1fr;
+    }
+    .viewport {
+      height: 60vh;
+    }
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+  import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+  import { DecalGeometry } from 'three/examples/jsm/geometries/DecalGeometry.js';
+  import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+  import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+
+  const viewport = document.getElementById('viewport') as HTMLElement;
+  const loadingEl = document.getElementById('loading') as HTMLElement;
+  const loadingLabel = document.getElementById('loading-label') as HTMLElement;
+  const templateGrid = document.getElementById('template-grid') as HTMLElement;
+  const uploadInput = document.getElementById('tattoo-file') as HTMLInputElement;
+  const uploadDrop = document.getElementById('upload-drop') as HTMLElement;
+  const uploadLabel = document.getElementById('upload-label') as HTMLElement;
+  const processingEl = document.getElementById('processing') as HTMLElement;
+  const progressFill = document.getElementById('progress-fill') as HTMLElement;
+  const progressLabel = document.getElementById('progress-label') as HTMLElement;
+  const scaleInput = document.getElementById('ctl-scale') as HTMLInputElement;
+  const rotateInput = document.getElementById('ctl-rotate') as HTMLInputElement;
+  const opacityInput = document.getElementById('ctl-opacity') as HTMLInputElement;
+  const clearBtn = document.getElementById('btn-clear') as HTMLButtonElement;
+  const shotBtn = document.getElementById('btn-shot') as HTMLButtonElement;
+  const placeHint = document.getElementById('place-hint') as HTMLElement;
+
+  // ---------------------------------------------------------------- scene
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  viewport.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 1.2;
+  controls.maxDistance = 9;
+  controls.enablePan = true;
+  controls.panSpeed = 0.9;
+  controls.maxPolarAngle = Math.PI * 0.92;
+  // shift + drag pans with the left button too — right-drag alone is undiscoverable
+  renderer.domElement.addEventListener('pointerdown', (e) => {
+    controls.mouseButtons.LEFT = e.shiftKey ? THREE.MOUSE.PAN : THREE.MOUSE.ROTATE;
+  });
+  // Wheel over the viewport must scroll the page, not zoom the model. Zoom is via the
+  // on-screen buttons, pinch on touch, or Ctrl/Cmd + wheel.
+  controls.enableZoom = false;
+
+  function dolly(factor: number) {
+    const dir = camera.position.clone().sub(controls.target);
+    const len = THREE.MathUtils.clamp(dir.length() * factor, controls.minDistance, controls.maxDistance);
+    camera.position.copy(controls.target.clone().add(dir.setLength(len)));
+    controls.update();
+  }
+
+  // soft studio image-based lighting for believable skin falloff
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.06).texture;
+  scene.environmentIntensity = 0.32;
+
+  scene.add(new THREE.HemisphereLight(0xdfe8f5, 0x2a1c12, 0.5));
+  const key = new THREE.DirectionalLight(0xfff4e8, 1.5);
+  key.position.set(2.2, 3.0, 3.6);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xcfe0ff, 0.45);
+  fill.position.set(-3.4, 1.2, 2.4);
+  scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xf2a900, 0.9);
+  rim.position.set(-1.8, 2.4, -3.2);
+  scene.add(rim);
+  const rimWarm = new THREE.DirectionalLight(0xffd9a8, 0.55);
+  rimWarm.position.set(2.6, 1.2, -3.0);
+  scene.add(rimWarm);
+
+  // ---------------------------------------------------------------- body model
+  let bodyMesh: THREE.Mesh | null = null;
+  let decal: THREE.Mesh | null = null;
+  let decalTexture: THREE.Texture | null = null;
+  let lastHit: { point: THREE.Vector3; normal: THREE.Vector3 } | null = null;
+  let textureAspect = 1;
+
+  const texLoader = new THREE.TextureLoader();
+  const skinColor = texLoader.load('/models/skin-color.jpg');
+  skinColor.colorSpace = THREE.SRGBColorSpace;
+  skinColor.wrapS = skinColor.wrapT = THREE.RepeatWrapping;
+  const skinBump = texLoader.load('/models/skin-bump.jpg');
+  skinBump.wrapS = skinBump.wrapT = THREE.RepeatWrapping;
+  // per-model muscle relief, baked through the mesh UVs
+  const anatomyMaps: Record<string, THREE.Texture> = {
+    '/models/human-body-male.obj': texLoader.load('/models/anatomy-male.jpg'),
+    '/models/human-body-female.obj': texLoader.load('/models/anatomy-female.jpg'),
+  };
+
+  const skinMaterial = new THREE.MeshStandardMaterial({
+    color: 0xeccbb0,
+    map: skinColor,
+    bumpMap: skinBump,
+    bumpScale: 0.055,
+    roughness: 0.64,
+    metalness: 0.0,
+  });
+
+  // Smooth shading: the OBJ is unwelded, so computeVertexNormals() alone gives flat/faceted
+  // normals. Weld a position-only copy, average the normals there, then map them back onto
+  // the original geometry (which keeps its UV seams intact).
+  function applySmoothNormals(geo: THREE.BufferGeometry) {
+    const posAttr = geo.getAttribute('position') as THREE.BufferAttribute;
+    const posOnly = new THREE.BufferGeometry();
+    posOnly.setAttribute('position', posAttr.clone());
+    const welded = mergeVertices(posOnly, 1e-4);
+    welded.computeVertexNormals();
+    const wPos = welded.getAttribute('position') as THREE.BufferAttribute;
+    const wNor = welded.getAttribute('normal') as THREE.BufferAttribute;
+    const key = (x: number, y: number, z: number) =>
+      `${Math.round(x * 1e4)},${Math.round(y * 1e4)},${Math.round(z * 1e4)}`;
+    const lookup = new Map<string, [number, number, number]>();
+    for (let i = 0; i < wPos.count; i++) {
+      lookup.set(key(wPos.getX(i), wPos.getY(i), wPos.getZ(i)), [wNor.getX(i), wNor.getY(i), wNor.getZ(i)]);
+    }
+    const normals = new Float32Array(posAttr.count * 3);
+    for (let i = 0; i < posAttr.count; i++) {
+      const n = lookup.get(key(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i)));
+      if (n) {
+        normals[i * 3] = n[0];
+        normals[i * 3 + 1] = n[1];
+        normals[i * 3 + 2] = n[2];
+      }
+    }
+    geo.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+    welded.dispose();
+    posOnly.dispose();
+  }
+
+  let bodyGroup: THREE.Group | null = null;
+  const objLoader = new OBJLoader();
+  const modelCache = new Map<string, THREE.BufferGeometry>();
+  let currentModel = '';
+
+  function buildBody(geometry: THREE.BufferGeometry, keepView: boolean) {
+    if (bodyGroup) {
+      scene.remove(bodyGroup);
+      bodyGroup.traverse((c) => {
+        const m = c as THREE.Mesh;
+        if (m.isMesh && m.geometry !== geometry) m.geometry.dispose();
+      });
+    }
+    const anat = anatomyMaps[currentModel];
+    if (anat) {
+      skinMaterial.bumpMap = anat;
+      skinMaterial.bumpScale = 0.055;
+      skinMaterial.needsUpdate = true;
+    }
+
+    const group = new THREE.Group();
+    const mesh = new THREE.Mesh(geometry, skinMaterial);
+    group.add(mesh);
+    bodyMesh = mesh;
+
+    const box = new THREE.Box3().setFromObject(group);
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    const scale = 3 / size.y;
+    group.scale.setScalar(scale);
+    group.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
+    scene.add(group);
+    bodyGroup = group;
+
+    // a decal belongs to the previous surface — drop it on model change
+    if (decal) {
+      scene.remove(decal);
+      decal.geometry.dispose();
+      decal = null;
+    }
+    lastHit = null;
+    placeHint.textContent = decalTexture
+      ? 'Modeli döndürüp dövmeyi koymak istediğiniz yere tıklayın.'
+      : 'Önce yukarıdan bir tasarım seçin ya da yükleyin.';
+
+    loadingEl.hidden = true;
+    if (!keepView) setRegion('full', false);
+  }
+
+  function loadModel(url: string, keepView = false) {
+    if (url === currentModel) return;
+    currentModel = url;
+    const cached = modelCache.get(url);
+    if (cached) {
+      buildBody(cached, keepView);
+      return;
+    }
+    loadingEl.hidden = false;
+    loadingLabel.textContent = '3D model yükleniyor…';
+    objLoader.load(
+      url,
+      (obj) => {
+        let geo: THREE.BufferGeometry | null = null;
+        obj.traverse((child) => {
+          const m = child as THREE.Mesh;
+          if (m.isMesh && !geo) geo = m.geometry;
+        });
+        if (!geo) return;
+        applySmoothNormals(geo);
+        modelCache.set(url, geo);
+        buildBody(geo, keepView);
+      },
+      (evt) => {
+        if (evt.total) {
+          loadingLabel.textContent = `3D model yükleniyor… ${Math.round((evt.loaded / evt.total) * 100)}%`;
+        }
+      },
+      () => {
+        loadingLabel.textContent = '3D model yüklenemedi. Sayfayı yenilemeyi deneyin.';
+      }
+    );
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.gender-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-active')) return;
+      document.querySelectorAll('.gender-btn').forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      loadModel(btn.dataset.model!, true);
+    });
+  });
+
+  loadModel('/models/human-body-female.obj');
+
+  // ---------------------------------------------------------------- camera regions
+  type View = { pos: [number, number, number]; target: [number, number, number] };
+  const VIEWS: Record<string, View> = {
+    full: { pos: [0, 0.45, 5.6], target: [0, 0.05, 0] },
+    onkol: { pos: [0.95, 0.5, 1.25], target: [0.6, 0.36, 0] },
+    ustkol: { pos: [0.92, 0.86, 1.45], target: [0.33, 0.6, 0] },
+    gogus: { pos: [0, 0.62, 1.75], target: [0, 0.55, 0] },
+    sirt: { pos: [0, 0.6, -1.95], target: [0, 0.5, 0] },
+    bacak: { pos: [0.72, -0.78, 1.75], target: [0.12, -0.95, 0] },
+  };
+
+  let anim: { from: THREE.Vector3; to: THREE.Vector3; fromT: THREE.Vector3; toT: THREE.Vector3; t: number } | null = null;
+
+  function setRegion(key: string, animate = true) {
+    const v = VIEWS[key];
+    if (!v) return;
+    const to = new THREE.Vector3(...v.pos);
+    const toT = new THREE.Vector3(...v.target);
+    if (!animate) {
+      camera.position.copy(to);
+      controls.target.copy(toT);
+      controls.update();
+      return;
+    }
+    anim = { from: camera.position.clone(), to, fromT: controls.target.clone(), toT, t: 0 };
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.region-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.region-btn').forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      setRegion(btn.dataset.region!);
+    });
+  });
+
+  // ---------------------------------------------------------------- decal
+  function buildDecal() {
+    if (!bodyMesh || !lastHit || !decalTexture) return;
+    if (decal) {
+      scene.remove(decal);
+      decal.geometry.dispose();
+      decal = null;
+    }
+
+    const sizeVal = Number(scaleInput.value) / 100; // 0.04 – 0.60
+    const w = sizeVal * 2.2;
+    const h = w / textureAspect;
+
+    const orientation = new THREE.Euler();
+    const dummy = new THREE.Object3D();
+    dummy.position.copy(lastHit.point);
+    dummy.lookAt(lastHit.point.clone().add(lastHit.normal));
+    dummy.rotateZ(THREE.MathUtils.degToRad(Number(rotateInput.value)));
+    orientation.copy(dummy.rotation);
+
+    const geo = new DecalGeometry(
+      bodyMesh,
+      lastHit.point,
+      orientation,
+      new THREE.Vector3(w, h, Math.max(w, h) * 1.6)
+    );
+
+    const mat = new THREE.MeshStandardMaterial({
+      map: decalTexture,
+      transparent: true,
+      opacity: Number(opacityInput.value) / 100,
+      depthTest: true,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -6,
+      roughness: 0.85,
+      metalness: 0,
+    });
+
+    decal = new THREE.Mesh(geo, mat);
+    scene.add(decal);
+    placeHint.textContent = 'Başka bir noktaya tıklayarak yeniden yerleştirebilirsiniz.';
+  }
+
+  function setDesign(url: string) {
+    texLoader.load(url, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      decalTexture = tex;
+      textureAspect = (tex.image as HTMLImageElement).width / (tex.image as HTMLImageElement).height || 1;
+      if (lastHit) buildDecal();
+      else placeHint.textContent = 'Tasarım hazır — modeli döndürüp yerleştirmek istediğiniz yere tıklayın.';
+    });
+  }
+
+  // template picking
+  templateGrid.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.tpl-btn') as HTMLElement | null;
+    if (!btn) return;
+    templateGrid.querySelectorAll('.tpl-btn').forEach((b) => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    setDesign(btn.dataset.src!);
+  });
+
+  // ---------------------------------------------------------------- upload + bg removal
+  function setProgress(pct: number, label?: string) {
+    progressFill.style.width = `${Math.round(pct * 100)}%`;
+    if (label) progressLabel.textContent = label;
+  }
+
+  function downscale(file: File, maxDim = 1200): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        let { width, height } = img;
+        if (Math.max(width, height) > maxDim) {
+          const r = maxDim / Math.max(width, height);
+          width = Math.round(width * r);
+          height = Math.round(height * r);
+        }
+        const c = document.createElement('canvas');
+        c.width = width;
+        c.height = height;
+        c.getContext('2d')!.drawImage(img, 0, 0, width, height);
+        URL.revokeObjectURL(url);
+        c.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob'))), 'image/png');
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith('image/')) return;
+    uploadLabel.textContent = file.name;
+    processingEl.hidden = false;
+    setProgress(0.05, 'Görsel hazırlanıyor…');
+    try {
+      const small = await downscale(file);
+      setProgress(0.12, 'Arka plan kaldırılıyor…');
+      const mod = await import('@imgly/background-removal');
+      const removeBackground = mod.default;
+      const out = await removeBackground(small, {
+        model: 'isnet_quint8',
+        progress: (_k: string, cur: number, total: number) => {
+          setProgress(0.12 + 0.85 * (total ? cur / total : 0), 'Arka plan kaldırılıyor…');
+        },
+      });
+      setDesign(URL.createObjectURL(out));
+      setProgress(1, 'Hazır');
+    } catch (err) {
+      console.error('background removal failed', err);
+      setDesign(URL.createObjectURL(file));
+      progressLabel.textContent = 'Arka plan kaldırılamadı, görsel olduğu gibi kullanılıyor.';
+    }
+    templateGrid.querySelectorAll('.tpl-btn').forEach((b) => b.classList.remove('is-active'));
+    setTimeout(() => {
+      processingEl.hidden = true;
+    }, 800);
+  }
+
+  uploadInput.addEventListener('change', () => {
+    const f = uploadInput.files?.[0];
+    if (f) handleFile(f);
+  });
+  ['dragenter', 'dragover'].forEach((ev) =>
+    uploadDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      uploadDrop.classList.add('is-dragover');
+    })
+  );
+  ['dragleave', 'drop'].forEach((ev) =>
+    uploadDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      uploadDrop.classList.remove('is-dragover');
+    })
+  );
+  uploadDrop.addEventListener('drop', (e) => {
+    const f = (e as DragEvent).dataTransfer?.files?.[0];
+    if (f) handleFile(f);
+  });
+
+  // ---------------------------------------------------------------- picking
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  let downPos = { x: 0, y: 0, t: 0 };
+
+  let lastClick = { x: 0, y: 0, t: 0 };
+
+  renderer.domElement.addEventListener('pointerdown', (e) => {
+    downPos = { x: e.clientX, y: e.clientY, t: performance.now() };
+  });
+
+  renderer.domElement.addEventListener('pointerup', (e) => {
+    const moved = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
+    if (moved > 6 || performance.now() - downPos.t > 600) return; // was a drag
+
+    // second click of a double click: that's a zoom gesture, not a placement
+    const now = performance.now();
+    const isDouble =
+      now - lastClick.t < 320 && Math.hypot(e.clientX - lastClick.x, e.clientY - lastClick.y) < 12;
+    lastClick = { x: e.clientX, y: e.clientY, t: now };
+    if (isDouble) return;
+    if (!bodyMesh || !decalTexture) {
+      if (!decalTexture) placeHint.textContent = 'Önce yukarıdan bir tasarım seçin ya da yükleyin.';
+      return;
+    }
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(bodyMesh, false);
+    if (!hits.length) return;
+    const hit = hits[0];
+    const normal = hit.face ? hit.face.normal.clone() : new THREE.Vector3(0, 0, 1);
+    normal.transformDirection(bodyMesh.matrixWorld);
+    lastHit = { point: hit.point.clone(), normal };
+    buildDecal();
+  });
+
+  function pan(dx: number, dy: number) {
+    const dist = camera.position.distanceTo(controls.target);
+    const step = dist * 0.16;
+    const right = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0).multiplyScalar(dx * step);
+    const up = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1).multiplyScalar(dy * step);
+    const offset = right.add(up);
+    anim = {
+      from: camera.position.clone(),
+      to: camera.position.clone().add(offset),
+      fromT: controls.target.clone(),
+      toT: controls.target.clone().add(offset),
+      t: 0,
+    };
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.pan-pad button').forEach((btn) => {
+    const dirs: Record<string, [number, number]> = {
+      up: [0, 1], down: [0, -1], left: [-1, 0], right: [1, 0],
+    };
+    btn.addEventListener('click', () => {
+      const d = dirs[btn.dataset.pan!];
+      if (d) pan(d[0], d[1]);
+    });
+  });
+
+  document.getElementById('btn-zoom-in')!.addEventListener('click', () => dolly(0.75));
+  document.getElementById('btn-zoom-out')!.addEventListener('click', () => dolly(1.33));
+  document.getElementById('btn-zoom-fit')!.addEventListener('click', () => {
+    const active = document.querySelector('.region-btn.is-active') as HTMLElement | null;
+    setRegion(active?.dataset.region ?? 'full');
+  });
+
+  // Wheel zoom is enabled once the pointer is actually over/using the viewport, and
+  // released when it leaves — so scrolling past the section never gets hijacked.
+  viewport.addEventListener('pointerenter', () => {
+    controls.enableZoom = true;
+  });
+  viewport.addEventListener('pointerleave', () => {
+    controls.enableZoom = false;
+  });
+  function pointerToNDC(e: PointerEvent | MouseEvent) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  }
+
+  renderer.domElement.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    if (!bodyMesh) return;
+    pointerToNDC(e);
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(bodyMesh, false);
+
+    if (!hits.length) {
+      // double click on the backdrop pulls back out to the selected region
+      const active = document.querySelector('.region-btn.is-active') as HTMLElement | null;
+      setRegion(active?.dataset.region ?? 'full');
+      return;
+    }
+
+    // keep the current viewing angle, but orbit around — and move close to — the clicked spot
+    const p = hits[0].point.clone();
+    const dir = camera.position.clone().sub(controls.target).normalize();
+    const dist = THREE.MathUtils.clamp(
+      camera.position.distanceTo(controls.target) * 0.5,
+      controls.minDistance,
+      controls.maxDistance
+    );
+    anim = {
+      from: camera.position.clone(),
+      to: p.clone().add(dir.multiplyScalar(dist)),
+      fromT: controls.target.clone(),
+      toT: p,
+      t: 0,
+    };
+  });
+
+  [scaleInput, rotateInput].forEach((el) => el.addEventListener('input', buildDecal));
+  opacityInput.addEventListener('input', () => {
+    if (decal) (decal.material as THREE.MeshStandardMaterial).opacity = Number(opacityInput.value) / 100;
+  });
+
+  clearBtn.addEventListener('click', () => {
+    if (decal) {
+      scene.remove(decal);
+      decal.geometry.dispose();
+      decal = null;
+    }
+    lastHit = null;
+    placeHint.textContent = 'Modeli döndürüp dövmeyi koymak istediğiniz yere tıklayın.';
+  });
+
+  shotBtn.addEventListener('click', () => {
+    renderer.render(scene, camera);
+    renderer.domElement.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'black-ink-art-onizleme.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  });
+
+  // ---------------------------------------------------------------- loop + resize
+  function resize() {
+    const w = viewport.clientWidth;
+    const h = viewport.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => resize()).observe(viewport);
+  }
+  resize();
+
+  function tick() {
+    requestAnimationFrame(tick);
+    if (anim) {
+      anim.t = Math.min(1, anim.t + 0.045);
+      const e = 1 - Math.pow(1 - anim.t, 3);
+      camera.position.lerpVectors(anim.from, anim.to, e);
+      controls.target.lerpVectors(anim.fromT, anim.toT, e);
+      if (anim.t >= 1) anim = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  tick();
+</script>

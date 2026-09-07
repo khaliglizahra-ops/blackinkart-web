@@ -1,26 +1,33 @@
 ---
-import { site, nav, legalNav } from '../data/site';
+import { site } from '../data/site';
+import { getNav, getLegalNav } from '../i18n/nav';
+import { useTranslations } from '../i18n/ui';
+import { langFromPath, localizePath } from '../i18n/config';
 
 const year = new Date().getFullYear();
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const nav = getNav(lang);
+const legalNav = getLegalNav(lang);
 ---
 
 <footer class="site-footer">
   <div class="container grid">
     <div class="col-brand">
       <img src="/brand/logo-mark.png" alt={site.shortName} width="200" height="93" class="footer-logo" />
-      <p>{site.tagline}.</p>
+      <p>{lang === 'en' && (site as any).taglineEn ? (site as any).taglineEn : site.tagline}.</p>
       <p class="addr">{site.address.full}</p>
     </div>
 
     <div class="col">
-      <h2>Keşfet</h2>
+      <h2>{t('footer.explore')}</h2>
       <ul>
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </div>
 
     <div class="col">
-      <h2>İletişim</h2>
+      <h2>{t('footer.contact')}</h2>
       <ul>
         <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
         <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
@@ -30,19 +37,19 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="col">
-      <h2>Diğer</h2>
+      <h2>{t('footer.other')}</h2>
       <ul>
-        <li><a href={site.jewelryShopUrl} target="_blank" rel="noopener">Piercing Takı Mağazası ↗</a></li>
+        <li><a href={site.jewelryShopUrl} target="_blank" rel="noopener">{t('footer.jewelryShop')}</a></li>
         {legalNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </div>
   </div>
 
   <div class="container bottom">
-    <p>© {year} {site.name}. Tüm hakları saklıdır.</p>
+    <p>© {year} {site.name}. {t('footer.rights')}</p>
     <p class="made-by">
-      18 yaş altına yalnızca veli veya yasal vasi eşliğinde ve onayıyla uygulama yapılır.
-      <a href="/yas-ve-onam-politikasi">Detaylar</a>
+      {t('footer.ageNote')}
+      <a href={localizePath('/yas-ve-onam-politikasi', lang)}>{t('footer.ageDetails')}</a>
     </p>
   </div>
 </footer>

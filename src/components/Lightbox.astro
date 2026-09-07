@@ -7,17 +7,23 @@
  * görseller arasında ok tuşlarıyla veya kenardaki düğmelerle gezinilir.
  * İsteğe bağlı `data-caption` alt yazı olarak gösterilir.
  */
+import { useTranslations } from '../i18n/ui';
+import { langFromPath } from '../i18n/config';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
 ---
 
-<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Görsel görüntüleyici">
-  <button class="lb-close" id="lb-close" aria-label="Kapat">
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true"
+  data-activate-label={t('lightbox.activate')} data-image-label={t('lightbox.image')} aria-label={t('lightbox.label')}>
+  <button class="lb-close" id="lb-close" aria-label={t('lightbox.close')}>
     <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg>
   </button>
 
-  <button class="lb-nav lb-prev" id="lb-prev" aria-label="Önceki görsel">
+  <button class="lb-nav lb-prev" id="lb-prev" aria-label={t('lightbox.prev')}>
     <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></svg>
   </button>
-  <button class="lb-nav lb-next" id="lb-next" aria-label="Sonraki görsel">
+  <button class="lb-nav lb-next" id="lb-next" aria-label={t('lightbox.next')}>
     <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="m8.6 16.6 1.4 1.4 6-6-6-6-1.4 1.4 4.6 4.6z"/></svg>
   </button>
 
@@ -297,8 +303,11 @@
       img.dataset.lbReady = '1';
       img.setAttribute('role', 'button');
       img.setAttribute('tabindex', '0');
-      const label = img.dataset.caption || img.alt || 'Görsel';
-      img.setAttribute('aria-label', `${label} — büyütmek için etkinleştirin`);
+      const root = document.getElementById('lightbox');
+      const fallback = root?.dataset.imageLabel || 'Görsel';
+      const activate = root?.dataset.activateLabel || 'büyütmek için etkinleştirin';
+      const label = img.dataset.caption || img.alt || fallback;
+      img.setAttribute('aria-label', `${label} — ${activate}`);
     });
   }
 

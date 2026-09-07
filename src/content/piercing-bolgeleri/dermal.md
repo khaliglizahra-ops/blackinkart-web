@@ -1,5 +1,6 @@
 ---
 title: "Dermal Piercing"
+translationKey: "dermal"
 description: "Dermal (microdermal) piercing uygulaması, iyileşme süresi, bakımı ve fiyatı."
 order: 8
 updatedAt: "2026-02-01"

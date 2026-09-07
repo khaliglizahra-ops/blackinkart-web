@@ -2,51 +2,63 @@
   "templates": [
     {
       "image": "/images/tattoo-templates/mandala.png",
-      "label": "Mandala"
+      "label": "Mandala",
+      "labelEn": "Mandala"
     },
     {
       "image": "/images/tattoo-templates/pusula.png",
-      "label": "Pusula"
+      "label": "Pusula",
+      "labelEn": "Compass"
     },
     {
       "image": "/images/tattoo-templates/ay-yildiz.png",
-      "label": "Ay ve Yıldız"
+      "label": "Ay ve Yıldız",
+      "labelEn": "Moon & Star"
     },
     {
       "image": "/images/tattoo-templates/kuslar.png",
-      "label": "Kuşlar"
+      "label": "Kuşlar",
+      "labelEn": "Birds"
     },
     {
       "image": "/images/tattoo-templates/dag-manzara.png",
-      "label": "Dağ Manzarası"
+      "label": "Dağ Manzarası",
+      "labelEn": "Mountain Landscape"
     },
     {
       "image": "/images/tattoo-templates/gunes.png",
-      "label": "Güneş"
+      "label": "Güneş",
+      "labelEn": "Sun"
     },
     {
       "image": "/images/tattoo-templates/kelebek.png",
-      "label": "Kelebek"
+      "label": "Kelebek",
+      "labelEn": "Butterfly"
     },
     {
       "image": "/images/tattoo-templates/tuy.png",
-      "label": "Tüy"
+      "label": "Tüy",
+      "labelEn": "Feather"
     },
     {
       "image": "/images/tattoo-templates/dalga.png",
-      "label": "Dalga"
+      "label": "Dalga",
+      "labelEn": "Wave"
     },
     {
       "image": "/images/tattoo-templates/ok.png",
-      "label": "Ok"
+      "label": "Ok",
+      "labelEn": "Arrow"
     },
     {
       "image": "/images/tattoo-templates/yilan.png",
-      "label": "Yılan"
+      "label": "Yılan",
+      "labelEn": "Snake"
     },
     {
       "image": "/images/tattoo-templates/kalp-atisi.png",
-      "label": "Kalp Atışı"
+      "label": "Kalp Atışı",
+      "labelEn": "Heartbeat"
     }
   ]
 }

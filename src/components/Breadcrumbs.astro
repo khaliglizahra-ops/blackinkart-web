@@ -1,5 +1,11 @@
 ---
 import { site } from '../data/site';
+import { useTranslations } from '../i18n/ui';
+import { langFromPath, localizePath } from '../i18n/config';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const homeHref = localizePath('/', lang);
 
 interface Crumb {
   label: string;
@@ -15,7 +21,7 @@ const { items } = Astro.props;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
-  itemListElement: [{ label: 'Ana Sayfa', href: '/' }, ...items].map((item, i, arr) => ({
+  itemListElement: [{ label: t('nav.home'), href: homeHref }, ...items].map((item, i, arr) => ({
     '@type': 'ListItem',
     position: i + 1,
     name: item.label,
@@ -24,9 +30,9 @@ const jsonLd = {
 };
 ---
 
-<nav class="breadcrumbs" aria-label="Kırıntı navigasyonu">
+<nav class="breadcrumbs" aria-label={t('breadcrumbs.label')}>
   <ol>
-    <li><a href="/">Ana Sayfa</a></li>
+    <li><a href={homeHref}>{t('nav.home')}</a></li>
     {items.map((item, i) => (
       <li>
         <span aria-hidden="true">/</span>

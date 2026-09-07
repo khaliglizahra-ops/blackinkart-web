@@ -1,0 +1,61 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GuideArticle from '../GuideArticle.astro';
+import BodyPainMap from '../BodyPainMap.astro';
+import { site } from '../../data/site';
+import { localizePath, type Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+/**
+ * Dövme ve piercing rehber yazılarının ortak gövdesi. İki dil de aynı
+ * bileşeni kullanıyor; hangi koleksiyondan geldiği `hub` ile belirtiliyor.
+ */
+interface Props {
+  entry: CollectionEntry<'dovme-rehberi'> | CollectionEntry<'piercing-rehberi'>;
+  slug: string;
+  lang: Lang;
+  hub: 'dovme' | 'piercing';
+  prev: { title: string; slug: string } | null;
+  next: { title: string; slug: string } | null;
+  /** Acı haritası yalnızca dövme acısı yazısında gösteriliyor. */
+  showPainMap?: boolean;
+}
+
+const { entry, slug, lang, hub, prev, next, showPainMap = false } = Astro.props;
+const { Content } = await render(entry);
+const t = useTranslations(lang);
+
+const hubPath = hub === 'dovme' ? '/dovme' : '/piercing';
+const hubLabel = hub === 'dovme' ? `${t('nav.tattoo')} ${t('guide.guides')}` : t('piercing.hubTitle');
+const base = localizePath(hubPath, lang);
+const path = `${base}/${slug}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: entry.data.title,
+  description: entry.data.description,
+  dateModified: entry.data.updatedAt,
+  inLanguage: lang,
+  author: { '@type': 'Person', name: site.founder },
+  publisher: { '@type': 'Organization', name: site.name },
+};
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description} path={path} jsonLd={jsonLd}>
+  <GuideArticle
+    hubLabel={hubLabel}
+    hubHref={base}
+    title={entry.data.title}
+    updatedAt={entry.data.updatedAt}
+    heroImage={entry.data.heroImage}
+    heroArt={entry.data.heroArt}
+    heroSeed={entry.data.heroSeed}
+    prev={prev ? { title: prev.title, href: `${base}/${prev.slug}` } : null}
+    next={next ? { title: next.title, href: `${base}/${next.slug}` } : null}
+  >
+    <Content />
+    {showPainMap && <BodyPainMap />}
+  </GuideArticle>
+</BaseLayout>

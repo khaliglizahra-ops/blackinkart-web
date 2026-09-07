@@ -29,12 +29,18 @@
   "hours": [
     {
       "day": "Pazartesi – Cumartesi",
-      "hours": "11:00 – 20:00"
+      "hours": "11:00 – 20:00",
+      "dayEn": "Monday – Saturday",
+      "hoursEn": "11:00 – 20:00"
     },
     {
       "day": "Pazar",
-      "hours": "Randevu ile"
+      "hours": "Randevu ile",
+      "dayEn": "Sunday",
+      "hoursEn": "By appointment"
     }
   ],
-  "googleBusinessUrl": ""
+  "googleBusinessUrl": "",
+  "taglineEn": "Tattoo and piercing artistry in Bahçelievler, Ankara",
+  "descriptionEn": "A tattoo and piercing studio on 7th Street, Bahçelievler, Ankara. Sterile equipment, experienced artistry and transparent pricing."
 }

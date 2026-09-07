@@ -1,13 +1,18 @@
 ---
 import { site } from '../data/site';
+import { useTranslations } from '../i18n/ui';
+import { langFromPath } from '../i18n/config';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
 ---
 
 <a
   class="whatsapp-fab"
-  href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Merhaba, randevu almak istiyorum.')}`}
+  href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(t('cta.whatsappPrefill'))}`}
   target="_blank"
   rel="noopener"
-  aria-label="WhatsApp üzerinden yazın"
+  aria-label={t('cta.whatsappAria')}
 >
   <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
     <path

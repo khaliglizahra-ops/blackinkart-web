@@ -1,5 +1,6 @@
 ---
 title: "Piercing Bakımı"
+translationKey: "piercing-aftercare"
 description: "Tuzlu su protokolü, vazelin kullanımı ve piercing sonrası ilk günlerde dikkat edilmesi gerekenler."
 order: 4
 updatedAt: "2026-02-01"

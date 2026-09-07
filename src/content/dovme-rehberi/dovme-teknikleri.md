@@ -1,5 +1,6 @@
 ---
 title: "Dövme Teknikleri"
+translationKey: "tattoo-techniques"
 description: "Makineli (Batı) tekniğinden hand-poke'a kadar dövme yapım yöntemleri ve stüdyomuzda kullanılan yaklaşım."
 order: 3
 updatedAt: "2026-02-01"

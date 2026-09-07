@@ -1,25 +1,30 @@
 ---
 // Same figures as the markdown table on this guide, rendered as a range chart (0–12 ay)
 // so the relative healing time across regions reads at a glance.
+import { langFromPath } from '../i18n/config';
+
+const lang = langFromPath(Astro.url.pathname);
+const MONTH = lang === 'en' ? 'mo' : 'ay';
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
 const MAX = 12;
 const rows = [
-  { label: 'Kulak memesi', min: 2, max: 4 },
-  { label: 'Kulak kıkırdağı', min: 4, max: 12 },
-  { label: 'Dudak', min: 2, max: 4 },
-  { label: 'Dil', min: 1, max: 2 },
-  { label: 'Burun', min: 2, max: 4 },
-  { label: 'Kaş', min: 2, max: 4 },
-  { label: 'Yanak', min: 4, max: 8 },
-  { label: 'Göbek', min: 4, max: 12 },
-  { label: 'Göğüs / Meme ucu', min: 3, max: 8 },
-  { label: 'Genital bölge', min: 0.5, max: 1.5 },
-  { label: 'Dermal', min: 3, max: 12 },
+  { label: L('Kulak memesi', 'Earlobe'), min: 2, max: 4 },
+  { label: L('Kulak kıkırdağı', 'Ear cartilage'), min: 4, max: 12 },
+  { label: L('Dudak', 'Lip'), min: 2, max: 4 },
+  { label: L('Dil', 'Tongue'), min: 1, max: 2 },
+  { label: L('Burun', 'Nose'), min: 2, max: 4 },
+  { label: L('Kaş', 'Eyebrow'), min: 2, max: 4 },
+  { label: L('Yanak', 'Cheek'), min: 4, max: 8 },
+  { label: L('Göbek', 'Navel'), min: 4, max: 12 },
+  { label: L('Göğüs / Meme ucu', 'Chest / Nipple'), min: 3, max: 8 },
+  { label: L('Genital bölge', 'Genital'), min: 0.5, max: 1.5 },
+  { label: L('Dermal', 'Dermal'), min: 3, max: 12 },
 ];
 ---
 
 <div class="healing-chart" data-reveal>
   <div class="axis">
-    {[0, 3, 6, 9, 12].map((m) => <span style={`left:${(m / MAX) * 100}%`}>{m} ay</span>)}
+    {[0, 3, 6, 9, 12].map((m) => <span style={`left:${(m / MAX) * 100}%`}>{m} {MONTH}</span>)}
   </div>
   {rows.map((r) => (
     <div class="row">
@@ -30,7 +35,7 @@ const rows = [
           style={`left:${(r.min / MAX) * 100}%; width:${((r.max - r.min) / MAX) * 100}%`}
         ></div>
       </div>
-      <span class="value">{r.min}–{r.max} ay</span>
+      <span class="value">{r.min}–{r.max} {MONTH}</span>
     </div>
   ))}
 </div>

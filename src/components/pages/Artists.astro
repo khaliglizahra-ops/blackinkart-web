@@ -1,0 +1,91 @@
+---
+import { langFromPath, localizePath } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (p: string) => localizePath(p, lang);
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const artists = await getLocalizedCollection('sanatcilar', lang);
+---
+
+<BaseLayout
+  title={t('nav.artists')}
+  description={t('artists.pageDesc')}
+  path={L('/sanatcilar')}
+>
+  <section class="section-tight">
+    <div class="container">
+      <Breadcrumbs items={[{ label: t('nav.artists') }]} />
+      <p class="eyebrow">Ekip</p>
+      <h1>{t('artists.h1')}</h1>
+      <p class="lead">{t('artists.lead')}</p>
+      <div class="gold-rule"></div>
+
+      <div class="artist-grid">
+        {artists.map((artist) => (
+          <a href={`${L('/sanatcilar')}/${cleanSlug(artist.slug)}`} class="artist-card surface" data-reveal>
+            <img src={artist.data.photo} alt={artist.data.name} width="400" height="500" />
+            <div class="info">
+              <h2>{artist.data.name}</h2>
+              <p class="role">{artist.data.role}</p>
+              <p>{artist.data.description}</p>
+              <span class="read-more">{t('artists.viewProfile')}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lead {
+    max-width: 56ch;
+  }
+
+  .artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.8rem;
+    margin-top: 2rem;
+  }
+
+  .artist-card {
+    overflow: hidden;
+    transition: border-color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+  }
+
+  .artist-card:hover {
+    border-color: var(--color-gold-35);
+    transform: translateY(-4px);
+  }
+
+  .artist-card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .info {
+    padding: 1.5rem;
+  }
+
+  .role {
+    color: var(--color-gold);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.8em;
+  }
+
+  .read-more {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-gold);
+  }
+</style>

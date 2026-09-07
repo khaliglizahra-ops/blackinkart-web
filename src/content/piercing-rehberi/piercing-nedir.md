@@ -1,5 +1,6 @@
 ---
 title: "Piercing Nedir?"
+translationKey: "what-is-a-piercing"
 description: "Piercingin tanımı, kısa tarihçesi ve modern uygulamadaki yeri."
 order: 1
 updatedAt: "2026-02-01"

@@ -1,0 +1,100 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { site } from '../../data/site';
+import { localizePath, type Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+  entry: CollectionEntry<'sanatcilar'>;
+  slug: string;
+  lang: Lang;
+}
+
+const { entry, slug, lang } = Astro.props;
+const { Content } = await render(entry);
+const t = useTranslations(lang);
+const artistsHref = localizePath('/sanatcilar', lang);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: entry.data.name,
+  jobTitle: entry.data.role,
+  image: new URL(entry.data.photo, site.url).toString(),
+  worksFor: { '@type': 'Organization', name: site.name },
+  description: entry.data.description,
+  inLanguage: lang,
+};
+---
+
+<BaseLayout
+  title={entry.data.name}
+  description={entry.data.description}
+  path={`${artistsHref}/${slug}`}
+  image={entry.data.photo}
+  jsonLd={jsonLd}
+>
+  <section class="section-tight">
+    <div class="container">
+      <Breadcrumbs items={[{ label: t('nav.artists'), href: artistsHref }, { label: entry.data.name }]} />
+      <div class="artist-layout">
+        <div class="photo-col" data-reveal>
+          <img src={entry.data.photo} alt={entry.data.name} width="500" height="625" />
+        </div>
+        <div class="text-col">
+          <p class="eyebrow">{entry.data.role}</p>
+          <h1>{entry.data.name}</h1>
+          <p class="since">{lang === 'en' ? `In the trade since ${entry.data.since}` : `Sektörde ${entry.data.since}'ten bu yana`}</p>
+          <div class="gold-rule"></div>
+          <div class="prose" data-reveal>
+            <Content />
+          </div>
+          <div class="actions">
+            <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('cta.book')}</a>
+            <a href={localizePath('/portfolyo', lang)} class="btn btn-outline">{t('cta.viewPortfolio')}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .artist-layout {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+
+  .photo-col img {
+    width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-hairline);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .since {
+    color: var(--color-ivory-faint);
+    font-size: 0.9rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 800px) {
+    .artist-layout {
+      grid-template-columns: 1fr;
+    }
+    .photo-col {
+      max-width: 320px;
+    }
+  }
+</style>

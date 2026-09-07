@@ -1,5 +1,6 @@
 ---
 title: "Piercing Malzemeleri: Titanyum, Cerrahi Çelik ve Bioplastik"
+translationKey: "piercing-materials"
 description: "Titanyum, 316L cerrahi çelik ve bioplastik (PTFE) piercing malzemelerinin karşılaştırması ve ilk delim için doğru seçim."
 order: 2
 updatedAt: "2026-02-01"

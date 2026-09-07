@@ -1,6 +1,11 @@
 ---
 import { site } from '../data/site';
 import heroSlides from '../data/hero.json';
+import { useTranslations } from '../i18n/ui';
+import { langFromPath, localizePath } from '../i18n/config';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
 
 // Hero kareleri artık portfolyodan değil kendi listesinden geliyor — böylece
 // portfolyo sırası değişince ana sayfa etkilenmiyor ve her kare tam ekran
@@ -9,7 +14,7 @@ import heroSlides from '../data/hero.json';
 // Her karenin kendi `position` değeri var: fotoğraflar dikey, hero ise geniş.
 // Tek bir ortak değer kullanılınca `cover` kırpması dövmeyi kadraj dışında
 // bırakıyordu; bu yüzden odak noktası kare kare belirleniyor.
-const SLIDE_SECONDS = 6;
+const SLIDE_SECONDS = 5;
 const slideDuration = heroSlides.length * SLIDE_SECONDS;
 
 // Her kare kendi döngüsünün ilk 1/n'inde görünür. Bu yüzden kare geçişlerinin
@@ -40,7 +45,7 @@ const keyframesCss = `@keyframes hero-slide-cycle{
 <section class="hero">
   <div class="hero-bg" aria-hidden="true" style={`--slide-duration:${slideDuration}s`}>
     {/* Yalnızca ilk kare hemen yükleniyor. Kalan dokuzu birlikte istenirse ana
-        sayfa açılışına ~1,2 MB ekliyor; oysa ikincisi 6 saniye sonra gerekiyor.
+        sayfa açılışına ~1,2 MB ekliyor; oysa ikincisi 5 saniye sonra gerekiyor.
         Bu yüzden onlar data-bg'de bekliyor ve sayfa hazır olunca yükleniyor. */}
     {heroSlides.map((slide, i) => (
       <div
@@ -64,18 +69,15 @@ const keyframesCss = `@keyframes hero-slide-cycle{
       />
     </div>
     <span class="hero-rule" aria-hidden="true"></span>
-    <p class="hero-eyebrow">Ankara Bahçelievler · 7. Cadde</p>
-    <h1 class="hero-title">Kalıcı sanatın <em>ustalıkla</em> buluştuğu adres</h1>
-    <p class="hero-sub">
-      Dövme ve piercingde steril standartlar, deneyimli sanatçılık ve şeffaf fiyatlarla —
-      hayalinizdeki tasarımı Black Ink Art'ta hayata geçirin.
-    </p>
+    <p class="hero-eyebrow">{t('home.eyebrow')}</p>
+    <h1 class="hero-title">{t('home.title.a')} <em>{t('home.title.em')}</em> {t('home.title.b')}</h1>
+    <p class="hero-sub">{t('home.sub')}</p>
     <div class="hero-actions">
-      <a href="/randevu" class="btn btn-primary">Randevu Al</a>
-      <a href="/portfolyo" class="btn btn-outline">Portfolyoyu Gör</a>
+      <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('cta.book')}</a>
+      <a href={localizePath('/portfolyo', lang)} class="btn btn-outline">{t('cta.viewPortfolio')}</a>
     </div>
   </div>
-  <a class="scroll-cue" href="#hero-next" aria-label="Aşağı kaydır">
+  <a class="scroll-cue" href="#hero-next" aria-label={t('home.scroll')}>
     <span></span>
   </a>
 </section>
@@ -297,7 +299,7 @@ const keyframesCss = `@keyframes hero-slide-cycle{
   /**
    * Hero karelerinin geri kalanını sayfa yerleştikten sonra yükler.
    * Hepsi HTML'de gelseydi ana sayfa açılışına ~1,2 MB eklenirdi; oysa ikinci
-   * kare 6 saniye sonra gerekiyor. Bu yüzden ilk kare satır içi, kalanlar
+   * kare 5 saniye sonra gerekiyor. Bu yüzden ilk kare satır içi, kalanlar
    * data-bg'de bekliyor.
    *
    * ClientRouter ile gövde her gezinmede yeniden yazıldığından iş

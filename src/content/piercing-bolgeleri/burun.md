@@ -1,5 +1,6 @@
 ---
 title: "Burun Piercingleri"
+translationKey: "nose"
 description: "Nostril, septum, high nostril ve nasallang dahil burun piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 2
 updatedAt: "2026-02-01"

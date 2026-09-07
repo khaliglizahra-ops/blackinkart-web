@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { site } from '../../data/site';
+import { langFromPath, localizePath } from '../../i18n/config';
+
+/**
+ * Yasal metinler sayfaya özgü ve başka yerde kullanılmıyor; bu yüzden
+ * uzaktaki bir sözlük yerine iki dil yan yana duruyor. Bir maddeyi
+ * değiştirirken öbür dildeki karşılığı gözden kaçmıyor.
+ */
+const lang = langFromPath(Astro.url.pathname);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
+const path = localizePath('/cerez-politikasi', lang);
+---
+
+<BaseLayout
+  title={L('Çerez Politikası', 'Cookie Policy')}
+  description={L(
+    'Black Ink Art Tattoo Piercing web sitesinde kullanılan çerezler hakkında bilgilendirme.',
+    'Information about the cookies used on the Black Ink Art Tattoo Piercing website.'
+  )}
+  path={path}
+  noindex={true}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: L('Çerez Politikası', 'Cookie Policy') }]} />
+      <p class="eyebrow">{L('Yasal', 'Legal')}</p>
+      <h1>{L('Çerez Politikası', 'Cookie Policy')}</h1>
+      <div class="prose">
+        <p>
+          {L(
+            'Bu web sitesi, ziyaretçilerine daha iyi bir deneyim sunmak amacıyla sınırlı sayıda çerez (cookie) ve benzeri teknolojiler kullanabilir.',
+            'This website may use a limited number of cookies and similar technologies in order to give visitors a better experience.'
+          )}
+        </p>
+
+        <h2>{L('Kullandığımız Çerez Türleri', 'The Types of Cookie We Use')}</h2>
+        <ul>
+          <li>
+            <strong>{L('Zorunlu çerezler:', 'Essential cookies:')}</strong>{' '}
+            {L(
+              'Sitenin temel işlevlerini (ör. mobil menü durumu) çalıştırmak için gereklidir; kapatılamaz.',
+              'These are required to run the basic functions of the site, such as the state of the mobile menu. They cannot be turned off.'
+            )}
+          </li>
+          <li>
+            <strong>{L('Harici içerik çerezleri:', 'Third-party content cookies:')}</strong>{' '}
+            {L(
+              'İletişim sayfasındaki harita (Google Maps) gibi gömülü içerikler kendi çerezlerini kullanabilir. Bu çerezler ilgili üçüncü tarafların gizlilik politikalarına tabidir. Randevu formumuz gömülü bir takvim kullanmaz ve çerez oluşturmaz.',
+              'Embedded content such as the map on the contact page (Google Maps) may set its own cookies. These are subject to the privacy policies of the third parties concerned. Our booking form does not use an embedded calendar and sets no cookies.'
+            )}
+          </li>
+          <li>
+            <strong>{L('Analitik çerezler:', 'Analytics cookies:')}</strong>{' '}
+            {L(
+              'Sitenin nasıl kullanıldığını anlamak için ileride anonim istatistik araçları eklenmesi durumunda kullanılabilir.',
+              'These may be used if anonymous statistics tools are added in future to understand how the site is used.'
+            )}
+          </li>
+        </ul>
+
+        <h2>{L('Çerezleri Yönetme', 'Managing Cookies')}</h2>
+        <p>
+          {L(
+            'Tarayıcınızın ayarlarından çerezleri silebilir veya engelleyebilirsiniz. Ancak bazı çerezlerin engellenmesi, gömülü harita gibi bazı özelliklerin düzgün çalışmamasına neden olabilir.',
+            'You can delete or block cookies in your browser settings. Blocking some cookies may, however, stop certain features — such as the embedded map — from working properly.'
+          )}
+        </p>
+
+        <h2>{L('İletişim', 'Contact')}</h2>
+        <p>
+          {L(
+            `Çerez kullanımıyla ilgili sorularınız için ${site.email} adresinden bize ulaşabilirsiniz.`,
+            `If you have questions about our use of cookies, you can reach us at ${site.email}.`
+          )}
+        </p>
+
+        <blockquote>
+          {L(
+            'Bu metin genel bir bilgilendirme amacıyla hazırlanmıştır; yayınlanmadan önce bir hukuk danışmanı tarafından gözden geçirilmesi önerilir.',
+            'This text is provided for general information. We recommend having it reviewed by a legal adviser before publication.'
+          )}
+        </blockquote>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

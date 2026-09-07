@@ -1,5 +1,6 @@
 ---
 title: "Kulak Piercingleri"
+translationKey: "ear"
 description: "Lobe, tragus, helix, conch, daith ve industrial dahil tüm kulak piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 1
 updatedAt: "2026-02-01"

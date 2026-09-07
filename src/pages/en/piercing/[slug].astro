@@ -1,0 +1,37 @@
+---
+import PiercingSlugPage from '../../../components/pages/PiercingSlugPage.astro';
+import { getLocalizedCollection, cleanSlug } from '../../../i18n/content';
+
+/** Piercing bölümünde iki koleksiyon aynı adres uzayını paylaşıyor:
+ *  rehber yazıları ve bölge sayfaları. */
+export async function getStaticPaths() {
+  const lang = 'en' as const;
+  const guides = await getLocalizedCollection('piercing-rehberi', lang);
+  const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
+
+  const build = (list: typeof guides | typeof areas, kind: 'guide' | 'area') =>
+    list.map((entry, i) => {
+      const at = (n: number) => {
+        const e = list[n];
+        return e ? { title: e.data.title, slug: cleanSlug(e.slug) } : null;
+      };
+      return {
+        params: { slug: cleanSlug(entry.slug) },
+        props: {
+          kind,
+          entry,
+          slug: cleanSlug(entry.slug),
+          lang,
+          prev: i > 0 ? at(i - 1) : null,
+          next: i < list.length - 1 ? at(i + 1) : null,
+        },
+      };
+    });
+
+  return [...build(guides, 'guide'), ...build(areas, 'area')];
+}
+
+const props = Astro.props;
+---
+
+<PiercingSlugPage {...props} />

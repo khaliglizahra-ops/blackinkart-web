@@ -1,5 +1,6 @@
 ---
 title: "Kaş Piercingleri"
+translationKey: "eyebrow"
 description: "Kaş (eyebrow) piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 5
 updatedAt: "2026-02-01"

@@ -1,5 +1,7 @@
 ---
 import GuideHero from './GuideHero.astro';
+import { useTranslations } from '../i18n/ui';
+import { langFromPath, localizePath, LANG_LABELS } from '../i18n/config';
 
 interface Props {
   hubLabel: string;
@@ -14,7 +16,9 @@ interface Props {
 }
 
 const { hubLabel, hubHref, title, updatedAt, heroImage, heroArt, heroSeed, prev, next } = Astro.props;
-const updatedLabel = new Date(updatedAt).toLocaleDateString('tr-TR', {
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const updatedLabel = new Date(updatedAt).toLocaleDateString(LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
@@ -31,27 +35,27 @@ const updatedLabel = new Date(updatedAt).toLocaleDateString('tr-TR', {
     seed={heroSeed}
   />
   <div class="container narrow section-tight">
-    <p class="updated">Güncellendi: {updatedLabel}</p>
+    <p class="updated">{t('guide.updated')}: {updatedLabel}</p>
     <div class="gold-rule"></div>
     <div class="prose" data-reveal>
       <slot />
     </div>
 
     {(prev || next) && (
-      <nav class="pager" aria-label="Rehber gezinme">
-        {prev ? <a href={prev.href} class="pager-link prev"><span>← Önceki</span>{prev.title}</a> : <span />}
-        {next ? <a href={next.href} class="pager-link next"><span>Sonraki →</span>{next.title}</a> : <span />}
+      <nav class="pager" aria-label={t('guide.pagerLabel')}>
+        {prev ? <a href={prev.href} class="pager-link prev"><span>{t('guide.prev')}</span>{prev.title}</a> : <span />}
+        {next ? <a href={next.href} class="pager-link next"><span>{t('guide.next')}</span>{next.title}</a> : <span />}
       </nav>
     )}
 
     <div class="cta surface" data-reveal>
       <div>
-        <h2>Sorularınız mı var?</h2>
-        <p>Randevu öncesi merak ettiklerinizi konuşalım.</p>
+        <h2>{t('guide.ctaTitle')}</h2>
+        <p>{t('guide.ctaText')}</p>
       </div>
       <div class="cta-actions">
-        <a href="/randevu" class="btn btn-primary">Randevu Al</a>
-        <a href="/hakkimizda-iletisim" class="btn btn-outline">İletişime Geç</a>
+        <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('cta.book')}</a>
+        <a href={localizePath('/hakkimizda-iletisim', lang)} class="btn btn-outline">{t('cta.contact')}</a>
       </div>
     </div>
   </div>

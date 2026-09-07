@@ -1,5 +1,6 @@
 ---
 title: "Dudak Piercingleri"
+translationKey: "lip"
 description: "Labret, Medusa, Monroe ve bites serisi dahil dudak piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 3
 updatedAt: "2026-02-01"

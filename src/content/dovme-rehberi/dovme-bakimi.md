@@ -1,5 +1,6 @@
 ---
 title: "Dövme Bakımı ve İyileşme Süreci"
+translationKey: "tattoo-aftercare"
 description: "Cerrahi bant ve streç film yöntemleriyle dövme bakımı, iyileşme süresi ve dikkat edilmesi gerekenler."
 order: 5
 updatedAt: "2026-02-01"

@@ -1,0 +1,105 @@
+---
+import { langFromPath, localizePath, LANG_LABELS } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (p: string) => localizePath(p, lang);
+const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { piercingPriceTables, startingPrice } from '../../data/prices';
+
+const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
+
+function priceFor(slug: string) {
+  const table = piercingPriceTables(lang).find((t) => t.slug === slug);
+  if (!table) return null;
+  return startingPrice(table);
+}
+---
+
+<BaseLayout
+  title={t('plc.pageTitle')}
+  description={t('plc.pageDesc')}
+  path={L('/piercing/bolgeler')}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: t('nav.piercing'), href: L('/piercing') }, { label: t('plc.crumb') }]} />
+      <p class="eyebrow">Piercing</p>
+      <h1>{t('plc.h1')}</h1>
+      <p class="lead">
+        {t('plc.lead')}
+      </p>
+      <div class="gold-rule"></div>
+
+      <div class="scroll surface" data-reveal>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">{t('plc.col.area')}</th>
+              <th scope="col">{t('area.healing')}</th>
+              <th scope="col">{t('area.pain')}</th>
+              <th scope="col">{t('plc.col.start')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {areas.map((area) => {
+              const price = priceFor(area.data.priceSlug);
+              return (
+                <tr>
+                  <th scope="row"><a href={`${L('/piercing')}/${cleanSlug(area.slug)}`}>{area.data.title}</a></th>
+                  <td>{area.data.healingTime}</td>
+                  <td>{area.data.painLevel}</td>
+                  <td class="price">{price ? `${price.toLocaleString(priceLocale)} ${t('price.currency')}${t('plc.from')}` : t('plc.contact')}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="kdv-note">{t('plc.note')} <a href={L('/piercing/fiyatlar')}>{t('pprice.pageTitle')}</a>.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 820px;
+  }
+
+  .lead {
+    max-width: 60ch;
+  }
+
+  .scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 560px;
+  }
+
+  th[scope='row'] a {
+    color: var(--color-ivory);
+    font-weight: 600;
+  }
+
+  th[scope='row'] a:hover {
+    color: var(--color-gold);
+  }
+
+  .kdv-note {
+    font-size: 0.82rem;
+    color: var(--color-ivory-faint);
+    margin-top: 1rem;
+  }
+
+  .kdv-note a {
+    color: var(--color-gold);
+  }
+</style>

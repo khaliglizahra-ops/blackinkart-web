@@ -1,5 +1,6 @@
 ---
 title: "Meme Ucu (Nipple) Piercing"
+translationKey: "nipple"
 description: "Nipple piercing uygulaması, iyileşme süresi, bakımı ve fiyatı."
 order: 7
 updatedAt: "2026-02-01"

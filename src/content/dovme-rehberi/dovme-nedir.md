@@ -1,5 +1,6 @@
 ---
 title: "Dövme Nedir?"
+translationKey: "what-is-a-tattoo"
 description: "Dövmenin tanımı, kısa tarihçesi ve günümüzdeki anlamı. Ankara'da kalıcı dövme yaptırmadan önce bilmeniz gerekenler."
 order: 1
 updatedAt: "2026-02-01"

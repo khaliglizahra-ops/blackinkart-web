@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
 import Lightbox from '../components/Lightbox.astro';
 import SEO from '../components/SEO.astro';
+import { langFromPath, LANG_LABELS } from '../i18n/config';
 import '../styles/global.css';
 
 interface Props {
@@ -17,10 +18,15 @@ interface Props {
 }
 
 const { title, description, path, image, noindex, jsonLd } = Astro.props;
+
+// Dil, prop olarak her sayfadan taşınmak yerine adresten okunuyor; alt
+// bileşenler de aynı şekilde kendileri buluyor. Böylece iki dil eklemek
+// sayfa dosyalarında imza değişikliği gerektirmedi.
+const lang = langFromPath(Astro.url.pathname);
 ---
 
 <!doctype html>
-<html lang="tr">
+<html lang={LANG_LABELS[lang].htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

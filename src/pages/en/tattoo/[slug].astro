@@ -1,0 +1,34 @@
+---
+import GuidePage from '../../../components/pages/GuidePage.astro';
+import { getLocalizedCollection, cleanSlug } from '../../../i18n/content';
+
+export async function getStaticPaths() {
+  const out = [];
+  for (const lang of ['en'.split(',')].flat()) {
+    const guides = await getLocalizedCollection('dovme-rehberi', lang as 'tr' | 'en');
+    guides.forEach((entry, i) => {
+      const slug = cleanSlug(entry.slug);
+      const at = (n: number) => {
+        const e = guides[n];
+        return e ? { title: e.data.title, slug: cleanSlug(e.slug) } : null;
+      };
+      out.push({
+        params: { slug },
+        props: {
+          entry,
+          slug,
+          lang,
+          prev: i > 0 ? at(i - 1) : null,
+          next: i < guides.length - 1 ? at(i + 1) : null,
+          showPainMap: slug === 'tattoo-pain-guide',
+        },
+      });
+    });
+  }
+  return out.filter((p) => p.props.lang === 'en');
+}
+
+const props = Astro.props;
+---
+
+<GuidePage {...props} hub="dovme" />

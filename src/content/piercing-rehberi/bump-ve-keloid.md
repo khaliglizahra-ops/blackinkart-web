@@ -1,5 +1,6 @@
 ---
 title: "Bump ve Keloid: Nedenleri ve Ev Tedavisi"
+translationKey: "bumps-and-keloids"
 description: "Piercing bump ve keloid oluşumunun nedenleri, aspirin ve Fucicort ile ev bakım protokolü."
 order: 5
 updatedAt: "2026-02-01"

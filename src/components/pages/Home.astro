@@ -1,0 +1,453 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import { site } from '../../data/site';
+import { topPortfolio, studioPhotos } from '../../data/gallery';
+import { tattooPricing } from '../../data/prices';
+import { getCollection } from 'astro:content';
+import { thumb } from '../../data/images';
+import { langFromPath, localizePath, LANG_LABELS } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const L = (p: string) => localizePath(p, lang);
+const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
+
+const artists = await getLocalizedCollection('sanatcilar', lang);
+const artist = artists[0];   // panelden silinebilir; aşağıda koşullu render ediliyor
+const teaserImages = topPortfolio.slice(0, 8);
+const studioTeaser = studioPhotos.slice(0, 3);
+---
+
+<BaseLayout title={t('home.pageTitle')} description={lang === 'en' && (site as any).descriptionEn ? (site as any).descriptionEn : site.description} path={L('/')}>
+  <Hero />
+
+  <section class="section pillars" id="hero-next">
+    <div class="container pillar-grid">
+      <div class="pillar" data-reveal>
+        <h2>{t('home.pillar1.h')}</h2>
+        <p>{t('home.pillar1.p')}</p>
+        <a href={L('/hijyen-ve-guvenlik')} class="btn-ghost">{t('home.pillar1.a')}</a>
+      </div>
+      <div class="pillar" data-reveal>
+        <h2>{t('home.pillar2.h')}</h2>
+        <p>{t('home.pillar2.p')}</p>
+        <a href={L('/sanatcilar')} class="btn-ghost">{t('home.pillar2.a')}</a>
+      </div>
+      <div class="pillar" data-reveal>
+        <h2>{t('home.pillar3.h')}</h2>
+        <p>{t('home.pillar3.p')}</p>
+        <a href={L('/dovme/fiyatlar')} class="btn-ghost">{t('home.pillar3.a')}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section services">
+    <div class="container">
+      <p class="eyebrow">{t('home.services.eyebrow')}</p>
+      <h2>{t('home.services.h')}</h2>
+      <div class="service-grid">
+        <a href={L('/dovme')} class="service-card" data-reveal>
+          <img src={teaserImages[0] ?? '/brand/og-default.jpg'} alt={t('nav.tattoo')} loading="lazy" />
+          <div class="service-overlay">
+            <h3>{t('nav.tattoo')}</h3>
+            <p>{t('home.tattooCard.p1')} {tattooPricing.openingPrice.toLocaleString(priceLocale)} {tattooPricing.currency}{t('home.tattooCard.p2')}</p>
+            <span class="btn btn-outline">{t('home.tattooCard.cta')}</span>
+          </div>
+        </a>
+        <a href={L('/piercing')} class="service-card" data-reveal>
+          <img src="/images/piercing/kulak/kulak-01.jpg" alt="Piercing" loading="lazy" />
+          <div class="service-overlay">
+            <h3>Piercing</h3>
+            <p>{t('home.piercingCard.p')}</p>
+            <span class="btn btn-outline">{t('home.piercingCard.cta')}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section preview-tool">
+    <div class="container preview-inner surface" data-reveal>
+      <div class="preview-copy">
+        <p class="eyebrow">{t('home.preview.eyebrow')}</p>
+        <h2>{t('home.preview.h')}</h2>
+        <p>{t('home.preview.p')}</p>
+        <a href={L('/dovme-onizleme')} class="btn btn-primary">{t('home.preview.cta')}</a>
+      </div>
+      <div class="preview-visual" aria-hidden="true">
+        <img src="/images/tattoo-templates/mandala.png" alt="" loading="lazy" class="preview-thumb" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section portfolio-teaser">
+    <div class="container">
+      <div class="teaser-head">
+        <div>
+          <p class="eyebrow">{t('nav.portfolio')}</p>
+          <h2>{t('home.portfolio.h')}</h2>
+        </div>
+        <a href={L('/portfolyo')} class="btn-ghost">{t('home.portfolio.all')}</a>
+      </div>
+      <div class="teaser-grid">
+        {teaserImages.map((src, i) => (
+          <div class="tile" data-reveal>
+            <img src={thumb(src)} data-full={src} alt={t('home.portfolio.alt')} loading={i < 4 ? 'eager' : 'lazy'} width="400" height="400" data-lightbox="portfolyo" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {artist && (
+    <section class="section artist-teaser">
+      <div class="container artist-inner">
+        <div class="artist-photo" data-reveal>
+          <img src={artist.data.photo} alt={artist.data.name} width="440" height="550" />
+        </div>
+        <div class="artist-copy">
+          <p class="eyebrow">{t('home.founder')}</p>
+          <h2>{artist.data.name}</h2>
+          <p>{artist.data.description}</p>
+          <a href={`${L('/sanatcilar')}/${cleanSlug(artist.slug)}`} class="btn btn-outline">{t('home.founder.cta')}</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section studio-teaser">
+    <div class="container">
+      <p class="eyebrow">{t('home.studio')}</p>
+      <h2>{t('home.studio.h')}</h2>
+      <p class="lead">{t('home.studio.p')}</p>
+      <div class="studio-grid">
+        {studioTeaser.map((src) => (
+          <div class="tile" data-reveal>
+            <img src={thumb(src)} data-full={src} alt={t('home.studio.alt')} loading="lazy" width="500" height="400" data-lightbox="studyo" />
+          </div>
+        ))}
+      </div>
+      <a href={L('/hijyen-ve-guvenlik')} class="btn btn-primary">{t('home.studio.cta')}</a>
+    </div>
+  </section>
+
+  <section class="section jewelry-teaser">
+    <div class="container jewelry-inner surface" data-reveal>
+      <div class="jewelry-visual">
+        <img
+          src="/brand/piercingland-logo.png"
+          alt={t('jewelry.alt')}
+          loading="lazy"
+          width="900"
+          height="709"
+        />
+      </div>
+      <div class="jewelry-copy">
+        <p class="eyebrow">{t('jewelry.eyebrow')}</p>
+        <h2>Piercingland</h2>
+        <p>{t('home.jewelry.p1')}</p>
+        <p>{t('home.jewelry.p2')}</p>
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="btn btn-primary">
+          {t('cta.viewJewelry')}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section final-cta">
+    <div class="container cta-box surface" data-reveal>
+      <div>
+        <h2>{t('home.final.h')}</h2>
+        <p>{t('home.final.p')}</p>
+      </div>
+      <div class="cta-actions">
+        <a href={L('/randevu')} class="btn btn-primary">{t('cta.book')}</a>
+        <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener" class="btn btn-outline">{t('cta.whatsapp')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .pillar h2 {
+    margin: 0 0 0.5em;
+  }
+
+  /* Numaraların yerine ince bir altın çizgi — sıralama hissi kalsın,
+     rakamlar görünmesin. */
+  .pillar::before {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 2px;
+    background: var(--color-gold);
+    margin-bottom: 1.1rem;
+  }
+
+  h2 {
+    margin-bottom: 0.6em;
+  }
+
+  .services h2,
+  .portfolio-teaser h2 {
+    max-width: 20ch;
+  }
+
+  .preview-inner {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .preview-copy {
+    padding: clamp(2rem, 4vw, 3.2rem);
+  }
+
+  .preview-copy h2 {
+    max-width: 16ch;
+  }
+
+  .preview-copy p {
+    max-width: 46ch;
+  }
+
+  .preview-visual {
+    align-self: stretch;
+    min-height: 220px;
+  }
+
+  .preview-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 2rem;
+    background: radial-gradient(ellipse at 50% 50%, #1b160f, #0a0908);
+    filter: invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(0.95);
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .service-card {
+    position: relative;
+    display: block;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--color-hairline);
+  }
+
+  .service-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .service-card:hover img {
+    transform: scale(1.05);
+  }
+
+  .service-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.92) 100%);
+  }
+
+  .service-overlay p {
+    color: var(--color-ivory-dim);
+    font-size: 0.9rem;
+    max-width: 32ch;
+  }
+
+  .service-overlay .btn {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .teaser-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .teaser-grid,
+  .studio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .studio-grid {
+    margin: 1.8rem 0 2rem;
+  }
+
+  .tile {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-hairline);
+    aspect-ratio: 1 / 1;
+  }
+
+  .studio-grid .tile {
+    aspect-ratio: 5 / 4;
+  }
+
+  .tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms var(--ease-out);
+  }
+
+  .tile:hover img {
+    transform: scale(1.06);
+  }
+
+  .artist-inner {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+  }
+
+  .artist-photo img {
+    width: 100%;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-hairline);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .studio-teaser .lead {
+    max-width: 60ch;
+  }
+
+  /* 3D aracı kartının aynası: görsel solda, metin sağda. Sayfayı aşağı inerken
+     aynı düzenin tekrar etmemesi için yön çevrildi. */
+  .jewelry-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .jewelry-visual {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    /* Logonun kendi zemini saf siyah; kartın zemini #0a0a0a. Aradaki fark gözle
+       seçilmiyor ama kutunun kenarı belli olmasın diye zemin eşitleniyor. */
+    background: #000;
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .jewelry-visual img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+  }
+
+  .jewelry-copy {
+    padding: clamp(2rem, 4vw, 3.2rem);
+  }
+
+  .jewelry-copy h2 {
+    margin-bottom: 0.4em;
+  }
+
+  .jewelry-copy p {
+    max-width: 46ch;
+  }
+
+  .jewelry-copy p + p {
+    margin-top: 0.9em;
+  }
+
+  .jewelry-copy .btn {
+    margin-top: 1.6rem;
+  }
+
+  .final-cta {
+    padding-bottom: clamp(4rem, 10vw, 8rem);
+  }
+
+  .cta-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .cta-box h2 {
+    margin-bottom: 0.3em;
+  }
+
+  .cta-box p {
+    margin: 0;
+    max-width: 44ch;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 860px) {
+    .pillar-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .service-grid {
+      grid-template-columns: 1fr;
+    }
+    .artist-inner {
+      grid-template-columns: 1fr;
+    }
+    .artist-photo {
+      max-width: 300px;
+    }
+    .preview-inner {
+      grid-template-columns: 1fr;
+    }
+    .preview-visual {
+      min-height: 180px;
+      order: -1;
+    }
+    .jewelry-inner {
+      grid-template-columns: 1fr;
+    }
+    .jewelry-visual {
+      min-height: 180px;
+    }
+  }
+</style>
