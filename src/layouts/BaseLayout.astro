@@ -36,19 +36,20 @@ const lang = langFromPath(Astro.url.pathname);
     <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
     <SEO title={title} description={description} path={path} image={image} noindex={noindex} jsonLd={jsonLd} />
     <ClientRouter />
-    <!-- Netlify Identity daveti bağlantıyı ana sayfaya `#invite_token=...` ile
-         yolluyor. Bu betik o durumu yakalayıp parola belirleme penceresini
-         açar ve kullanıcıyı panele yollar; olmazsa davet bağlantısı sessizce
-         hiçbir şey yapmıyordu. Yalnızca token varsa iş yapar. -->
+    <!-- Netlify Identity daveti / parola sıfırlama bağlantısı ana sayfaya
+         `#invite_token=...` ya da `#recovery_token=...` ile düşüyor. Widget bu
+         belirteci kendisi okuyup doğru pencereyi (parola belirleme) açar —
+         burada `open()` çağırmak onu düz "giriş" ekranına düşürüyordu. Bu
+         yüzden yalnızca yüklüyor, açmayı ona bırakıyoruz.
+         Koşullu yükleme: belirteç yoksa bu ~100 KB betik hiç indirilmiyor. -->
     <script is:inline>
-      if (window.location.hash.includes('invite_token=') || window.location.hash.includes('recovery_token=')) {
+      if (/[#&](invite_token|recovery_token|confirmation_token|email_change_token)=/.test(window.location.hash)) {
         const s = document.createElement('script');
         s.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
         s.onload = () => {
           const id = window.netlifyIdentity;
           if (!id) return;
           id.on('login', () => { window.location.href = '/admin/'; });
-          id.open();
         };
         document.head.appendChild(s);
       }
