@@ -86,7 +86,7 @@ yalnızca "bu adres hangi sunucuyu göstersin" ayarını değiştiriyoruz.
 
 ### Önce: e-postanız nerede?
 
-**Bu adımı atlamayın.** `info@www.blackinkart.com.tr` gibi bir e-posta adresiniz
+**Bu adımı atlamayın.** `info@blackinkart.com.tr` gibi bir e-posta adresiniz
 hostinginizde duruyorsa, aşağıdaki iki yoldan **yalnızca ikincisi** güvenli.
 
 - **Nameserver'ları Netlify'a çevirmek** (Netlify'ın önerdiği yol) tüm DNS
