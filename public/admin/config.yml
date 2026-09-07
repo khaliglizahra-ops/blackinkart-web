@@ -7,7 +7,7 @@
 
 backend:
   name: github
-  repo: KULLANICI_ADINIZ/blackinkart-web   # <-- GitHub deposu bağlanınca güncellenecek
+  repo: khaliglizahra-ops/blackinkart-web   # <-- GitHub deposu bağlanınca güncellenecek
   branch: main
 
 # Yerel deneme modu: panel yalnızca localhost'ta açıldığında devreye girer ve
