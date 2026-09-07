@@ -5,9 +5,15 @@
 # Bölümler kullanım sıklığına göre sıralandı: en sık yapılan iş (portfolyoya
 # fotoğraf eklemek) en üstte, yılda bir dokunulacaklar en altta.
 
+# Giriş, kullanıcı adı (e-posta) ve parola ile: Netlify Identity kullanıcıyı
+# doğrular, Git Gateway onun adına GitHub'a yazar. Böylece panele girenin
+# GitHub hesabı olması gerekmiyor.
+#
+# Kullanıcı eklemek: Netlify → Identity → Invite users. Davet edilen kişi
+# kendi parolasını e-postadaki bağlantıdan kendisi belirler; parola hiçbir
+# yerde bizde durmaz. Kayıt "yalnızca davetle" olarak ayarlandı.
 backend:
-  name: github
-  repo: khaliglizahra-ops/blackinkart-web
+  name: git-gateway
   branch: main
 
 # Yerel deneme modu: panel yalnızca localhost'ta açıldığında devreye girer ve
