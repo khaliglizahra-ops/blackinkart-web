@@ -1,0 +1,52 @@
+[
+  {
+    "src": "/images/hero/hero-01.jpg",
+    "position": "center 48%",
+    "label": "Medusa — kol"
+  },
+  {
+    "src": "/images/hero/hero-02.jpg",
+    "position": "center 42%",
+    "label": "Fırça vuruşu kuş — kaburga"
+  },
+  {
+    "src": "/images/hero/hero-03.jpg",
+    "position": "center 42%",
+    "label": "Kelebekli kadın portresi — kol"
+  },
+  {
+    "src": "/images/hero/hero-04.jpg",
+    "position": "center 58%",
+    "label": "Şakayık — omuz"
+  },
+  {
+    "src": "/images/hero/hero-05.jpg",
+    "position": "center 52%",
+    "label": "Geyik — ense"
+  },
+  {
+    "src": "/images/hero/hero-06.jpg",
+    "position": "center 50%",
+    "label": "Medusa — göğüs"
+  },
+  {
+    "src": "/images/hero/hero-07.jpg",
+    "position": "center 50%",
+    "label": "Gözler — göğüs"
+  },
+  {
+    "src": "/images/hero/hero-08.jpg",
+    "position": "center 46%",
+    "label": "Ornamental sternum"
+  },
+  {
+    "src": "/images/hero/hero-09.jpg",
+    "position": "center 55%",
+    "label": "Sinek kuşu — sırt"
+  },
+  {
+    "src": "/images/hero/hero-10.jpg",
+    "position": "center 50%",
+    "label": "Köpek balığı — kaburga"
+  }
+]

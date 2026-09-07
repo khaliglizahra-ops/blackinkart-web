@@ -609,6 +609,17 @@ const styles = portfolio.categories.map((c) => c.label);
     .booking-layout {
       grid-template-columns: 1fr;
     }
+
+    /* iOS Safari, 16px'ten küçük yazılı bir alana dokunulduğunda sayfayı
+       kendiliğinden yakınlaştırıyor; kullanıcı yanlara kaymış bir formda
+       kalıyor. Masaüstü ölçüsü korunuyor, dokunmatikte 16px'e sabitleniyor. */
+    input[type='text'],
+    input[type='date'],
+    input[type='number'],
+    select,
+    textarea {
+      font-size: 16px;
+    }
   }
 
   @media (max-width: 560px) {

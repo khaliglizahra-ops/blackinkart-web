@@ -1,21 +1,52 @@
 ---
 import { site } from '../data/site';
-import { topPortfolio } from '../data/gallery';
+import heroSlides from '../data/hero.json';
 
-// Öne çıkanların ilk beşi bilerek hero için seçilmiş büyük ölçekli işler:
-// koyu, yüksek kontrastlı ve merkezi kalabalık olmayan kareler — üzerine yazı biniyor.
-// Sıralamayı panelden değiştirmek hero'yu da değiştirir.
-const HERO_SLIDE_INDEXES = [0, 1, 2, 3, 4];
-const heroSlides = HERO_SLIDE_INDEXES.map((i) => topPortfolio[i]).filter(Boolean);
-const slideDuration = heroSlides.length * 6; // seconds for one full loop
+// Hero kareleri artık portfolyodan değil kendi listesinden geliyor — böylece
+// portfolyo sırası değişince ana sayfa etkilenmiyor ve her kare tam ekran
+// arka plan için ayrı hazırlanıyor.
+//
+// Her karenin kendi `position` değeri var: fotoğraflar dikey, hero ise geniş.
+// Tek bir ortak değer kullanılınca `cover` kırpması dövmeyi kadraj dışında
+// bırakıyordu; bu yüzden odak noktası kare kare belirleniyor.
+const SLIDE_SECONDS = 6;
+const slideDuration = heroSlides.length * SLIDE_SECONDS;
+
+// Her kare kendi döngüsünün ilk 1/n'inde görünür. Bu yüzden kare geçişlerinin
+// yüzdeleri kare sayısına bağlı — sabit yazılırsa (eskiden %20, yani 5 kare)
+// kare sayısı değiştiği anda iki fotoğraf üst üste biniyor.
+const share = 100 / heroSlides.length;
+const pct = (v: number) => `${Math.round(v * 1000) / 1000}%`;
+const keyframesCss = `@keyframes hero-slide-cycle{
+  0%{opacity:0;transform:scale(1)}
+  ${pct(share * 0.15)}{opacity:1}
+  ${pct(share * 0.85)}{opacity:1}
+  ${pct(share)}{opacity:0;transform:scale(1.09)}
+  100%{opacity:0;transform:scale(1)}
+}`;
 ---
+
+<style is:inline set:html={keyframesCss}></style>
+
+<noscript>
+  {/* JS yoksa data-bg'deki kareler hiç yüklenmez ve döngünün 54 saniyesi
+      siyah kalırdı. Bu durumda tek kareye düşüp animasyonu durduruyoruz. */}
+  <style is:inline>
+    .hero-bg-slide[data-bg] { display: none !important; }
+    .hero-bg-slide:first-child { animation: none !important; opacity: 1 !important; }
+  </style>
+</noscript>
 
 <section class="hero">
   <div class="hero-bg" aria-hidden="true" style={`--slide-duration:${slideDuration}s`}>
-    {heroSlides.map((src, i) => (
+    {/* Yalnızca ilk kare hemen yükleniyor. Kalan dokuzu birlikte istenirse ana
+        sayfa açılışına ~1,2 MB ekliyor; oysa ikincisi 6 saniye sonra gerekiyor.
+        Bu yüzden onlar data-bg'de bekliyor ve sayfa hazır olunca yükleniyor. */}
+    {heroSlides.map((slide, i) => (
       <div
         class="hero-bg-slide"
-        style={`background-image:url(${src}); animation-delay:${i * 6}s;`}
+        data-bg={i === 0 ? undefined : slide.src}
+        style={`${i === 0 ? `background-image:url(${slide.src}); ` : ''}background-position:${slide.position}; animation-delay:${i * SLIDE_SECONDS}s;`}
       ></div>
     ))}
     <div class="hero-bg-overlay"></div>
@@ -74,10 +105,11 @@ const slideDuration = heroSlides.length * 6; // seconds for one full loop
     position: absolute;
     inset: -4%;
     background-size: cover;
-    background-position: center 25%;
+    /* Gerçek odak noktası her kare için satır içi geliyor (hero.json). */
+    background-position: center 45%;
     opacity: 0;
     filter: saturate(1) brightness(1.05);
-    animation: hero-slide var(--slide-duration) infinite;
+    animation: hero-slide-cycle var(--slide-duration) infinite;
     animation-fill-mode: both;
   }
 
@@ -87,27 +119,6 @@ const slideDuration = heroSlides.length * 6; // seconds for one full loop
     background:
       linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.42) 45%, var(--color-black) 94%),
       radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.5) 72%);
-  }
-
-  @keyframes hero-slide {
-    0% {
-      opacity: 0;
-      transform: scale(1);
-    }
-    3% {
-      opacity: 1;
-    }
-    17% {
-      opacity: 1;
-    }
-    20% {
-      opacity: 0;
-      transform: scale(1.09);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(1);
-    }
   }
 
   .hero-glow {
@@ -281,3 +292,45 @@ const slideDuration = heroSlides.length * 6; // seconds for one full loop
     }
   }
 </style>
+
+<script>
+  /**
+   * Hero karelerinin geri kalanını sayfa yerleştikten sonra yükler.
+   * Hepsi HTML'de gelseydi ana sayfa açılışına ~1,2 MB eklenirdi; oysa ikinci
+   * kare 6 saniye sonra gerekiyor. Bu yüzden ilk kare satır içi, kalanlar
+   * data-bg'de bekliyor.
+   *
+   * ClientRouter ile gövde her gezinmede yeniden yazıldığından iş
+   * astro:page-load'da tekrar çalışıyor; aksi hâlde ana sayfaya istemci
+   * tarafından dönüldüğünde kareler boş kalırdı.
+   */
+  function loadHeroSlides() {
+    const slides = document.querySelectorAll<HTMLElement>('.hero-bg-slide[data-bg]');
+    if (!slides.length) return;
+    slides.forEach((el, i) => {
+      const src = el.dataset.bg;
+      if (!src) return;
+      // Sırayla: on istek aynı anda gidince ilk kare ve yazı tipleri gecikiyor.
+      window.setTimeout(() => {
+        const pre = new Image();
+        pre.onload = () => {
+          el.style.backgroundImage = `url(${src})`;
+          delete el.dataset.bg;
+        };
+        pre.src = src;
+      }, i * 250);
+    });
+  }
+
+  function schedule() {
+    const w = window as any;
+    if (document.readyState === 'complete') {
+      w.requestIdleCallback ? w.requestIdleCallback(loadHeroSlides, { timeout: 2000 }) : setTimeout(loadHeroSlides, 300);
+    } else {
+      window.addEventListener('load', schedule, { once: true });
+    }
+  }
+
+  schedule();
+  document.addEventListener('astro:page-load', schedule);
+</script>
