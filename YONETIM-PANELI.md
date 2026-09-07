@@ -77,7 +77,67 @@ Panelin GitHub'a yazabilmesi için Netlify'ın giriş sağlayıcısını açman�
 
 Bu kadar. Artık **`siteadresiniz.netlify.app/admin`** adresine gidip
 **"GitHub ile Giriş"** ile panele girebilirsiniz. Alan adınızı bağladığınızda
-adres `www.blackinkart.com.tr/admin` olur.
+adres `alanadiniz.com.tr/admin` olur.
+
+## Adım 6 — Alan adınızı bağlayın
+
+Alan adınız ve WordPress hostinginiz Türk bir firmada. Alan adı sizde kalıyor;
+yalnızca "bu adres hangi sunucuyu göstersin" ayarını değiştiriyoruz.
+
+### Önce: e-postanız nerede?
+
+**Bu adımı atlamayın.** `info@alanadiniz.com.tr` gibi bir e-posta adresiniz
+hostinginizde duruyorsa, aşağıdaki iki yoldan **yalnızca ikincisi** güvenli.
+
+- **Nameserver'ları Netlify'a çevirmek** (Netlify'ın önerdiği yol) tüm DNS
+  kayıtlarını Netlify'a taşır. E-posta kayıtlarınız (MX) geride kalır ve
+  **e-postanız çalışmayı durdurur.**
+- **Mevcut DNS'te kalıp yalnızca iki kayıt değiştirmek** e-postaya dokunmaz.
+
+E-postanız varsa ikinci yolu kullanın. Aşağıdaki adımlar onu anlatıyor.
+
+### 1. Netlify'a alan adını tanıtın
+
+Netlify → siteniz → **Domain management** → **Add a domain** → alan adınızı yazın.
+
+Netlify size **tam olarak hangi kayıtları gireceğinizi ekranda gösterir.**
+Aşağıdaki değerler tipik olanlar, ama **Netlify'ın size gösterdiği değerleri
+kullanın** — zaman içinde değişebiliyorlar.
+
+### 2. Hosting firmanızın DNS panelinde kayıtları girin
+
+cPanel'de **Zone Editor**, firmanın kendi panelinde genelde **DNS Yönetimi**
+adıyla geçer.
+
+| Tip | İsim / Host | Değer |
+|---|---|---|
+| `CNAME` | `www` | `siteadresiniz.netlify.app` |
+| `A` | `@` (kök alan adı) | Netlify'ın gösterdiği IP |
+
+Aynı isimde **eski bir kayıt varsa silin** — WordPress'i gösteren `A` veya
+`CNAME` kaydı duruyorsa çakışır.
+
+**MX kayıtlarına dokunmayın.** Onlar e-postanızı taşır.
+
+### 3. Bekleyin
+
+Değişiklik yayılması 15 dakika ile birkaç saat arasında sürer. Netlify panelde
+"Netlify DNS" veya "External DNS" yanında yeşil onay gösterdiğinde tamamdır.
+
+### 4. HTTPS'i açın
+
+Netlify → **Domain management** → **HTTPS** → **Verify DNS configuration** →
+**Provision certificate**. Ücretsiz ve otomatik yenilenir. Kilit simgesi
+çıkana kadar bekleyin.
+
+### Bilmeniz gerekenler
+
+- Alan adında şu an bir **WordPress sitesi yayındaysa, o an itibarıyla
+  görünmez olur.** Dosyaları hostingde durur, silinmez — ama adres artık yeni
+  siteyi gösterir. Eski siteyi yedeklemek isterseniz önce yedek alın.
+- **Hostingi iptal etmeyin.** Alan adınız ve e-postanız orada duruyor.
+- Site Netlify'da yayında olduğu için hostinginizin hızı veya kotası siteyi
+  etkilemez.
 
 ---
 
