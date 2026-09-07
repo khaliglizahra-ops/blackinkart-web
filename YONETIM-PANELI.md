@@ -7,9 +7,25 @@ servis) ve ikisi arasındaki **giriş izni**. Hepsi ücretsiz.
 Bu adımları sizin hesaplarınızla yapmanız gerekiyor — ben sizin adınıza hesap
 açamıyorum. Yaklaşık 15 dakika sürer ve bir kez yapılır.
 
+> **Durum (7 Eylül 2026): Tüm adımlar tamamlandı.** Site
+> **https://www.blackinkart.com.tr** adresinde yayında, panel
+> **https://www.blackinkart.com.tr/admin** adresinde. Aşağısı kayıt için duruyor.
+>
+> Kurulumda kararlaştırılan üç şey:
+> - **GitHub deposu herkese açık (public).** Netlify'ın ücretsiz planı, özel
+>   depolarda yalnızca doğrulanmış ekip üyelerinin commit'lerini derliyor;
+>   panelin yaptığı her değişiklik engelleniyordu. Depoda şifre ya da anahtar
+>   yok, içerik zaten sitede görünüyor.
+> - **DNS Netlify'da.** Alan adının hostingi bu hesapta olmadığı için kayıtlar
+>   Alastyr'da düzenlenemedi; nameserver'lar Netlify'a (`dns1-4.p09.nsone.net`)
+>   çevrildi. HTTPS sertifikası Netlify tarafından otomatik verildi ve yenilenir.
+> - **Bu Mac'ten GitHub'a SSH anahtarıyla gönderiliyor**
+>   (`~/.ssh/id_ed25519_github_blackinkart`). Commit e-postası
+>   `huseyinolmez06@gmail.com` olmalı — Netlify hesabındaki e-posta bu.
+
 ---
 
-## Adım 1 — GitHub deposu oluşturun
+## Adım 1 — GitHub deposu oluşturun ✅
 
 1. [github.com](https://github.com) adresinden ücretsiz hesap açın (varsa giriş yapın).
 2. Sağ üstteki **+** → **New repository**.
@@ -20,7 +36,7 @@ açamıyorum. Yaklaşık 15 dakika sürer ve bir kez yapılır.
 Açılan sayfada size bir adres gösterilecek, şuna benzer:
 `https://github.com/khaliglizahra-ops/blackinkart-web.git`
 
-## Adım 2 — Projeyi GitHub'a gönderin
+## Adım 2 — Projeyi GitHub'a gönderin ✅
 
 Terminal'i açın ve şu iki komutu sırayla çalıştırın
 (`khaliglizahra-ops` yerine kendi GitHub kullanıcı adınızı yazın):
@@ -51,7 +67,7 @@ ve gönderin:
 git add public/admin/config.yml && git commit -m "panel deposu ayarlandı" && git push
 ```
 
-## Adım 4 — Netlify'ı GitHub'a bağlayın
+## Adım 4 — Netlify'ı GitHub'a bağlayın ✅
 
 Şu ana kadar siteyi zip sürükleyerek yayınlıyordunuz. Artık Netlify'ın kendisi
 GitHub'dan alıp yayınlayacak — panelde yaptığınız her değişiklik otomatik
@@ -67,7 +83,7 @@ olarak siteye yansıyacak.
 > Eskiden zip ile oluşturduğunuz site duruyorsa onu silebilirsiniz; artık bu yeni
 > site geçerli.
 
-## Adım 5 — Panele giriş iznini açın
+## Adım 5 — Panele giriş iznini açın ✅
 
 Panelin GitHub'a yazabilmesi için Netlify'ın giriş sağlayıcısını açmanız gerekir:
 
@@ -79,7 +95,7 @@ Bu kadar. Artık **`blackinkart.netlify.app/admin`** adresine gidip
 **"GitHub ile Giriş"** ile panele girebilirsiniz. Alan adınızı bağladığınızda
 adres `www.blackinkart.com.tr/admin` olur.
 
-## Adım 6 — Alan adınızı bağlayın
+## Adım 6 — Alan adınızı bağlayın ✅ (Netlify DNS ile yapıldı)
 
 Alan adınız ve WordPress hostinginiz Türk bir firmada. Alan adı sizde kalıyor;
 yalnızca "bu adres hangi sunucuyu göstersin" ayarını değiştiriyoruz.
