@@ -52,7 +52,7 @@ import portfolio from '../../data/portfolio.json';
 // Türkçede "Kulak Piercingleri". Mesaj da o dilde gidiyor.
 const areas = (await getLocalizedCollection('piercing-bolgeleri', lang)).map((e) => e.data.title);
 
-const styles = portfolio.categories.map((c) => c.label);
+const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn ? c.labelEn : c.label));
 ---
 
 <BaseLayout
@@ -72,7 +72,7 @@ const styles = portfolio.categories.map((c) => c.label);
       <ol class="steps">
         <li><span>1</span> {t('booking.step1')}</li>
         <li><span>2</span> {t('booking.step2')}</li>
-        <li><span>3</span> Saati birlikte belirleyelim</li>
+        <li><span>3</span> {t('booking.step3')}</li>
       </ol>
     </div>
   </section>
@@ -100,7 +100,7 @@ const styles = portfolio.categories.map((c) => c.label);
             <legend>{t('booking.legend2t')}</legend>
 
             <label class="field">
-              <span class="label">Stil</span>
+              <span class="label">{t('booking.style')}</span>
               <select name="stil">
                 <option value="">{t('booking.unsure')}</option>
                 {styles.map((s) => <option value={s}>{s}</option>)}
@@ -129,8 +129,8 @@ const styles = portfolio.categories.map((c) => c.label);
 
             <div class="choice-row tight">
               <span class="label">{t('booking.first')}</span>
-              <label class="choice sm"><input type="radio" name="ilk" value="Evet" /><span>Evet</span></label>
-              <label class="choice sm"><input type="radio" name="ilk" value="Hayır" /><span>Hayır</span></label>
+              <label class="choice sm"><input type="radio" name="ilk" value={t('booking.yes')} /><span>{t('booking.yes')}</span></label>
+              <label class="choice sm"><input type="radio" name="ilk" value={t('booking.no')} /><span>{t('booking.no')}</span></label>
             </div>
           </fieldset>
 
@@ -147,7 +147,7 @@ const styles = portfolio.categories.map((c) => c.label);
                 </select>
               </label>
               <label class="field narrow-field">
-                <span class="label">Adet</span>
+                <span class="label">{t('booking.count')}</span>
                 <input type="number" name="adet" min="1" max="10" value="1" />
               </label>
             </div>
@@ -174,7 +174,7 @@ const styles = portfolio.categories.map((c) => c.label);
                 <input type="date" name="gun" id="gun" />
               </label>
               <label class="field">
-                <span class="label">Saat tercihi</span>
+                <span class="label">{t('booking.time')}</span>
                 <select name="saat">
                   <option>{t('booking.anyTime')}</option>
                   <option>{t('booking.morning')}</option>
@@ -192,7 +192,7 @@ const styles = portfolio.categories.map((c) => c.label);
             <legend>{t('booking.legend4')}</legend>
 
             <label class="field">
-              <span class="label">Ad Soyad <em>*</em></span>
+              <span class="label">{t('booking.name')} <em>*</em></span>
               <input type="text" name="ad" id="ad" required placeholder={t('booking.ph.name')} />
             </label>
 
@@ -207,7 +207,7 @@ const styles = portfolio.categories.map((c) => c.label);
               </select>
               <span class="hint">
                 {t('footer.ageNote')}
-                <a href="/yas-ve-onam-politikasi">Detaylar</a>
+                <a href={L('/yas-ve-onam-politikasi')}>{t('footer.ageDetails')}</a>
               </span>
             </label>
 

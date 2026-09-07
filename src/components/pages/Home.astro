@@ -221,9 +221,13 @@ const studioTeaser = studioPhotos.slice(0, 3);
     max-width: 46ch;
   }
 
+  /* Zemin burada, süzgeç yalnızca görselde. Aynı elemanda olunca `invert`
+     koyu zemini de tersine çeviriyor, sepia sarıya boyuyordu: ortaya düz
+     sarı bir kutu çıkıyor, altın çizgiler içinde kayboluyordu. */
   .preview-visual {
     align-self: stretch;
     min-height: 220px;
+    background: radial-gradient(ellipse at 50% 50%, #1b160f, #0a0908);
   }
 
   .preview-visual img {
@@ -231,7 +235,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
     height: 100%;
     object-fit: contain;
     padding: 2rem;
-    background: radial-gradient(ellipse at 50% 50%, #1b160f, #0a0908);
+    /* Şablon siyah çizgi + saydam zemin. Ters çevir → beyaz, sepya → altın. */
     filter: invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(0.95);
   }
 

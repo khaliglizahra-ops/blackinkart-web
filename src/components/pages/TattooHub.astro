@@ -41,7 +41,7 @@ const guides = await getLocalizedCollection('dovme-rehberi', lang);
 
   <section class="section-tight">
     <div class="container">
-      <h2>Rehberler</h2>
+      <h2>{t('guide.guides')}</h2>
       <div class="guide-grid">
         {guides.map((g) => (
           <a href={`${L('/dovme')}/${cleanSlug(g.slug)}`} class="guide-card surface" data-reveal>

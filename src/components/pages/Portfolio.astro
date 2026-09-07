@@ -6,6 +6,8 @@ import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
+// Kategori adları panelde Türkçe; İngilizce karşılığı varsa o gösteriliyor.
+const catLabel = (g: any) => (lang === 'en' && g.labelEn ? g.labelEn : g.label);
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { dovmeGalleries, topPortfolio } from '../../data/gallery';
@@ -19,8 +21,8 @@ import { thumb } from '../../data/images';
 >
   <section class="section-tight">
     <div class="container">
-      <Breadcrumbs items={[{ label: 'Portfolyo' }]} />
-      <p class="eyebrow">Portfolyo</p>
+      <Breadcrumbs items={[{ label: t('nav.portfolio') }]} />
+      <p class="eyebrow">{t('nav.portfolio')}</p>
       <h1>{t('portfolio.h1')}</h1>
       <p class="lead">{t('portfolio.lead')}</p>
     </div>
@@ -45,7 +47,7 @@ import { thumb } from '../../data/images';
       <div class="filters" role="tablist" aria-label={t('portfolio.filterLabel')}>
         <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">{t('portfolio.all')}</button>
         {dovmeGalleries.map((g) => (
-          <button class="filter-btn" data-filter={g.key} role="tab" aria-selected="false">{g.label}</button>
+          <button class="filter-btn" data-filter={g.key} role="tab" aria-selected="false">{catLabel(g)}</button>
         ))}
       </div>
 
@@ -53,8 +55,8 @@ import { thumb } from '../../data/images';
         {dovmeGalleries.map((g) =>
           g.images.map((src) => (
             <div class="tile" data-category={g.key} data-reveal>
-              <img src={thumb(src)} data-full={src} alt={`${g.label} — Black Ink Art`} loading="lazy" width="500" height="500" data-lightbox="stiller" data-caption={`${g.label} — Black Ink Art`} />
-              <span class="tag">{g.label}</span>
+              <img src={thumb(src)} data-full={src} alt={`${catLabel(g)} — Black Ink Art`} loading="lazy" width="500" height="500" data-lightbox="stiller" data-caption={`${catLabel(g)} — Black Ink Art`} />
+              <span class="tag">{catLabel(g)}</span>
             </div>
           ))
         )}

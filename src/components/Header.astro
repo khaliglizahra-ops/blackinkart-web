@@ -195,12 +195,15 @@ const langLinks = LANGS.map((l) => ({
     gap: 0.1rem;
   }
 
+  /* Menü bağlantılarıyla aynı ton. `ivory-faint` iken seçili olmayan dil,
+     sayfa tepesindeki açık renkli hero fotoğrafının üzerinde kayboluyordu —
+     Türkçe sayfaya gelen yabancı "EN"i göremiyordu. */
   .lang-opt {
     padding: 0.35em 0.5em;
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.08em;
-    color: var(--color-ivory-faint);
+    color: var(--color-ivory-dim);
     border-radius: 3px;
     transition: color var(--dur-fast), background var(--dur-fast);
   }

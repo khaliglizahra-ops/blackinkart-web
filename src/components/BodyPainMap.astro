@@ -1,29 +1,33 @@
 ---
+import { langFromPath } from '../i18n/config';
+
+const lang = langFromPath(Astro.url.pathname);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
 // Stylised (not anatomically literal) front-body diagram marking relative tattoo pain zones,
 // referenced from the "Dövme Acısı" guide. Colour = intensity, all within the gold/ivory palette.
 
 const zones = [
-  { label: 'Boyun', x: 100, cy: 62, tier: 'high' },
-  { label: 'Kaburga', x: 82, cy: 150, tier: 'high' },
-  { label: 'Dirsek içi', x: 46, cy: 168, tier: 'high' },
-  { label: 'El', x: 30, cy: 230, tier: 'high' },
-  { label: 'Omuz', x: 128, cy: 92, tier: 'mid' },
-  { label: 'Uyluk', x: 88, cy: 268, tier: 'mid' },
-  { label: 'Baldır (iç)', x: 90, cy: 330, tier: 'mid' },
-  { label: 'Üst kol (dış)', x: 138, cy: 140, tier: 'low' },
-  { label: 'Ön kol', x: 150, cy: 190, tier: 'low' },
-  { label: 'Baldır (dış)', x: 122, cy: 330, tier: 'low' },
+  { label: L('Boyun', 'Neck'), x: 100, cy: 62, tier: 'high' },
+  { label: L('Kaburga', 'Ribs'), x: 82, cy: 150, tier: 'high' },
+  { label: L('Dirsek içi', 'Inner elbow'), x: 46, cy: 168, tier: 'high' },
+  { label: L('El', 'Hand'), x: 30, cy: 230, tier: 'high' },
+  { label: L('Omuz', 'Shoulder'), x: 128, cy: 92, tier: 'mid' },
+  { label: L('Uyluk', 'Thigh'), x: 88, cy: 268, tier: 'mid' },
+  { label: L('Baldır (iç)', 'Calf (inner)'), x: 90, cy: 330, tier: 'mid' },
+  { label: L('Üst kol (dış)', 'Upper arm (outer)'), x: 138, cy: 140, tier: 'low' },
+  { label: L('Ön kol', 'Forearm'), x: 150, cy: 190, tier: 'low' },
+  { label: L('Baldır (dış)', 'Calf (outer)'), x: 122, cy: 330, tier: 'low' },
 ];
 
 const tierMeta: Record<string, { color: string; label: string }> = {
-  low: { color: 'var(--color-gold-dim)', label: 'Daha az hassas' },
-  mid: { color: 'var(--color-gold)', label: 'Orta hassasiyet' },
-  high: { color: 'var(--color-gold-bright)', label: 'Daha hassas' },
+  low: { color: 'var(--color-gold-dim)', label: L('Daha az hassas', 'Less sensitive') },
+  mid: { color: 'var(--color-gold)', label: L('Orta hassasiyet', 'Moderately sensitive') },
+  high: { color: 'var(--color-gold-bright)', label: L('Daha hassas', 'More sensitive') },
 };
 ---
 
 <div class="pain-map" data-reveal>
-  <svg viewBox="0 0 200 380" role="img" aria-label="Vücut bölgelerine göre dövme acı hassasiyet şeması">
+  <svg viewBox="0 0 200 380" role="img" aria-label={L('Vücut bölgelerine göre dövme acı hassasiyet şeması', 'Tattoo pain sensitivity chart by body area')}>
     <g stroke="var(--color-hairline)" stroke-width="1.5" fill="none" opacity="0.9">
       <circle cx="100" cy="30" r="22" />
       <path d="M85 50 L85 66 M115 50 L115 66" />

@@ -64,7 +64,8 @@
         "/images/portfolyo/black-work/black-work-13.jpg",
         "/images/portfolyo/black-work/black-work-14.jpg",
         "/images/portfolyo/black-work/black-work-15.jpg"
-      ]
+      ],
+      "labelEn": "Blackwork"
     },
     {
       "key": "coverup-scarup",
@@ -80,7 +81,8 @@
         "/images/portfolyo/coverup-scarup/coverup-08.jpg",
         "/images/portfolyo/coverup-scarup/coverup-09.jpg",
         "/images/portfolyo/coverup-scarup/coverup-10.jpg"
-      ]
+      ],
+      "labelEn": "Cover-up & Scar-up"
     },
     {
       "key": "minimaller",
@@ -129,7 +131,8 @@
         "/images/portfolyo/minimaller/minimaller-41.jpg",
         "/images/portfolyo/minimaller/minimaller-42.jpg",
         "/images/portfolyo/minimaller/minimaller-43.jpg"
-      ]
+      ],
+      "labelEn": "Minimal"
     },
     {
       "key": "portreler",
@@ -149,7 +152,8 @@
         "/images/portfolyo/portreler/portreler-12.jpg",
         "/images/portfolyo/portreler/portreler-13.jpg",
         "/images/portfolyo/portreler/portreler-14.jpg"
-      ]
+      ],
+      "labelEn": "Portrait"
     },
     {
       "key": "renkliler",
@@ -179,7 +183,8 @@
         "/images/portfolyo/renkliler/renkliler-22.jpg",
         "/images/portfolyo/renkliler/renkliler-23.jpg",
         "/images/portfolyo/renkliler/renkliler-24.jpg"
-      ]
+      ],
+      "labelEn": "Colour"
     },
     {
       "key": "retrolar",
@@ -195,7 +200,8 @@
         "/images/portfolyo/retrolar/retro-08.jpg",
         "/images/portfolyo/retrolar/retro-09.jpg",
         "/images/portfolyo/retrolar/retro-10.jpg"
-      ]
+      ],
+      "labelEn": "Retro / Old School"
     },
     {
       "key": "yazi-dovmeleri",
@@ -205,7 +211,8 @@
         "/images/portfolyo/yazi-dovmeleri/yazi-dovmeleri-02.jpg",
         "/images/portfolyo/yazi-dovmeleri/yazi-dovmeleri-03.jpg",
         "/images/portfolyo/yazi-dovmeleri/yazi-dovmeleri-04.jpg"
-      ]
+      ],
+      "labelEn": "Lettering"
     }
   ]
 }
