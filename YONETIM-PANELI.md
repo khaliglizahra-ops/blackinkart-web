@@ -18,16 +18,16 @@ açamıyorum. Yaklaşık 15 dakika sürer ve bir kez yapılır.
 5. Başka hiçbir kutuyu işaretlemeden **Create repository**.
 
 Açılan sayfada size bir adres gösterilecek, şuna benzer:
-`https://github.com/KULLANICI_ADINIZ/blackinkart-web.git`
+`https://github.com/khaliglizahra-ops/blackinkart-web.git`
 
 ## Adım 2 — Projeyi GitHub'a gönderin
 
 Terminal'i açın ve şu iki komutu sırayla çalıştırın
-(`KULLANICI_ADINIZ` yerine kendi GitHub kullanıcı adınızı yazın):
+(`khaliglizahra-ops` yerine kendi GitHub kullanıcı adınızı yazın):
 
 ```bash
 cd ~/Desktop/blackinkart-web
-git remote add origin https://github.com/KULLANICI_ADINIZ/blackinkart-web.git
+git remote add origin https://github.com/khaliglizahra-ops/blackinkart-web.git
 git push -u origin main
 ```
 
@@ -36,15 +36,15 @@ gerekir. GitHub → Settings → Developer settings → Personal access tokens �
 Tokens (classic) → Generate new token → `repo` iznini seçin → oluşturun ve
 çıkan uzun metni şifre olarak yapıştırın.
 
-## Adım 3 — Panelin adresini güncelleyin
+## Adım 3 — Panelin adresini güncelleyin ✅ (yapıldı)
 
 `public/admin/config.yml` dosyasının 7. satırında şu yazıyor:
 
 ```yaml
-  repo: KULLANICI_ADINIZ/blackinkart-web
+  repo: khaliglizahra-ops/blackinkart-web
 ```
 
-`KULLANICI_ADINIZ` kısmını gerçek GitHub kullanıcı adınızla değiştirin, kaydedin
+`khaliglizahra-ops` kısmını gerçek GitHub kullanıcı adınızla değiştirin, kaydedin
 ve gönderin:
 
 ```bash
@@ -75,9 +75,9 @@ Panelin GitHub'a yazabilmesi için Netlify'ın giriş sağlayıcısını açman�
    **OAuth** bölümü → **Install provider** → **GitHub**.
 2. GitHub'a yönlendirilir, izin verirsiniz, geri döner.
 
-Bu kadar. Artık **`siteadresiniz.netlify.app/admin`** adresine gidip
+Bu kadar. Artık **`blackinkart.netlify.app/admin`** adresine gidip
 **"GitHub ile Giriş"** ile panele girebilirsiniz. Alan adınızı bağladığınızda
-adres `alanadiniz.com.tr/admin` olur.
+adres `www.blackinkart.com.tr/admin` olur.
 
 ## Adım 6 — Alan adınızı bağlayın
 
@@ -86,7 +86,7 @@ yalnızca "bu adres hangi sunucuyu göstersin" ayarını değiştiriyoruz.
 
 ### Önce: e-postanız nerede?
 
-**Bu adımı atlamayın.** `info@alanadiniz.com.tr` gibi bir e-posta adresiniz
+**Bu adımı atlamayın.** `info@www.blackinkart.com.tr` gibi bir e-posta adresiniz
 hostinginizde duruyorsa, aşağıdaki iki yoldan **yalnızca ikincisi** güvenli.
 
 - **Nameserver'ları Netlify'a çevirmek** (Netlify'ın önerdiği yol) tüm DNS
@@ -111,8 +111,8 @@ adıyla geçer.
 
 | Tip | İsim / Host | Değer |
 |---|---|---|
-| `CNAME` | `www` | `siteadresiniz.netlify.app` |
-| `A` | `@` (kök alan adı) | Netlify'ın gösterdiği IP |
+| `CNAME` | `www` | `blackinkart.netlify.app` |
+| `A` | `@` (kök alan adı) | `75.2.60.5` (Netlify panelinde de aynı değer görünür) |
 
 Aynı isimde **eski bir kayıt varsa silin** — WordPress'i gösteren `A` veya
 `CNAME` kaydı duruyorsa çakışır.
