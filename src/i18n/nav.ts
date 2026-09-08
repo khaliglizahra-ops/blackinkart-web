@@ -24,7 +24,7 @@ const LEGAL_NAV: { key: UIKey; href: string }[] = [
 
 export function getNav(lang: Lang) {
   const t = useTranslations(lang);
-  return NAV.map((item) => ({ label: t(item.key), href: localizePath(item.href, lang) }));
+  return NAV.map((item) => ({ key: item.key, label: t(item.key), href: localizePath(item.href, lang) }));
 }
 
 export function getLegalNav(lang: Lang) {

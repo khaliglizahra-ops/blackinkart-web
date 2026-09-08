@@ -41,7 +41,7 @@ import { thumb } from '../../data/images';
     </div>
   </section>
 
-  <section class="section-tight">
+  <section class="section-tight" id="kesfet">
     <div class="container">
       <h2>{t('portfolio.byStyle')}</h2>
 
@@ -298,4 +298,30 @@ import { thumb } from '../../data/images';
       });
     });
   });
+
+  // Header'daki Portfolyo açılır menüsünden gelen derin bağlantılar:
+  // /portfolyo?grup=piercing&kategori=kulak — ilgili sekmeyi ve filtreyi
+  // seçip bölümü görünüme kaydırır.
+  try {
+    const params = new URLSearchParams(location.search);
+    const grup = params.get('grup');
+    const kategori = params.get('kategori');
+
+    if (grup) {
+      document.querySelector<HTMLButtonElement>(`.group-tab[data-group="${grup}"]`)?.click();
+    }
+    if (kategori) {
+      const activeGroup = grup || 'dovme';
+      document
+        .querySelector<HTMLButtonElement>(
+          `.style-group[data-group="${activeGroup}"] .filter-btn[data-filter="${kategori}"]`
+        )
+        ?.click();
+    }
+    if (grup || kategori) {
+      document.getElementById('kesfet')?.scrollIntoView({ block: 'start' });
+    }
+  } catch {
+    // Bozuk bir adres parametresi filtrelemeyi engellemesin.
+  }
 </script>

@@ -4,11 +4,26 @@ import { getNav } from '../i18n/nav';
 import { useTranslations } from '../i18n/ui';
 import { LANGS, LANG_LABELS, langFromPath, localizePath } from '../i18n/config';
 import { alternatesFor } from '../i18n/routes';
+import { dovmeGalleries, piercingGalleries } from '../data/gallery';
 
 const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 const lang = langFromPath(currentPath);
 const t = useTranslations(lang);
 const nav = getNav(lang);
+
+// "Portfolyo" menü öğesinin altında açılan alt kategoriler — dövme stilleri
+// ve piercing bölgeleri, portfolio.json'dan. Yeni bir kategori eklendiğinde
+// (admin panelinden) menü otomatik güncellenir, elle dokunmaya gerek kalmaz.
+const catLabel = (g: any) => (lang === 'en' && g.labelEn ? g.labelEn : g.label);
+const portfolioBase = localizePath('/portfolyo', lang);
+const portfolioDovme = dovmeGalleries.map((g) => ({
+  label: catLabel(g),
+  href: `${portfolioBase}?grup=dovme&kategori=${g.key}`,
+}));
+const portfolioPiercing = piercingGalleries.map((g) => ({
+  label: catLabel(g),
+  href: `${portfolioBase}?grup=piercing&kategori=${g.key}`,
+}));
 
 // Dil değiştirici aynı sayfanın öbür dildeki karşılığına gider — ana sayfaya
 // değil. Ziyaretçi fiyat sayfasındayken dil değiştirince yine fiyat
@@ -30,16 +45,45 @@ const langLinks = LANGS.map((l) => ({
 
     <nav class="desktop-nav" aria-label={t('nav.menu')}>
       <ul>
-        {nav.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              aria-current={currentPath === item.href ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
+        {nav.map((item) =>
+          item.key === 'nav.portfolio' ? (
+            <li class="has-dropdown">
+              <a href={item.href} class="dropdown-trigger" aria-current={currentPath === item.href ? 'page' : undefined}>
+                {item.label}
+                <svg class="chevron" viewBox="0 0 12 8" width="10" height="7" aria-hidden="true">
+                  <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+              <div class="dropdown-panel">
+                <div class="dropdown-col">
+                  <p class="dropdown-heading">{t('nav.tattoo')}</p>
+                  <ul>
+                    {portfolioDovme.map((c) => (
+                      <li><a href={c.href}>{c.label}</a></li>
+                    ))}
+                  </ul>
+                </div>
+                <div class="dropdown-col">
+                  <p class="dropdown-heading">{t('nav.piercing')}</p>
+                  <ul>
+                    {portfolioPiercing.map((c) => (
+                      <li><a href={c.href}>{c.label}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </li>
+          ) : (
+            <li>
+              <a
+                href={item.href}
+                aria-current={currentPath === item.href ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          )
+        )}
       </ul>
     </nav>
 
@@ -77,13 +121,48 @@ const langLinks = LANGS.map((l) => ({
 <div class="mobile-menu" id="mobile-menu" inert>
   <nav aria-label={t('nav.mobileMenu')}>
     <ul>
-      {nav.map((item, i) => (
-        <li style={`--i:${i}`}>
-          <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
-            {item.label}
-          </a>
-        </li>
-      ))}
+      {nav.map((item, i) =>
+        item.key === 'nav.portfolio' ? (
+          <li style={`--i:${i}`} class="has-submenu">
+            <div class="mobile-nav-row">
+              <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+              <button
+                class="mobile-submenu-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="mobile-portfolio-submenu"
+                aria-label={t('nav.portfolioSubmenuToggle')}
+              >
+                <svg viewBox="0 0 12 8" width="14" height="10" aria-hidden="true">
+                  <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="mobile-submenu" id="mobile-portfolio-submenu" hidden>
+              <p class="mobile-submenu-heading">{t('nav.tattoo')}</p>
+              <ul>
+                {portfolioDovme.map((c) => (
+                  <li><a href={c.href}>{c.label}</a></li>
+                ))}
+              </ul>
+              <p class="mobile-submenu-heading">{t('nav.piercing')}</p>
+              <ul>
+                {portfolioPiercing.map((c) => (
+                  <li><a href={c.href}>{c.label}</a></li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ) : (
+          <li style={`--i:${i}`}>
+            <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        )
+      )}
     </ul>
     <div class="mobile-lang" role="group" aria-label={t('lang.switch')}>
       {langLinks.map((l) => (
@@ -178,6 +257,85 @@ const langLinks = LANGS.map((l) => ({
   }
 
   .desktop-nav a[aria-current='page'] {
+    color: var(--color-gold);
+  }
+
+  /* Portfolyo öğesinin altında açılan, dövme stillerine ve piercing
+     bölgelerine giden alt menü. Fare üzerine gelince (ya da klavyeyle
+     odaklanınca) açılır; tıklamak yine normal şekilde /portfolyo'ya götürür. */
+  .has-dropdown {
+    position: relative;
+  }
+
+  .dropdown-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+  }
+
+  .chevron {
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .has-dropdown:hover .chevron,
+  .has-dropdown:focus-within .chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-panel {
+    position: absolute;
+    top: calc(100% + 16px);
+    left: -1rem;
+    display: flex;
+    gap: 2rem;
+    padding: 1.3rem 1.5rem;
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity var(--dur-fast), transform var(--dur-fast);
+  }
+
+  .has-dropdown:hover .dropdown-panel,
+  .has-dropdown:focus-within .dropdown-panel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .dropdown-col {
+    min-width: 128px;
+  }
+
+  .dropdown-heading {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin: 0 0 0.65em;
+  }
+
+  .dropdown-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .dropdown-col a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-ivory-dim);
+    white-space: nowrap;
+  }
+
+  .dropdown-col a:hover {
     color: var(--color-gold);
   }
 
@@ -335,6 +493,72 @@ const langLinks = LANGS.map((l) => ({
     color: var(--color-gold);
   }
 
+  /* Portfolyo satırının yanındaki açılır ok — dokunmatik ekranda hover
+     olmadığı için ayrı bir düğme, tıklanınca alt kategorileri katlayıp açar. */
+  .mobile-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .mobile-nav-row a {
+    flex: 1;
+    border-bottom: none;
+  }
+
+  .mobile-submenu-toggle {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--color-hairline);
+    border-radius: 50%;
+    color: var(--color-ivory-dim);
+    cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease-out), color var(--dur-fast);
+  }
+
+  .mobile-submenu-toggle[aria-expanded='true'] {
+    transform: rotate(180deg);
+    color: var(--color-gold);
+  }
+
+  .mobile-submenu {
+    padding: 0 0 1rem 1rem;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .mobile-submenu[hidden] {
+    display: none;
+  }
+
+  .mobile-submenu-heading {
+    margin: 0.9em 0 0.5em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  .mobile-submenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobile-submenu a {
+    display: block;
+    padding: 0.5em 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-ivory-dim);
+    border-bottom: none;
+  }
+
   /* Seçici bilerek `.mobile-menu a.mobile-cta`: yukarıdaki `.mobile-menu a` kuralı
      (özgüllük 0-1-1) tek başına `.mobile-cta`yı (0-1-0) yeniyor ve .btn-primary'nin
      koyu metin rengini eziyordu — altın zemin üzerinde krem yazı 1.72:1 kalıyordu. */
@@ -420,6 +644,11 @@ const langLinks = LANGS.map((l) => ({
     // odağı engellemiyordu, kapalı menüdeki bağlantılar Tab'lanabiliyordu.
     menu?.setAttribute('inert', '');
     document.body.style.overflow = '';
+    // Portfolyo alt menüsü açık kalmasın — bir dahaki açılışta baştan kapalı olsun.
+    document.querySelectorAll<HTMLButtonElement>('.mobile-submenu-toggle').forEach((btn) => {
+      btn.setAttribute('aria-expanded', 'false');
+      document.getElementById(btn.getAttribute('aria-controls') || '')?.setAttribute('hidden', '');
+    });
   }
 
   function openMenu() {
@@ -453,6 +682,12 @@ const langLinks = LANGS.map((l) => ({
         toggle?.getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
       } else if (t.closest('#mobile-menu-scrim')) {
         closeMenu();
+      } else if (t.closest('.mobile-submenu-toggle')) {
+        const btn = t.closest('.mobile-submenu-toggle') as HTMLButtonElement;
+        const submenu = document.getElementById(btn.getAttribute('aria-controls') || '');
+        const wasOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!wasOpen));
+        submenu?.toggleAttribute('hidden', wasOpen);
       } else if (t.closest('#mobile-menu a')) {
         closeMenu();
       }
