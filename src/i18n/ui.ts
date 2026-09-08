@@ -121,7 +121,7 @@ export const ui = {
     'home.studio.p': 'Her uygulama, tek kullanımlık ve steril ekipmanla, kayıt altına alınan sterilizasyon protokollerine uygun şekilde yapılır.',
     'home.studio.alt': 'Black Ink Art stüdyo',
     'home.studio.cta': 'Hijyen Standartlarımız',
-    'home.jewelry.p1': "Stüdyomuzda taktığımız piercing takıları kendi markamız Piercingland'a ait. Cerrahi çelik, titanyum ve altın seçenekleriyle helixten septuma, dilden göbeğe kadar geniş bir koleksiyon üretiyoruz.",
+    'home.jewelry.p1': "Stüdyomuzda taktığımız piercing takıları kendi markamız Piercingland'a ait. Cerrahi çelik, titanyum ve 14 ayar altın seçenekleriyle helixten septuma, dilden göbeğe kadar geniş bir koleksiyon üretiyoruz.",
     'home.jewelry.p2': 'Takınızı uygulamadan önce seçmek ya da mevcut piercinginiz için yeni bir model bakmak isterseniz koleksiyonun tamamı mağazamızda.',
     'home.final.h': 'Randevunuzu Bugün Alın',
     'home.final.p': "Ankara Çankaya Aşkabat Caddesi'ndeki stüdyomuzda hayalinizdeki tasarımı konuşalım.",
