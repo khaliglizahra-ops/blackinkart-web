@@ -6,8 +6,6 @@ import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
-const PAIN: Record<string, any> = { 'Düşük': 'area.pain.low', 'Orta': 'area.pain.medium', 'Orta-Yüksek': 'area.pain.mediumHigh', 'Yüksek': 'area.pain.high' };
-const painLabel = (v: string) => t(PAIN[v] ?? 'area.pain.medium');
 const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -44,7 +42,6 @@ function priceFor(slug: string) {
             <tr>
               <th scope="col">{t('plc.col.area')}</th>
               <th scope="col">{t('area.healing')}</th>
-              <th scope="col">{t('area.pain')}</th>
               <th scope="col">{t('plc.col.start')}</th>
             </tr>
           </thead>
@@ -55,7 +52,6 @@ function priceFor(slug: string) {
                 <tr>
                   <th scope="row"><a href={`${L('/piercing')}/${cleanSlug(area.slug)}`}>{area.data.title}</a></th>
                   <td>{area.data.healingTime}</td>
-                  <td>{painLabel(area.data.painLevel)}</td>
                   <td class="price">{price ? `${price.toLocaleString(priceLocale)} ${t('price.currency')}${t('plc.from')}` : t('plc.contact')}</td>
                 </tr>
               );
