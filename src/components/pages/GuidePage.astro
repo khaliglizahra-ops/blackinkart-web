@@ -27,7 +27,7 @@ const { Content } = await render(entry);
 const t = useTranslations(lang);
 
 const hubPath = hub === 'dovme' ? '/dovme' : '/piercing';
-const hubLabel = hub === 'dovme' ? `${t('nav.tattoo')} ${t('guide.guides')}` : t('piercing.hubTitle');
+const hubLabel = hub === 'dovme' ? t('tattoo.hubTitle') : t('piercing.hubTitle');
 const base = localizePath(hubPath, lang);
 const path = `${base}/${slug}`;
 
