@@ -214,5 +214,136 @@
       ],
       "labelEn": "Lettering"
     }
+  ],
+  "piercingCategories": [
+    {
+      "key": "kulak",
+      "label": "Kulak",
+      "images": [
+        "/images/piercing/kulak/kulak-01.jpg",
+        "/images/piercing/kulak/kulak-02.jpg",
+        "/images/piercing/kulak/kulak-03.jpg",
+        "/images/piercing/kulak/kulak-04.jpg",
+        "/images/piercing/kulak/kulak-05.jpg",
+        "/images/piercing/kulak/kulak-06.jpg",
+        "/images/piercing/kulak/kulak-07.jpg",
+        "/images/piercing/kulak/kulak-08.jpg",
+        "/images/piercing/kulak/kulak-09.jpg",
+        "/images/piercing/kulak/kulak-10.jpg",
+        "/images/piercing/kulak/kulak-11.jpg",
+        "/images/piercing/kulak/kulak-12.jpg"
+      ],
+      "labelEn": "Ear"
+    },
+    {
+      "key": "burun",
+      "label": "Burun",
+      "images": [
+        "/images/piercing/burun/burun-01.jpg",
+        "/images/piercing/burun/burun-02.jpg",
+        "/images/piercing/burun/burun-03.jpg",
+        "/images/piercing/burun/burun-04.jpg",
+        "/images/piercing/burun/burun-05.jpg",
+        "/images/piercing/burun/burun-06.jpg",
+        "/images/piercing/burun/burun-07.jpg",
+        "/images/piercing/burun/burun-08.jpg",
+        "/images/piercing/burun/burun-09.jpg",
+        "/images/piercing/burun/burun-10.jpg",
+        "/images/piercing/burun/burun-11.jpg",
+        "/images/piercing/burun/burun-12.jpg"
+      ],
+      "labelEn": "Nose"
+    },
+    {
+      "key": "dudak",
+      "label": "Dudak",
+      "images": [
+        "/images/piercing/dudak/dudak-01.jpg",
+        "/images/piercing/dudak/dudak-02.jpg",
+        "/images/piercing/dudak/dudak-03.jpg",
+        "/images/piercing/dudak/dudak-04.jpg",
+        "/images/piercing/dudak/dudak-05.jpg",
+        "/images/piercing/dudak/dudak-06.jpg",
+        "/images/piercing/dudak/dudak-07.jpg",
+        "/images/piercing/dudak/dudak-08.jpg",
+        "/images/piercing/dudak/dudak-09.jpg",
+        "/images/piercing/dudak/dudak-10.jpg"
+      ],
+      "labelEn": "Lip"
+    },
+    {
+      "key": "dil",
+      "label": "Dil",
+      "images": [
+        "/images/piercing/dil/dil-01.jpg",
+        "/images/piercing/dil/dil-02.jpg",
+        "/images/piercing/dil/dil-03.jpg",
+        "/images/piercing/dil/dil-04.jpg",
+        "/images/piercing/dil/dil-05.jpg"
+      ],
+      "labelEn": "Tongue"
+    },
+    {
+      "key": "kas",
+      "label": "Kaş",
+      "images": [
+        "/images/piercing/kas/kas-01.jpg",
+        "/images/piercing/kas/kas-02.jpg",
+        "/images/piercing/kas/kas-03.jpg",
+        "/images/piercing/kas/kas-04.jpg",
+        "/images/piercing/kas/kas-05.jpg",
+        "/images/piercing/kas/kas-06.jpg",
+        "/images/piercing/kas/kas-07.jpg",
+        "/images/piercing/kas/kas-08.jpg"
+      ],
+      "labelEn": "Eyebrow"
+    },
+    {
+      "key": "gobek",
+      "label": "Göbek",
+      "images": [
+        "/images/piercing/gobek/gobek-01.jpg",
+        "/images/piercing/gobek/gobek-02.jpg",
+        "/images/piercing/gobek/gobek-03.jpg",
+        "/images/piercing/gobek/gobek-04.jpg",
+        "/images/piercing/gobek/gobek-05.jpg",
+        "/images/piercing/gobek/gobek-06.jpg",
+        "/images/piercing/gobek/gobek-07.jpg",
+        "/images/piercing/gobek/gobek-08.jpg",
+        "/images/piercing/gobek/gobek-09.jpg",
+        "/images/piercing/gobek/gobek-10.jpg"
+      ],
+      "labelEn": "Navel"
+    },
+    {
+      "key": "meme-ucu",
+      "label": "Meme Ucu",
+      "images": [
+        "/images/piercing/meme-ucu/meme-ucu-01.jpg",
+        "/images/piercing/meme-ucu/meme-ucu-02.jpg",
+        "/images/piercing/meme-ucu/meme-ucu-03.jpg",
+        "/images/piercing/meme-ucu/meme-ucu-04.jpg",
+        "/images/piercing/meme-ucu/meme-ucu-05.jpg",
+        "/images/piercing/meme-ucu/meme-ucu-06.jpg",
+        "/images/piercing/meme-ucu/meme-ucu-07.jpg",
+        "/images/piercing/meme-ucu/meme-ucu-08.jpg"
+      ],
+      "labelEn": "Nipple"
+    },
+    {
+      "key": "dermal",
+      "label": "Dermal",
+      "images": [
+        "/images/piercing/dermal/dermal-01.jpg",
+        "/images/piercing/dermal/dermal-02.jpg",
+        "/images/piercing/dermal/dermal-03.jpg",
+        "/images/piercing/dermal/dermal-04.jpg",
+        "/images/piercing/dermal/dermal-05.jpg",
+        "/images/piercing/dermal/dermal-06.jpg",
+        "/images/piercing/dermal/dermal-07.jpg",
+        "/images/piercing/dermal/dermal-08.jpg"
+      ],
+      "labelEn": "Dermal"
+    }
   ]
 }

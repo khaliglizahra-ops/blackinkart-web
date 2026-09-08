@@ -10,7 +10,7 @@ const L = (p: string) => localizePath(p, lang);
 const catLabel = (g: any) => (lang === 'en' && g.labelEn ? g.labelEn : g.label);
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import { dovmeGalleries, topPortfolio } from '../../data/gallery';
+import { dovmeGalleries, piercingGalleries, topPortfolio } from '../../data/gallery';
 import { thumb } from '../../data/images';
 ---
 
@@ -44,22 +44,50 @@ import { thumb } from '../../data/images';
   <section class="section-tight">
     <div class="container">
       <h2>{t('portfolio.byStyle')}</h2>
-      <div class="filters" role="tablist" aria-label={t('portfolio.filterLabel')}>
-        <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">{t('portfolio.all')}</button>
-        {dovmeGalleries.map((g) => (
-          <button class="filter-btn" data-filter={g.key} role="tab" aria-selected="false">{catLabel(g)}</button>
-        ))}
+
+      <div class="group-tabs" role="tablist" aria-label={t('portfolio.groupLabel')}>
+        <button class="group-tab is-active" data-group="dovme" role="tab" aria-selected="true">{t('nav.tattoo')}</button>
+        <button class="group-tab" data-group="piercing" role="tab" aria-selected="false">{t('nav.piercing')}</button>
       </div>
 
-      <div class="filtered-grid" id="filtered-grid">
-        {dovmeGalleries.map((g) =>
-          g.images.map((src) => (
-            <div class="tile" data-category={g.key} data-reveal>
-              <img src={thumb(src)} data-full={src} alt={`${catLabel(g)} — Black Ink Art`} loading="lazy" width="500" height="500" data-lightbox="stiller" data-caption={`${catLabel(g)} — Black Ink Art`} />
-              <span class="tag">{catLabel(g)}</span>
-            </div>
-          ))
-        )}
+      <div class="style-group" data-group="dovme">
+        <div class="filters" role="tablist" aria-label={t('portfolio.filterLabel')}>
+          <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">{t('portfolio.all')}</button>
+          {dovmeGalleries.map((g) => (
+            <button class="filter-btn" data-filter={g.key} role="tab" aria-selected="false">{catLabel(g)}</button>
+          ))}
+        </div>
+
+        <div class="filtered-grid">
+          {dovmeGalleries.map((g) =>
+            g.images.map((src) => (
+              <div class="tile" data-category={g.key} data-reveal>
+                <img src={thumb(src)} data-full={src} alt={`${catLabel(g)} — Black Ink Art`} loading="lazy" width="500" height="500" data-lightbox="stiller" data-caption={`${catLabel(g)} — Black Ink Art`} />
+                <span class="tag">{catLabel(g)}</span>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div class="style-group" data-group="piercing" hidden>
+        <div class="filters" role="tablist" aria-label={t('portfolio.filterLabelPiercing')}>
+          <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">{t('portfolio.all')}</button>
+          {piercingGalleries.map((g) => (
+            <button class="filter-btn" data-filter={g.key} role="tab" aria-selected="false">{catLabel(g)}</button>
+          ))}
+        </div>
+
+        <div class="filtered-grid">
+          {piercingGalleries.map((g) =>
+            g.images.map((src) => (
+              <div class="tile" data-category={g.key} data-reveal>
+                <img src={thumb(src)} data-full={src} alt={`${catLabel(g)} — Black Ink Art`} loading="lazy" width="500" height="500" data-lightbox="bolgeler" data-caption={`${catLabel(g)} — Black Ink Art`} />
+                <span class="tag">{catLabel(g)}</span>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   </section>
@@ -135,6 +163,41 @@ import { thumb } from '../../data/images';
     transform: translateY(0);
   }
 
+  .group-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .group-tab {
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 700;
+    padding: 0.65em 1.7em;
+    border-radius: 30px;
+    border: 1px solid var(--color-hairline);
+    background: transparent;
+    color: var(--color-ivory-dim);
+    cursor: pointer;
+    transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast);
+  }
+
+  .group-tab:hover {
+    border-color: var(--color-gold-35);
+    color: var(--color-ivory);
+  }
+
+  .group-tab.is-active {
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: #150f00;
+  }
+
+  .style-group[hidden] {
+    display: none;
+  }
+
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -199,19 +262,39 @@ import { thumb } from '../../data/images';
 </style>
 
 <script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const tiles = document.querySelectorAll<HTMLElement>('#filtered-grid .tile');
+  // Üst sekme: Dövme / Piercing arasında geçiş — ilgili .style-group'u gösterir.
+  const groupTabs = document.querySelectorAll<HTMLButtonElement>('.group-tab');
+  const groups = document.querySelectorAll<HTMLElement>('.style-group');
 
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter;
-      buttons.forEach((b) => {
-        b.classList.toggle('is-active', b === btn);
-        b.setAttribute('aria-selected', String(b === btn));
+  groupTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      groupTabs.forEach((t) => {
+        t.classList.toggle('is-active', t === tab);
+        t.setAttribute('aria-selected', String(t === tab));
       });
-      tiles.forEach((tile) => {
-        const show = filter === 'all' || tile.dataset.category === filter;
-        tile.hidden = !show;
+      groups.forEach((group) => {
+        group.hidden = group.dataset.group !== tab.dataset.group;
+      });
+    });
+  });
+
+  // Alt filtre: her grup kendi düğmelerini ve karolarını yönetir, böylece
+  // gizli gruptaki bir filtre görünen grubu etkilemez.
+  groups.forEach((group) => {
+    const buttons = group.querySelectorAll<HTMLButtonElement>('.filter-btn');
+    const tiles = group.querySelectorAll<HTMLElement>('.tile');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        buttons.forEach((b) => {
+          b.classList.toggle('is-active', b === btn);
+          b.setAttribute('aria-selected', String(b === btn));
+        });
+        tiles.forEach((tile) => {
+          const show = filter === 'all' || tile.dataset.category === filter;
+          tile.hidden = !show;
+        });
       });
     });
   });

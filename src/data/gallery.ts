@@ -1,5 +1,6 @@
 // Portfolio images are managed in the admin panel (Portfolyo) and stored in
-// portfolio.json. Piercing area photos live in each area's own content entry.
+// portfolio.json. Piercing category photos mirror each area's own photo
+// folder (aynı klasörler /piercing/<bölge> sayfalarında da kullanılıyor).
 import portfolio from './portfolio.json';
 
 export type GalleryCategory = {
@@ -8,8 +9,13 @@ export type GalleryCategory = {
   images: string[];
 };
 
-/** Dövme portfolio grouped by style — drives the filters on /portfolyo. */
+/** Dövme portfolio grouped by style — drives the "Dövme" filters on /portfolyo. */
 export const dovmeGalleries: GalleryCategory[] = portfolio.categories.filter(
+  (c) => c.images.length > 0
+);
+
+/** Piercing portfolio grouped by body area — drives the "Piercing" filters on /portfolyo. */
+export const piercingGalleries: GalleryCategory[] = portfolio.piercingCategories.filter(
   (c) => c.images.length > 0
 );
 

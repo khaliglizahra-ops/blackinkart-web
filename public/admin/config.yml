@@ -59,14 +59,15 @@ editor:
 collections:
   # ------------------------------------------------------------------ PORTFOLYO
   - name: portfolyo
-    label: Portfolyo (Dövme Fotoğrafları)
+    label: Portfolyo (Dövme ve Piercing Fotoğrafları)
     files:
       - name: portfolyo_listesi
         label: Fotoğraflar
         file: src/data/portfolio.json
         description: >-
-          Ana sayfadaki öne çıkanlar, stile göre kategoriler ve stüdyo fotoğrafları.
-          Yeni fotoğraf eklemek için ilgili bölümü açıp en alttaki "Ekle" düğmesine basın.
+          Ana sayfadaki öne çıkanlar, dövme stiline göre kategoriler, piercing bölgesine
+          göre kategoriler ve stüdyo fotoğrafları. Yeni fotoğraf eklemek için ilgili
+          bölümü açıp en alttaki "Ekle" düğmesine basın.
         fields:
           - name: featured
             label: Öne Çıkanlar (ana sayfada görünür)
@@ -81,7 +82,7 @@ collections:
               public_folder: /images/portfolyo/top30
             hint: Ana sayfada ve portfolyo sayfasının en üstünde gösterilir.
           - name: categories
-            label: Stil Kategorileri
+            label: Dövme — Stil Kategorileri
             label_singular: Kategori
             widget: list
             collapsed: true
@@ -107,6 +108,35 @@ collections:
                   public_folder: /images/portfolyo
                 hint: >-
                   Kategori fotoğrafları her kategorinin kendi klasöründe duruyor ve panel
+                  liste satırı başına ayrı klasör gösteremiyor; bu yüzden seçici boş açılır.
+                  Yeni fotoğrafı doğrudan yükleyin, doğru yere kaydedilir.
+          - name: piercingCategories
+            label: Piercing — Bölge Kategorileri
+            label_singular: Kategori
+            widget: list
+            collapsed: true
+            minimize_collapsed: true
+            summary: '{{fields.label}}'
+            fields:
+              - { name: label, label: Kategori adı, widget: string, hint: 'Portfolyo sayfasındaki filtre düğmesinde görünen isim. Örn. Kulak, Burun.' }
+              - name: key
+                label: Kategori kimliği
+                widget: string
+                pattern: ['^[a-z0-9-]+$', 'Sadece küçük harf, rakam ve tire kullanın. Örn. meme-ucu']
+                hint: 'DEĞİŞTİRMEYİN — filtrelerin çalışmasını sağlar. Yeni kategoride: küçük harf, boşluk yerine tire.'
+              - name: images
+                label: Fotoğraflar
+                widget: list
+                collapsed: true
+                minimize_collapsed: true
+                field:
+                  name: image
+                  label: Fotoğraf
+                  widget: image
+                  media_folder: /public/images/piercing
+                  public_folder: /images/piercing
+                hint: >-
+                  Kategori fotoğrafları her bölgenin kendi klasöründe duruyor ve panel
                   liste satırı başına ayrı klasör gösteremiyor; bu yüzden seçici boş açılır.
                   Yeni fotoğrafı doğrudan yükleyin, doğru yere kaydedilir.
           - name: studio
