@@ -1,0 +1,99 @@
+---
+import { langFromPath, localizePath } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+/**
+ * 3D önizleme aracının tanıtım bloğu. Hem ana sayfada hem dövme bölümünün
+ * en üstünde duruyor, bu yüzden ayrı bir bileşen.
+ *
+ * Görsel, aracın kendi 3D modelinden alınmış bir kare (kola yerleştirilmiş
+ * bir dövmeyle). Önceden düz bir şablon PNG'si vardı; ziyaretçi bunun bir
+ * 3D araç olduğunu anlamıyordu.
+ */
+interface Props {
+  /** Dövme sayfasının en üstünde daha derli toplu dursun diye. */
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+---
+
+<section class={`section preview-tool${compact ? ' is-compact' : ''}`}>
+  <div class="container preview-inner surface" data-reveal>
+    <div class="preview-copy">
+      <p class="eyebrow">{t('home.preview.eyebrow')}</p>
+      <h2>{t('home.preview.h')}</h2>
+      <p>{t('home.preview.p')}</p>
+      <a href={localizePath('/dovme-onizleme', lang)} class="btn btn-primary">{t('home.preview.cta')}</a>
+    </div>
+    <div class="preview-visual">
+      <img
+        src="/images/3d-onizleme-model.png"
+        alt={t('home.preview.alt')}
+        loading="lazy"
+        width="595"
+        height="488"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .preview-tool.is-compact {
+    padding-top: 0;
+  }
+
+  .preview-inner {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .preview-copy {
+    padding: clamp(2rem, 4vw, 3.2rem);
+  }
+
+  .preview-copy h2 {
+    max-width: 16ch;
+  }
+
+  .preview-copy p {
+    max-width: 46ch;
+  }
+
+  .preview-visual {
+    align-self: stretch;
+    min-height: 240px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    /* Model saydam zeminli; ışık aşağıdan geliyormuş gibi bir zemin. */
+    background: radial-gradient(ellipse at 50% 78%, #221b10 0%, #0a0908 72%);
+  }
+
+  .preview-visual img {
+    width: 100%;
+    height: 100%;
+    max-height: 340px;
+    object-fit: contain;
+    object-position: center bottom;
+    /* Model rengi krem; siteyle uyumlu olsun diye hafif sıcaklık. */
+    filter: saturate(0.92) contrast(1.04) drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+  }
+
+  @media (max-width: 900px) {
+    .preview-inner {
+      grid-template-columns: 1fr;
+    }
+    .preview-visual {
+      min-height: 200px;
+      order: -1;
+    }
+    .preview-visual img {
+      max-height: 260px;
+    }
+  }
+</style>

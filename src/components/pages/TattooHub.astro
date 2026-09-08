@@ -9,6 +9,7 @@ const L = (p: string) => localizePath(p, lang);
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GuideHero from '../../components/GuideHero.astro';
+import PreviewToolTeaser from '../PreviewToolTeaser.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
 import { thumb } from '../../data/images';
 
@@ -26,6 +27,8 @@ const guides = await getLocalizedCollection('dovme-rehberi', lang);
     breadcrumbs={[{ label: t('nav.tattoo') }]}
     image="/images/portfolyo/top30/top-11.jpg"
   />
+
+  <PreviewToolTeaser compact />
 
   <section class="section-tight hub-hero">
     <div class="container">
