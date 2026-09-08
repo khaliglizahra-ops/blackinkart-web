@@ -1,10 +1,11 @@
 ---
-title: "Dövme Teknikleri"
-translationKey: "tattoo-techniques"
-description: "Makineli (Batı) tekniğinden hand-poke'a kadar dövme yapım yöntemleri ve stüdyomuzda kullanılan yaklaşım."
+translationKey: tattoo-techniques
+title: Dövme Teknikleri
+description: Makineli (Batı) tekniğinden hand-poke'a kadar dövme yapım
+  yöntemleri ve stüdyomuzda kullanılan yaklaşım.
 order: 3
-updatedAt: "2026-02-01"
-heroImage: "/images/surec/surec-01.jpg"
+heroImage: /images/portfolyo/top30/top-02.jpg
+updatedAt: 2026-02-01
 ---
 
 Dünya genelinde farklı kültürler farklı dövme teknikleri geliştirmiştir. Bugün de bu tekniklerin bir kısmı hâlâ uygulanmaktadır:
