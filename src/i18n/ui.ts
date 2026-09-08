@@ -16,7 +16,7 @@ export const ui = {
     'nav.artists': 'Sanatçılar',
     'nav.tattoo': 'Dövme',
     'nav.piercing': 'Piercing',
-    'nav.preview': 'Önizleme',
+    'nav.preview': '3D Dövme Dene',
     'nav.hygiene': 'Hijyen ve Güvenlik',
     'nav.contact': 'İletişim',
     'nav.menu': 'Ana menü',
