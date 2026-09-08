@@ -1,5 +1,5 @@
 ---
-title: "A Guide to Tattoo Styles"
+title: "Tattoo Styles"
 translationKey: "tattoo-styles"
 description: "Realism, minimal, blackwork, traditional and more — an overview of tattoo styles and how to find the one that suits you."
 order: 2

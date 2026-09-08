@@ -1,6 +1,6 @@
 ---
 translationKey: piercing-healing-times
-title: Piercing İyileşme Süreleri Rehberi
+title: Piercing İyileşme Süreleri
 description: Kulak, burun, dudak, dil, göbek ve diğer bölgelere göre piercing
   iyileşme süreleri.
 order: 6
@@ -24,4 +24,4 @@ updatedAt: 2026-02-01
 | Genital bölge | 2 – 6 hafta |
 | Dermal | 3 ay – 1 yıl |
 
-Kıkırdak ve mukoza dokular (ağız, burun içi) genel olarak daha yavaş iyileşir ve daha hassastır; bu bölgelerde bakım protokolüne özellikle sadık kalmak önemlidir. Detaylı bakım adımları için [Piercing Bakımı](/piercing/piercing-bakimi) rehberimize bakabilirsiniz.
+Kıkırdak ve mukoza dokular (ağız, burun içi) genel olarak daha yavaş iyileşir ve daha hassastır; bu bölgelerde bakım protokolüne özellikle sadık kalmak önemlidir. Detaylı bakım adımları için [Piercing Bakımı](/piercing/piercing-bakimi) yazımıza bakabilirsiniz.

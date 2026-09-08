@@ -16,4 +16,4 @@ Kaliteli bir dövme, doğru sırayla ilerleyen bir süreçtir. Black Ink Art'ta 
 5. **Uygulama** — Önce kontur (dış çizgi), ardından dolum ve gölgelendirme yapılır. Cilt, çizgilerin net çıkması için sürekli gerdirilir ve düzenli olarak temizlenir.
 6. **İlk bakım** — Taze dövme, deriyi nemli ve hava alır durumda tutan bir bantla kapatılır.
 
-Uygulama sonrası bakım süreci ayrıca çok önemlidir — detaylar için [Dövme Bakımı ve İyileşme Süreci](/dovme/dovme-bakimi) rehberimize göz atın.
+Uygulama sonrası bakım süreci ayrıca çok önemlidir — detaylar için [Dövme Bakımı ve İyileşme Süreci](/dovme/dovme-bakimi) yazımıza göz atın.

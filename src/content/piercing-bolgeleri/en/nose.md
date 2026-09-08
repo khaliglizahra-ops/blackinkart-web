@@ -24,4 +24,4 @@ photos:
 
 **Nostril** and **septum** are the most commonly chosen nose piercings, and they heal relatively quickly. More specific placements — **high nostril, austin bar, rhino, septril** — depend on your anatomy being suitable. **Nasallang**, which joins three points on a single bar, is a technique that demands experience.
 
-Because the nose sits close to mucosal tissue, following the saline protocol during healing matters especially here — see our [piercing aftercare](/en/piercing/piercing-aftercare) guide.
+Because the nose sits close to mucosal tissue, following the saline protocol during healing matters especially here — see our [piercing aftercare](/en/piercing/piercing-aftercare) page.

@@ -20,4 +20,4 @@ photos:
 
 Meme ucu piercingi, doğru teknik ve steril uygulamayla güvenli şekilde yapılabilir. İyileşme sürecinde günlük temiz ve ütülenmiş bir sütyen kullanmak, bölgeyi sabit tutarak sürtünmeye bağlı acıyı büyük ölçüde azaltır.
 
-Kıyafet altında kalan tüm piercinglerde olduğu gibi, temas eden tekstilin her gün temiz ve ütülü olmasına özen gösterilmelidir. Bakım detayları için [Piercing Bakımı](/piercing/piercing-bakimi) rehberimize bakabilirsiniz.
+Kıyafet altında kalan tüm piercinglerde olduğu gibi, temas eden tekstilin her gün temiz ve ütülü olmasına özen gösterilmelidir. Bakım detayları için [Piercing Bakımı](/piercing/piercing-bakimi) yazımıza bakabilirsiniz.

@@ -1,5 +1,5 @@
 ---
-title: "Tattoo Pain: A Guide to Sensitivity by Area"
+title: "Tattoo Pain: Sensitivity by Area"
 translationKey: "tattoo-pain-guide"
 description: "What affects how much a tattoo hurts, and what to expect from different areas of the body."
 order: 6

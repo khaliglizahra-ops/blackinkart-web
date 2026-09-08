@@ -19,4 +19,4 @@ Modern dövme makineleri, yüksek hızda hareket eden bir iğne grubuyla pigment
 
 Black Ink Art'ta her dövme, tek kullanımlık iğne ve steril ekipmanla, [hijyen ve güvenlik standartlarımıza](/hijyen-ve-guvenlik) uygun şekilde uygulanır.
 
-Dövme yaptırmayı düşünüyorsanız devam eden rehberlerimizde stiller, teknikler, uygulama aşamaları ve bakım süreci hakkında detaylı bilgi bulabilirsiniz.
+Dövme yaptırmayı düşünüyorsanız devam eden yazılarımızda stiller, teknikler, uygulama aşamaları ve bakım süreci hakkında detaylı bilgi bulabilirsiniz.

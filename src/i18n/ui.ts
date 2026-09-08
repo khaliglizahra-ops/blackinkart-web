@@ -48,12 +48,12 @@ export const ui = {
 
     // — Rehber yazıları —
     'guide.updated': 'Güncellendi',
-    'guide.pagerLabel': 'Rehber gezinme',
+    'guide.pagerLabel': 'Sayfalar arası gezinme',
     'guide.prev': '← Önceki',
     'guide.next': 'Sonraki →',
     'guide.ctaTitle': 'Sorularınız mı var?',
     'guide.ctaText': 'Randevu öncesi merak ettiklerinizi konuşalım.',
-    'guide.guides': 'Rehberler',
+    'guide.guides': 'Yazılar',
 
     // — Altbilgi —
     'footer.explore': 'Keşfet',
@@ -127,11 +127,11 @@ export const ui = {
     'home.pageTitle': 'Ana Sayfa',
     'tattoo.hubTitle': 'Dövme',
     'tattoo.pageTitle': 'Dövme',
-    'tattoo.pageDesc': "Dövme stilleri, teknikleri, uygulama aşamaları, bakımı ve fiyatları hakkında Black Ink Art'ın kapsamlı dövme rehberi.",
-    'tattoo.hubLead': 'Kalıcı dövme kararınızı bilinçli vermeniz için hazırladığımız rehberler: stiller, teknikler, uygulama aşamaları, bakım ve daha fazlası.',
+    'tattoo.pageDesc': "Dövme stilleri, teknikleri, uygulama aşamaları, bakımı ve fiyatları hakkında bilmeniz gereken her şey.",
+    'tattoo.hubLead': 'Kalıcı dövme kararınızı bilinçli vermeniz için hazırladığımız yazılar: stiller, teknikler, uygulama aşamaları, bakım ve daha fazlası.',
     'cta.browsePortfolio': 'Portfolyoyu İncele',
     'piercing.pageTitle': 'Piercing',
-    'piercing.pageDesc': "Piercing malzemeleri, uygulama süreci, bakımı, bump/keloid ve bölgeye göre iyileşme süreleri hakkında Black Ink Art'ın kapsamlı piercing rehberi.",
+    'piercing.pageDesc': "Piercing malzemeleri, uygulama süreci, bakımı, bump/keloid ve bölgeye göre iyileşme süreleri hakkında bilmeniz gereken her şey.",
     'portfolio.pageTitle': 'Portfolyo',
     'portfolio.pageDesc': 'Black Ink Art dövme portfolyosu: blackwork, minimal, renkli, portre, retro ve daha fazlası. Stile göre filtreleyerek keşfedin.',
     'portfolio.h1': 'Çalışmalarımız',
@@ -338,12 +338,12 @@ export const ui = {
 
     // — Guide articles —
     'guide.updated': 'Updated',
-    'guide.pagerLabel': 'Guide navigation',
+    'guide.pagerLabel': 'Page navigation',
     'guide.prev': '← Previous',
     'guide.next': 'Next →',
     'guide.ctaTitle': 'Have questions?',
     'guide.ctaText': "Let's talk through anything you're wondering about before you book.",
-    'guide.guides': 'Guides',
+    'guide.guides': 'Articles',
 
     // — Footer —
     'footer.explore': 'Explore',
@@ -417,11 +417,11 @@ export const ui = {
     'home.pageTitle': 'Home',
     'tattoo.hubTitle': 'Tattoo',
     'tattoo.pageTitle': 'Tattoo',
-    'tattoo.pageDesc': "Black Ink Art's complete tattoo guide: styles, techniques, the stages of the process, aftercare and pricing.",
-    'tattoo.hubLead': 'Guides to help you make an informed decision about a permanent tattoo: styles, techniques, the stages of the process, aftercare and more.',
+    'tattoo.pageDesc': "Everything you need to know about tattoo styles, techniques, the stages of the process, aftercare and pricing.",
+    'tattoo.hubLead': 'Articles to help you make an informed decision about a permanent tattoo: styles, techniques, the stages of the process, aftercare and more.',
     'cta.browsePortfolio': 'Browse the Portfolio',
     'piercing.pageTitle': 'Piercing',
-    'piercing.pageDesc': "Black Ink Art's complete piercing guide: materials, the procedure, aftercare, bumps and keloids, and healing times by placement.",
+    'piercing.pageDesc': "Everything you need to know about piercing materials, the procedure, aftercare, bumps and keloids, and healing times by placement.",
     'portfolio.pageTitle': 'Portfolio',
     'portfolio.pageDesc': 'The Black Ink Art tattoo portfolio: blackwork, minimal, colour, portrait, retro and more. Filter by style to explore.',
     'portfolio.h1': 'Our Work',

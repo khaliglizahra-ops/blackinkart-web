@@ -20,4 +20,4 @@ photos:
 
 Dermal piercing, geleneksel piercinglerden farklı olarak bir giriş-çıkış deliği değil, tek noktadan deriye gömülen bir çapa implantı içerir. Delim, tek kullanımlık bir punch ile açılır ve implant yerleştirildikten sonra üzerine istenen taş/top takılır.
 
-Hareketli veya sık sürtünen bölgelerde bioplastik seçenekler iyileşmeyi kolaylaştırabilir. Keloid gelişimi riskine karşı [Bump ve Keloid](/piercing/bump-ve-keloid) rehberimizi incelemenizi öneririz.
+Hareketli veya sık sürtünen bölgelerde bioplastik seçenekler iyileşmeyi kolaylaştırabilir. Keloid gelişimi riskine karşı [Bump ve Keloid](/piercing/bump-ve-keloid) yazımızı incelemenizi öneririz.

@@ -1,7 +1,7 @@
 ---
-title: "Dövme Stilleri Rehberi"
+title: "Dövme Stilleri"
 translationKey: "tattoo-styles"
-description: "Realistik, minimal, blackwork, geleneksel ve daha fazlası — dövme stillerine genel bakış ve size uygun tarzı bulma rehberi."
+description: "Realistik, minimal, blackwork, geleneksel ve daha fazlası — dövme stillerine genel bakış ve size uygun tarzı bulun."
 order: 2
 updatedAt: "2026-02-01"
 heroImage: "/images/portfolyo/top30/top-24.jpg"

@@ -1,5 +1,5 @@
 ---
-title: "A Guide to Piercing Healing Times"
+title: "Piercing Healing Times"
 translationKey: "piercing-healing-times"
 description: "How long piercings take to heal — ear, nose, lip, tongue, navel and other placements."
 order: 6
@@ -23,4 +23,4 @@ Healing time depends on the placement, on how quickly you heal as an individual,
 | Genital | 2 – 6 weeks |
 | Dermal | 3 months – 1 year |
 
-Cartilage and mucosal tissue — the mouth and the inside of the nose — generally heal more slowly and are more sensitive. Sticking closely to the aftercare protocol matters especially in these areas. For the detailed steps, see our guide to [piercing aftercare](/en/piercing/piercing-aftercare).
+Cartilage and mucosal tissue — the mouth and the inside of the nose — generally heal more slowly and are more sensitive. Sticking closely to the aftercare protocol matters especially in these areas. For the detailed steps, see [piercing aftercare](/en/piercing/piercing-aftercare).

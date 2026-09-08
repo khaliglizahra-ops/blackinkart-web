@@ -20,4 +20,4 @@ photos:
 
 Unlike a conventional piercing, a dermal piercing has no entry and exit hole. Instead, an anchor implant is set into the skin at a single point. The opening is made with a single-use punch, and once the implant is in place the gem or ball of your choice is fitted on top.
 
-In areas that move or rub frequently, bioplast options can make healing easier. Given the risk of keloid formation, we recommend reading our guide to [bumps and keloids](/en/piercing/bumps-and-keloids).
+In areas that move or rub frequently, bioplast options can make healing easier. Given the risk of keloid formation, we recommend reading about [bumps and keloids](/en/piercing/bumps-and-keloids).

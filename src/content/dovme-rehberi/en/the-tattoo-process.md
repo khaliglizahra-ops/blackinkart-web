@@ -16,4 +16,4 @@ A good tattoo is a process that moves through the right steps in the right order
 5. **The tattoo** — Outlines first, then filling and shading. The skin is kept taut so the lines come out clean, and is wiped down regularly throughout.
 6. **First dressing** — The fresh tattoo is covered with a dressing that keeps the skin moist while still letting it breathe.
 
-What happens afterwards matters just as much — see our guide to [tattoo aftercare and healing](/en/tattoo/tattoo-aftercare).
+What happens afterwards matters just as much — see [tattoo aftercare and healing](/en/tattoo/tattoo-aftercare).

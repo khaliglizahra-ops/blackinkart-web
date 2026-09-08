@@ -1,5 +1,5 @@
 ---
-title: "Dövme Acısı: Bölgelere Göre Hassasiyet Rehberi"
+title: "Dövme Acısı: Bölgelere Göre Hassasiyet"
 translationKey: "tattoo-pain-guide"
 description: "Dövme yaptırırken acı seviyesini etkileyen faktörler ve bölgeye göre genel hassasiyet beklentisi."
 order: 6

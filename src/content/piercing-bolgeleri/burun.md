@@ -24,4 +24,4 @@ photos:
 
 **Nostril** ve **septum**, burun piercingleri arasında en yaygın tercih edilenlerdir ve nispeten hızlı iyileşir. **High nostril, austin bar, rhino, septril** gibi daha spesifik uygulamalar ek anatomik uygunluk gerektirir; **nasallang** ise üç noktayı tek bir bar üzerinde birleştiren, deneyim isteyen bir tekniktir.
 
-Burun bölgesi mukoza dokuya yakın olduğu için iyileşme sürecinde tuzlu su protokolüne uymak özellikle önemlidir — detaylar için [Piercing Bakımı](/piercing/piercing-bakimi) rehberimize bakın.
+Burun bölgesi mukoza dokuya yakın olduğu için iyileşme sürecinde tuzlu su protokolüne uymak özellikle önemlidir — detaylar için [Piercing Bakımı](/piercing/piercing-bakimi) yazımıza bakın.

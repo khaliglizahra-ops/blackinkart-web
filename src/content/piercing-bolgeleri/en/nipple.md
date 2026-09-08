@@ -20,4 +20,4 @@ photos:
 
 A nipple piercing can be done safely with the right technique and a sterile procedure. During healing, wearing a clean, ironed bra each day holds the area still and greatly reduces the soreness caused by friction.
 
-As with every piercing that sits under clothing, make sure the fabric in contact with it is clean and ironed daily. For aftercare details, see our [piercing aftercare](/en/piercing/piercing-aftercare) guide.
+As with every piercing that sits under clothing, make sure the fabric in contact with it is clean and ironed daily. For aftercare details, see our [piercing aftercare](/en/piercing/piercing-aftercare) page.

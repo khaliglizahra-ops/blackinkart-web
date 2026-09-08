@@ -17,4 +17,4 @@ Piercingin izleri 5000 yıl öncesine kadar uzanır. Antik Mısır'da firavunlar
 
 Profesyonel bir piercing uygulaması; steril ekipman, tek kullanımlık iğne/kanül ve doğru takı seçimiyle yapılır. Doku önce dezenfekte edilir, işaretlenen noktadan tek kullanımlık steril bir intraket ile delim gerçekleştirilir ve uygun takı takılır. Dermal piercinglerde ise tek kullanımlık bir punch ile açılan cebe implant yerleştirilir.
 
-Detaylı bilgi için [Piercing Uygulama Süreci](/piercing/piercing-uygulama-sureci) ve [Piercing Malzemeleri](/piercing/piercing-malzemeleri) rehberlerimize göz atabilirsiniz.
+Detaylı bilgi için [Piercing Uygulama Süreci](/piercing/piercing-uygulama-sureci) ve [Piercing Malzemeleri](/piercing/piercing-malzemeleri) yazılarımıza göz atabilirsiniz.
