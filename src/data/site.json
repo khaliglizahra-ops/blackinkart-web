@@ -3,17 +3,17 @@
   "shortName": "Black Ink Art",
   "founder": "Hüseyin Ölmez",
   "tagline": "Ankara Bahçelievler’de dövme ve piercing sanatı",
-  "description": "Ankara Bahçelievler 7. Cadde’de dövme ve piercing stüdyosu. Steril ekipman, deneyimli sanatçı ve şeffaf fiyatlarla randevunuzu bugün alın.",
+  "description": "Ankara Çankaya Aşkabat Caddesi’nde (eski 7. Cadde) dövme ve piercing stüdyosu. Steril ekipman, deneyimli sanatçı ve şeffaf fiyatlarla randevunuzu bugün alın.",
   "url": "https://www.blackinkart.com.tr",
   "address": {
-    "streetAddress": "7. Cadde",
-    "addressLocality": "Bahçelievler, Çankaya",
+    "streetAddress": "Yukarı Bahçelievler Mah. Aşkabat Cad. (Eski 7. Cad) No: 47/2",
+    "addressLocality": "Çankaya",
     "addressRegion": "Ankara",
     "postalCode": "06490",
     "addressCountry": "TR",
-    "full": "Bahçelievler 7. Cadde, Çankaya/Ankara"
+    "full": "Yukarı Bahçelievler Mah. Aşkabat Cad. (Eski 7. Cad) No: 47/2, Çankaya/Ankara"
   },
-  "mapsEmbedSrc": "https://www.google.com/maps?q=Bah%C3%A7elievler+7.+Cadde+Çankaya+Ankara&output=embed",
+  "mapsEmbedSrc": "https://www.google.com/maps?q=A%C5%9Fkabat%20Caddesi%20No%2047/2%20Yukar%C4%B1%20Bah%C3%A7elievler%20%C3%87ankaya%20Ankara&output=embed",
   "geo": {
     "latitude": 39.9208,
     "longitude": 32.8138
@@ -42,5 +42,6 @@
   ],
   "googleBusinessUrl": "",
   "taglineEn": "Tattoo and piercing artistry in Bahçelievler, Ankara",
-  "descriptionEn": "A tattoo and piercing studio on 7th Street, Bahçelievler, Ankara. Sterile equipment, experienced artistry and transparent pricing."
+  "descriptionEn": "A tattoo and piercing studio on Aşkabat Caddesi (formerly 7th Street) in Çankaya, Ankara. Sterile equipment, experienced artistry and transparent pricing.",
+  "mapsUrl": "https://www.google.com/maps/search/?api=1&query=A%C5%9Fkabat%20Caddesi%20No%2047/2%20Yukar%C4%B1%20Bah%C3%A7elievler%20%C3%87ankaya%20Ankara"
 }

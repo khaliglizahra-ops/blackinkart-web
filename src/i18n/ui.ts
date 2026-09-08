@@ -64,6 +64,9 @@ export const ui = {
     'footer.ageNote':
       '18 yaş altına yalnızca veli veya yasal vasi eşliğinde ve onayıyla uygulama yapılır.',
     'footer.ageDetails': 'Detaylar',
+    'footer.directions': 'Yol tarifi al →',
+    'footer.mapTitle': 'Black Ink Art konum haritası',
+    'footer.mapAria': 'Haritada aç — yol tarifi',
 
     // — Yasal sayfa adları —
     'legal.kvkk': 'KVKK Aydınlatma Metni',
@@ -79,7 +82,7 @@ export const ui = {
     'lightbox.image': 'Görsel',
 
     // — Ana sayfa —
-    'home.eyebrow': 'Ankara Bahçelievler · 7. Cadde',
+    'home.eyebrow': 'Ankara Çankaya · Aşkabat Caddesi',
     'home.title.a': 'Kalıcı sanatın',
     'home.title.em': 'ustalıkla',
     'home.title.b': 'buluştuğu adres',
@@ -119,7 +122,7 @@ export const ui = {
     'home.jewelry.p1': "Stüdyomuzda taktığımız piercing takıları kendi markamız Piercingland'a ait. Cerrahi çelik, titanyum ve altın seçenekleriyle helixten septuma, dilden göbeğe kadar geniş bir koleksiyon üretiyoruz.",
     'home.jewelry.p2': 'Takınızı uygulamadan önce seçmek ya da mevcut piercinginiz için yeni bir model bakmak isterseniz koleksiyonun tamamı mağazamızda.',
     'home.final.h': 'Randevunuzu Bugün Alın',
-    'home.final.p': "Ankara Bahçelievler 7. Cadde'deki stüdyomuzda hayalinizdeki tasarımı konuşalım.",
+    'home.final.p': "Ankara Çankaya Aşkabat Caddesi'ndeki stüdyomuzda hayalinizdeki tasarımı konuşalım.",
     'home.pageTitle': 'Ana Sayfa',
     'tattoo.hubTitle': 'Dövme Rehberi',
     'tattoo.pageTitle': 'Dövme Rehberi ve Bilgi Merkezi',
@@ -350,6 +353,9 @@ export const ui = {
     'footer.ageNote':
       'Under-18s are worked on only when accompanied by a parent or legal guardian, and with their consent.',
     'footer.ageDetails': 'Details',
+    'footer.directions': 'Get directions →',
+    'footer.mapTitle': 'Black Ink Art location map',
+    'footer.mapAria': 'Open in maps — directions',
 
     // — Legal page names —
     'legal.kvkk': 'Privacy Notice (KVKK)',
@@ -365,7 +371,7 @@ export const ui = {
     'lightbox.image': 'Image',
 
     // — Home —
-    'home.eyebrow': 'Ankara Bahçelievler · 7th Street',
+    'home.eyebrow': 'Çankaya, Ankara · Aşkabat Caddesi',
     'home.title.a': 'Where lasting art meets',
     'home.title.em': 'true craft',
     'home.title.b': '',
@@ -405,7 +411,7 @@ export const ui = {
     'home.jewelry.p1': 'The piercing jewellery we fit in the studio is our own brand, Piercingland. We produce a wide collection in surgical steel, titanium and gold — from helix to septum, tongue to navel.',
     'home.jewelry.p2': 'Whether you want to choose your jewellery before your appointment or find a new piece for a piercing you already have, the full collection is in our shop.',
     'home.final.h': 'Book Your Appointment Today',
-    'home.final.p': "Let's talk through the design you have in mind at our studio on 7th Street, Bahçelievler, Ankara.",
+    'home.final.p': "Let's talk through the design you have in mind at our studio on Aşkabat Caddesi, Çankaya, Ankara.",
     'home.pageTitle': 'Home',
     'tattoo.hubTitle': 'Tattoo Guide',
     'tattoo.pageTitle': 'Tattoo Guide and Information Centre',
