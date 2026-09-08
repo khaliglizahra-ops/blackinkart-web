@@ -36,8 +36,8 @@ export const ui = {
     'cta.readMore': 'Devamını Oku →',
     'cta.seePrices': 'Fiyatları Gör',
     'cta.comparePlacements': 'Bölgeleri Karşılaştır',
-    'cta.viewJewelry': 'Takıları İncele ↗',
-    'cta.viewJewelryLong': 'Piercing Takılarını İncele ↗',
+    'cta.viewJewelry': 'Piercingleri İncele ↗',
+    'cta.viewJewelryLong': 'Piercingleri İncele ↗',
 
     // — Dil değiştirici —
     'lang.switch': 'Dil seçin',
