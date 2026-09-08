@@ -51,7 +51,7 @@ const keyframesCss = `@keyframes hero-slide-cycle{
       <div
         class="hero-bg-slide"
         data-bg={i === 0 ? undefined : slide.src}
-        style={`${i === 0 ? `background-image:url(${slide.src}); ` : ''}background-position:${slide.position}; animation-delay:${i * SLIDE_SECONDS}s;`}
+        style={`${i === 0 ? `--slide-img:url(${slide.src}); ` : ''}--slide-pos:${slide.position}; animation-delay:${i * SLIDE_SECONDS}s;`}
       ></div>
     ))}
     <div class="hero-bg-overlay"></div>
@@ -103,24 +103,51 @@ const keyframesCss = `@keyframes hero-slide-cycle{
     background: var(--color-black);
   }
 
+  /* Fotoğraflar dikey, hero ise geniş. `cover` ile fotoğrafın yalnızca
+     ortadaki dar bandı görünüyordu — dövmenin tamamı kadraj dışında
+     kalıyordu. Şimdi iki katman: arkada bulanık, ekranı dolduran bir kopya;
+     önde fotoğrafın tamamı (`contain`). Böylece boşluk kalmadan bütün dövme
+     görünüyor. */
   .hero-bg-slide {
     position: absolute;
     inset: -4%;
-    background-size: cover;
-    /* Gerçek odak noktası her kare için satır içi geliyor (hero.json). */
-    background-position: center 45%;
     opacity: 0;
-    filter: saturate(1) brightness(1.05);
     animation: hero-slide-cycle var(--slide-duration) infinite;
     animation-fill-mode: both;
+  }
+
+  .hero-bg-slide::before,
+  .hero-bg-slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--slide-img);
+    background-repeat: no-repeat;
+  }
+
+  /* Arka katman: kenarları dolduran bulanık kopya. */
+  .hero-bg-slide::before {
+    background-size: cover;
+    background-position: center;
+    filter: blur(38px) saturate(0.75) brightness(0.5);
+    transform: scale(1.2);
+  }
+
+  /* Ön katman: fotoğrafın tamamı, kırpılmadan. */
+  .hero-bg-slide::after {
+    background-size: contain;
+    background-position: var(--slide-pos, center 45%);
+    filter: saturate(1) brightness(1.02);
   }
 
   .hero-bg-overlay {
     position: absolute;
     inset: 0;
+    /* Örtü hafifletildi: fotoğrafın kendisi görünsün. Yazı zaten kendi
+       gölgesini taşıyor, en üstte de menü için ince bir bant var. */
     background:
-      linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.42) 45%, var(--color-black) 94%),
-      radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.5) 72%);
+      linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.16) 13%, rgba(0, 0, 0, 0.26) 45%, var(--color-black) 94%),
+      radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.42) 72%);
   }
 
   .hero-glow {
@@ -316,7 +343,7 @@ const keyframesCss = `@keyframes hero-slide-cycle{
       window.setTimeout(() => {
         const pre = new Image();
         pre.onload = () => {
-          el.style.backgroundImage = `url(${src})`;
+          el.style.setProperty('--slide-img', `url(${src})`);
           delete el.dataset.bg;
         };
         pre.src = src;

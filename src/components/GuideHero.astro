@@ -43,14 +43,26 @@ const { eyebrow, title, breadcrumbs, image, art, seed = 3 } = Astro.props;
     inset: 0;
     background-size: cover;
     background-position: center 30%;
-    filter: saturate(0.85) brightness(0.85);
+    /* Fotoğraf eskiden %85 parlaklıkla ve koyu bir örtüyle iyice
+       karartılıyordu; üstündeki dövme seçilmiyordu. Örtü artık yalnızca
+       yazının oturduğu alt bantta koyu. */
+    filter: saturate(0.95);
     transform: scale(1.02);
   }
 
   .guide-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.55) 40%, var(--color-black) 96%);
+    /* Üstte neredeyse şeffaf, aşağı inerken koyulaşıyor: başlık ve kırıntı
+       navigasyonu alt kenarda duruyor, kontrast orada gerekiyor. */
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.62) 0%,
+      rgba(0, 0, 0, 0.18) 16%,
+      rgba(0, 0, 0, 0.16) 44%,
+      rgba(0, 0, 0, 0.62) 74%,
+      var(--color-black) 97%
+    );
   }
 
   .guide-hero-inner {
