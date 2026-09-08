@@ -2,7 +2,7 @@
   "kdvNote": "Fiyatlarımıza KDV dahil değildir.",
   "multiPiercingNote": "Bir kişi üzerinde yapılacak 700 TL’lik çelik 3 adet piercing 1800 TL, 900 TL’lik 3 adet titanyum piercing ise 2400 TL olarak fiyatlandırılır.",
   "tattoo": {
-    "openingPrice": 750,
+    "openingPrice": 2500,
     "currency": "TL",
     "notes": [
       "5 cm’e kadar çizgisel, detaysız minimal dövmeler makine açılış fiyatından uygulanır.",
