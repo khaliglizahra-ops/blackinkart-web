@@ -1,20 +1,23 @@
 # Black Ink Art — yönetim paneli yapılandırması
-# Panelde yapılan her değişiklik GitHub deposuna kaydedilir; Netlify siteyi
+# Panelde yapılan her değişiklik GitHub deposuna kaydedilir; Hostinger siteyi
 # otomatik olarak yeniden yayınlar (genellikle 1-2 dakika).
 #
 # Bölümler kullanım sıklığına göre sıralandı: en sık yapılan iş (portfolyoya
 # fotoğraf eklemek) en üstte, yılda bir dokunulacaklar en altta.
 
-# Giriş, kullanıcı adı (e-posta) ve parola ile: Netlify Identity kullanıcıyı
-# doğrular, Git Gateway onun adına GitHub'a yazar. Böylece panele girenin
-# GitHub hesabı olması gerekmiyor.
+# Giriş GitHub hesabıyla: panel, api.blackinkart.com.tr üzerindeki küçük
+# sunucu (depodaki server/ klasörü, Hostinger'da çalışır) aracılığıyla GitHub'a
+# bağlanır ve değişiklikleri doğrudan depoya yazar. Hostinger her push'ta siteyi
+# yeniden derleyip yayınlar (genellikle 1-2 dakika).
 #
-# Kullanıcı eklemek: Netlify → Identity → Invite users. Davet edilen kişi
-# kendi parolasını e-postadaki bağlantıdan kendisi belirler; parola hiçbir
-# yerde bizde durmaz. Kayıt "yalnızca davetle" olarak ayarlandı.
+# Kullanıcı eklemek: GitHub → depo → Settings → Collaborators → kişiyi ekleyin.
+# Panele giren kişinin bu depoya yazma izni olan bir GitHub hesabı olmalı.
 backend:
-  name: git-gateway
+  name: github
+  repo: khaliglizahra-ops/blackinkart-web
   branch: main
+  base_url: https://api.blackinkart.com.tr
+  auth_endpoint: auth
 
 # Yerel deneme modu: panel yalnızca localhost'ta açıldığında devreye girer ve
 # GitHub yerine bilgisayardaki dosyaları düzenler. Yayındaki sitede etkisi yoktur.
