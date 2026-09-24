@@ -17,6 +17,9 @@ ErrorDocument 404 /404.html
   # Yönetim paneli: config.yml göreli yüklendiği için /admin sonu eğik çizgili olmalı.
   RewriteRule ^admin$ /admin/ [R=301,L]
 
+  # /api kendi .htaccess'iyle yönetiliyor.
+  RewriteRule ^api(/|$) - [L]
+
   # Diğer sayfalar eğik çizgisiz (astro.config: trailingSlash 'never').
   RewriteCond %{REQUEST_URI} !^/admin/
   RewriteRule ^(.+)/$ /$1 [R=301,L]
@@ -32,17 +35,9 @@ ErrorDocument 404 /404.html
   RewriteRule ^(.+)$ /$1.html [L]
 </IfModule>
 
-<IfModule mod_headers.c>
-  <If "%{REQUEST_URI} =~ m#^/admin/#">
-    Header set X-Robots-Tag "noindex, nofollow"
-  </If>
-  <If "%{REQUEST_URI} =~ m#^/_astro/#">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </If>
-  <If "%{REQUEST_URI} =~ m#^/models/#">
-    Header set Cache-Control "public, max-age=604800"
-  </If>
-</IfModule>
+# Önbellek / noindex başlıkları ilgili klasörlerdeki .htaccess dosyalarında
+# (admin/, _astro/, models/) — LiteSpeed <If> bloklarını desteklemiyor.
+
 
 <IfModule mod_mime.c>
   AddType model/gltf-binary .glb
