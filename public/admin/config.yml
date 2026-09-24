@@ -5,21 +5,17 @@
 # Bölümler kullanım sıklığına göre sıralandı: en sık yapılan iş (portfolyoya
 # fotoğraf eklemek) en üstte, yılda bir dokunulacaklar en altta.
 
-# Giriş, kullanıcı adı (e-posta) ve parola ile: Netlify Identity kullanıcıyı
-# doğrular, Git Gateway onun adına GitHub'a yazar. Böylece panele girenin
-# GitHub hesabı olması gerekmiyor.
+# Giriş kullanıcı adı ve şifreyle. Doğrulamayı ve GitHub'a yazmayı sitenin
+# kendi sunucusundaki /api (public/api/index.php) yapar; Netlify'a veya panele
+# girenin GitHub hesabına gerek yok. GitHub anahtarı depoda değil sunucuda durur.
 #
-# Kullanıcı eklemek: Netlify → Identity → Invite users. Davet edilen kişi
-# kendi parolasını e-postadaki bağlantıdan kendisi belirler; parola hiçbir
-# yerde bizde durmaz. Kayıt "yalnızca davetle" olarak ayarlandı.
+# Kullanıcı eklemek / şifre değiştirmek: https://www.blackinkart.com.tr/api/kurulum
 backend:
   name: git-gateway
   branch: main
-  # Site Hostinger'da yayında; giriş (Netlify Identity) ve GitHub'a yazma
-  # (Git Gateway) Netlify'daki kopya üzerinden yapılıyor. Panelde kaydedilen
-  # değişiklik GitHub'a gider, GitHub Actions siteyi derleyip Hostinger'a yükler.
-  identity_url: https://blackinkart.netlify.app/.netlify/identity
-  gateway_url: https://blackinkart.netlify.app/.netlify/git
+  identity_url: /api/identity
+  gateway_url: /api/gateway
+  status_endpoint: /api/gateway/status
 
 # Yerel deneme modu: panel yalnızca localhost'ta açıldığında devreye girer ve
 # GitHub yerine bilgisayardaki dosyaları düzenler. Yayındaki sitede etkisi yoktur.

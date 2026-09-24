@@ -92,19 +92,7 @@
         border-bottom: 1px solid #2c2822;
       }
     </style>
-    <!-- Kimlik doğrulama: e-posta + parola. Panel betiğinden ÖNCE yüklenmeli,
-         yoksa Decap açılışta oturumu bulamıyor. -->
-    <!-- Site Netlify dışında (Hostinger) yayında olduğu için widget'a kimlik
-         sunucusunun adresini veriyoruz. Bu dinleyici widget'tan ÖNCE kaydedilmeli:
-         widget kendi init()'ini DOMContentLoaded'da çağırıyor, ilk init kazanır. -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        if (window.netlifyIdentity && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
-          window.netlifyIdentity.init({ APIUrl: 'https://blackinkart.netlify.app/.netlify/identity' });
-        }
-      });
-    </script>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Giriş: kullanıcı adı + şifre, sitenin kendi sunucusunda (/api). -->
   </head>
   <body>
     <div id="bia-splash">
@@ -151,5 +139,16 @@
     </script>
 
     <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
+    <script>
+      // Giriş formundaki "E-posta" alanı aslında kullanıcı adı.
+      new MutationObserver(function () {
+        var f = document.querySelector('#nc-root input[name="email"]');
+        if (f && f.placeholder !== 'Kullanıcı adı') {
+          f.placeholder = 'Kullanıcı adı';
+          f.autocomplete = 'username';
+          f.autocapitalize = 'none';
+        }
+      }).observe(document.documentElement, { childList: true, subtree: true });
+    </script>
   </body>
 </html>
