@@ -1,0 +1,26 @@
+# Hostinger (LiteSpeed/Apache) ayarları — netlify.toml'daki başlıkların karşılığı.
+
+<IfModule mod_headers.c>
+  # Yönetim paneli arama sonuçlarında görünmesin.
+  <If "%{REQUEST_URI} =~ m#^/admin#">
+    Header set X-Robots-Tag "noindex, nofollow"
+  </If>
+  # Parmak izli derleme dosyaları hiç değişmez.
+  <If "%{REQUEST_URI} =~ m#^/_astro/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  # 3D modeller büyük ama sabit.
+  <If "%{REQUEST_URI} =~ m#^/models/#">
+    Header set Cache-Control "public, max-age=604800"
+  </If>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Panel tek sayfalık bir uygulama: /admin altındaki her yol kabuğunu göstermeli.
+  RewriteCond %{REQUEST_URI} ^/admin
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^admin/.*$ /admin/index.html [L]
+</IfModule>
+
+ErrorDocument 404 /404.html
