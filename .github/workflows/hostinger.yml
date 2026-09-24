@@ -1,6 +1,6 @@
 # main dalına her gönderimde (panelden kaydedilen içerik dahil) siteyi derler
 # ve FTP ile Hostinger'daki public_html klasörüne yükler.
-# Gerekli GitHub Secrets: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
+# FTP şifresi GitHub Secrets'ta: HUSEYIN (sunucu ve kullanıcı adı gizli değil)
 name: Hostinger'a yayınla
 
 on:
@@ -29,9 +29,9 @@ jobs:
       - name: FTP ile Hostinger'a yükle
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: 46.202.158.60
+          username: u603584055.blackinkart.com.tr
+          password: ${{ secrets.HUSEYIN }}
           protocol: ftps
           local-dir: ./dist/
           server-dir: ./public_html/
