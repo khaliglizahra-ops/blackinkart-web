@@ -34,4 +34,5 @@ jobs:
           password: ${{ secrets.HUSEYIN }}
           protocol: ftps
           local-dir: ./dist/
-          server-dir: ./public_html/
+          # Bu FTP hesabinin koku zaten public_html.
+          server-dir: ./
