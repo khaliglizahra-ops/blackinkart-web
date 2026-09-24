@@ -85,8 +85,9 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
   <section class="section-tight">
     <div class="container narrow">
       <h2>{L('Mesaj Bırakın', 'Leave a Message')}</h2>
-      <form name="iletisim" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form" data-reveal>
-        <input type="hidden" name="form-name" value="iletisim" />
+      <p class="form-note" id="form-ok" hidden>{L('Teşekkürler, mesajınız bize ulaştı. En kısa sürede dönüş yapacağız.', 'Thank you, we received your message and will get back to you soon.')}</p>
+      <p class="form-note form-note--error" id="form-err" hidden>{L('Mesaj gönderilemedi. Lütfen WhatsApp veya telefonla ulaşın.', 'Your message could not be sent. Please reach us via WhatsApp or phone.')}</p>
+      <form name="iletisim" method="POST" action="https://api.blackinkart.com.tr/iletisim" class="contact-form" data-reveal>
         <p class="honeypot"><label>{L('Bu alanı boş bırakın:', 'Leave this field empty:')} <input name="bot-field" /></label></p>
         <div class="field-row">
           <label>
@@ -104,6 +105,13 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
         </label>
         <button type="submit" class="btn btn-primary">{L('Gönder', 'Send')}</button>
       </form>
+      <script is:inline>
+        (function () {
+          var q = new URLSearchParams(window.location.search);
+          var el = q.has('gonderildi') ? document.getElementById('form-ok') : q.has('hata') ? document.getElementById('form-err') : null;
+          if (el) { el.hidden = false; el.scrollIntoView({ block: 'center' }); }
+        })();
+      </script>
     </div>
   </section>
 </BaseLayout>
@@ -111,6 +119,17 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
 <style>
   .narrow {
     max-width: 780px;
+  }
+
+  .form-note {
+    padding: 0.9rem 1.1rem;
+    border: 1px solid #c9a24a;
+    border-radius: 6px;
+    margin-bottom: 1.2rem;
+  }
+
+  .form-note--error {
+    border-color: #b94a48;
   }
 
   .contact-layout {
