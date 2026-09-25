@@ -187,7 +187,7 @@ export const ui = {
     'jewelry.body1':
       'Uyguladığımız piercing takıları kendi markamız Piercingland’a ait. Cerrahi çelik, titanyum ve 14 ayar altın seçenekleriyle helixten septuma, dilden göbeğe kadar geniş bir koleksiyon üretiyoruz.',
     'jewelry.body2':
-      'Randevunuzdan önce modelleri inceleyip seçiminizi yapabilir, beğendiğiniz takıyı uygulamada bize söyleyebilirsiniz.',
+      "Piercingland'ın kendi sitesi üzerinden online sipariş verebilir, ya da stüdyoya gelmeden modelleri inceleyip seçiminizi yapabilirsiniz.",
     'jewelry.alt': 'Piercingland — piercing takı markamız',
 
     // — Piercing merkezi —
