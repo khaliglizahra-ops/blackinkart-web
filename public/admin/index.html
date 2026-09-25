@@ -130,6 +130,23 @@
         font-size: 11px !important;
         padding: 4px 6px !important;
       }
+
+      /* Fiyat tablosu satırları gibi yalnızca metin/sayı alanından oluşan
+         satırlar: her satırın alanları (uygulama adı, fiyatlar, not) alt alta
+         yerine yan yana dizilir — bir tablo satırı gibi. */
+      .bia-row-item {
+        margin: 0 !important;
+      }
+      .bia-row-fields {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        align-items: flex-end !important;
+      }
+      .bia-row-fields > * {
+        flex: 1 1 120px !important;
+        min-width: 100px !important;
+      }
     </style>
     <!-- Giriş: kullanıcı adı + şifre, sitenin kendi sunucusunda (/api). -->
   </head>
@@ -182,6 +199,16 @@
       // Salt görsel liste öğelerini (metin alanı olmayanları) ".bia-grid-item"
       // ile işaretler; CSS'teki ızgara kuralları bunları yakalar. Kategori
       // kartı gibi metin+görsel karışık öğelere dokunmaz.
+      //
+      // Ayrıca yaprak (alt liste içermeyen), yalnızca metin/sayı alanlarından
+      // oluşan satırları (ör. fiyat tablosu satırları: uygulama adı + 3 fiyat +
+      // not) ".bia-row-item" ile işaretler — CSS bu alanları tablo satırı gibi
+      // yan yana dizer. Tablo kartının kendisi (başlık+kimlik+satırlar listesi)
+      // içinde başka bir liste barındırdığı için buna dahil olmaz.
+      //
+      // İki durumu ayırt etmek için CSS ':has()' içine ':has()' koymak
+      // gerekirdi ki bu geçersiz bir seçici (tarayıcı reddediyor); bu yüzden
+      // ayrım burada yapılıp düz sınıflar ekleniyor.
       function tagImageGridItems() {
         document.querySelectorAll('[class*="-SortableListItem"]').forEach(function (item) {
           var hasImage = item.querySelector('[aria-label="image field"]');
@@ -189,6 +216,18 @@
           if (hasImage && !hasString) {
             item.classList.add('bia-grid-item');
             if (item.parentElement) item.parentElement.classList.add('bia-grid-list');
+            return;
+          }
+          var hasNestedList = item.querySelector('[class*="-SortableListItem"]');
+          var hasListField = item.querySelector('[aria-label="list field"]');
+          var hasSelectField = item.querySelector('[aria-label="select field"]');
+          if (!hasImage && !hasNestedList && !hasListField && !hasSelectField) {
+            var controls = item.querySelectorAll('[class*="-ControlContainer"]');
+            if (controls.length >= 2) {
+              item.classList.add('bia-row-item');
+              var fieldsWrap = controls[0].parentElement;
+              if (fieldsWrap) fieldsWrap.classList.add('bia-row-fields');
+            }
           }
         });
       }
@@ -203,6 +242,12 @@
         }
         tagImageGridItems();
       }).observe(document.documentElement, { childList: true, subtree: true });
+
+      // Yedek: bazı listelerde görsel kutusu, satır göründükten kısa bir süre
+      // sonra (veri git-gateway'den gelince) DOM'a giriyor — o an mutasyon
+      // gözlemcisi zaten tetiklenmiş oluyor ve resim henüz yokken satırı
+      // "salt görsel değil" sanıp atlıyor. Kısa aralıklı bu tarama farkı kapatır.
+      setInterval(tagImageGridItems, 400);
     </script>
   </body>
 </html>
