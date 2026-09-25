@@ -91,6 +91,45 @@
       #nc-root [class*='-ToolbarContainer'] {
         border-bottom: 1px solid #2c2822;
       }
+
+      /* ------------------------------------------------------- fotoğraf ızgarası
+         Sade fotoğraf listeleri (öne çıkanlar, kategori fotoğrafları, stüdyo vb.)
+         Decap'te tek tek alt alta, her biri tam genişlikte geliyordu — 30-40
+         fotoğraflık bir listede uzun bir kaydırma ve fotoğrafı görmek için önce
+         satırı açmak gerekiyordu. `tagImageGridItems()` (aşağıda) yalnızca TEK
+         alanlı (salt görsel) liste öğelerini ".bia-grid-item" ile işaretliyor —
+         kategori kartı gibi metin+görsel karışık liste öğelerine dokunmuyor,
+         onlar normal tam genişlikte kalıyor. Karma öğeleri ayırt etmek için
+         `:has()` içine `:has()` yerleştirmek gerekirdi ki bu geçersiz bir seçici
+         (tarayıcı reddediyor); bu yüzden ayrım JS'te yapılıp düz bir sınıf
+         ekleniyor. */
+      .bia-grid-list {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+        gap: 12px !important;
+      }
+      .bia-grid-item {
+        margin: 0 !important;
+      }
+      .bia-grid-item [class*='-NestedObjectLabel'],
+      .bia-grid-item [class*='-ControlTopbar'] {
+        display: none !important;
+      }
+      .bia-grid-item [class*='-ImageWrapper-checkerboard'] {
+        height: 130px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .bia-grid-item [class*='-StyledImage'] {
+        width: 100% !important;
+        height: 130px !important;
+        object-fit: cover !important;
+      }
+      .bia-grid-item [class*='-FileWidgetButton'] {
+        font-size: 11px !important;
+        padding: 4px 6px !important;
+      }
     </style>
     <!-- Giriş: kullanıcı adı + şifre, sitenin kendi sunucusunda (/api). -->
   </head>
@@ -140,6 +179,20 @@
 
     <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
     <script>
+      // Salt görsel liste öğelerini (metin alanı olmayanları) ".bia-grid-item"
+      // ile işaretler; CSS'teki ızgara kuralları bunları yakalar. Kategori
+      // kartı gibi metin+görsel karışık öğelere dokunmaz.
+      function tagImageGridItems() {
+        document.querySelectorAll('[class*="-SortableListItem"]').forEach(function (item) {
+          var hasImage = item.querySelector('[aria-label="image field"]');
+          var hasString = item.querySelector('[aria-label="string field"]');
+          if (hasImage && !hasString) {
+            item.classList.add('bia-grid-item');
+            if (item.parentElement) item.parentElement.classList.add('bia-grid-list');
+          }
+        });
+      }
+
       // Giriş formundaki "E-posta" alanı aslında kullanıcı adı.
       new MutationObserver(function () {
         var f = document.querySelector('#nc-root input[name="email"]');
@@ -148,6 +201,7 @@
           f.autocomplete = 'username';
           f.autocapitalize = 'none';
         }
+        tagImageGridItems();
       }).observe(document.documentElement, { childList: true, subtree: true });
     </script>
   </body>
