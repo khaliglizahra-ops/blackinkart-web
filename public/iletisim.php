@@ -6,6 +6,41 @@
 $ALICI = 'black_inkart@hotmail.com';
 $GONDEREN = 'noreply@blackinkart.com.tr';
 
+// ---- Hız sınırı: aynı IP 10 dakikada en fazla 5 mesaj gönderebilir. Sınırsız
+// gönderim, sunucunun mail() işlevini spam için kötüye kullanmaya ya da
+// stüdyonun kutusunu doldurmaya açıktı. Kayıtlar public_html dışında,
+// panelin kullandığı bia-panel klasöründe tutuluyor.
+$RATE_DIR = dirname(__DIR__) . '/bia-panel';
+$RATE_MAX = 5;
+$RATE_WINDOW = 600;
+
+function iletisim_ip(): string
+{
+    return preg_replace('/[^0-9a-fA-F:.]/', '', $_SERVER['REMOTE_ADDR'] ?? 'x');
+}
+
+function iletisim_rate_asildi(string $dir): bool
+{
+    global $RATE_MAX, $RATE_WINDOW;
+    if (!is_dir($dir) && !@mkdir($dir, 0700, true)) {
+        return false; // Klasör oluşmuyorsa sınırı uygulayamayız; formu engellemeyelim.
+    }
+    $f = $dir . '/ilet-' . md5(iletisim_ip()) . '.json';
+    $list = is_file($f) ? (json_decode((string) file_get_contents($f), true) ?: []) : [];
+    $list = array_values(array_filter($list, fn($t) => $t > time() - $RATE_WINDOW));
+    if (count($list) >= $RATE_MAX) {
+        return true;
+    }
+    $list[] = time();
+    @file_put_contents($f, json_encode($list), LOCK_EX);
+    return false;
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && iletisim_rate_asildi($RATE_DIR)) {
+    header('Location: /hakkimizda-iletisim?mesaj=hata', true, 303);
+    exit;
+}
+
 function geri($sonuc) {
     $donus = isset($_POST['donus']) ? (string) $_POST['donus'] : '/hakkimizda-iletisim';
     // Yalnızca site içi yol: "/..." ile başlamalı, "//" veya ters bölü içermemeli.

@@ -239,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="post" autocomplete="off">
       <h2 style="margin-top:0">Kullanıcı ekle / şifre değiştir</h2>
       <input type="hidden" name="islem" value="kaydet">
-      <label>Kullanıcı adı <small>Mevcut kullanıcılar: <?= h(implode(', ', array_keys($cfg['users']))) ?></small>
+      <label>Kullanıcı adı
         <input name="kullanici" required pattern="[a-z0-9._\-]{3,32}">
       </label>
       <label>Ad soyad <small>(isteğe bağlı)</small><input name="adsoyad"></label>
@@ -255,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h2 style="margin-top:0">Kullanıcı sil</h2>
       <input type="hidden" name="islem" value="sil">
       <label>Silinecek kullanıcı
-        <select name="kullanici"><?php foreach (array_keys($cfg['users']) as $u): ?><option><?= h($u) ?></option><?php endforeach; ?></select>
+        <input name="kullanici" required pattern="[a-z0-9._\-]{3,32}">
       </label>
       <label>Onay için sizin kullanıcı adınız<input name="yonetici" required></label>
       <label>Sizin şifreniz<input type="password" name="yonetici_sifre" required autocomplete="current-password"></label>

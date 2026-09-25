@@ -45,3 +45,15 @@ ErrorDocument 404 /404.html
   AddType image/avif .avif
   AddType image/webp .webp
 </IfModule>
+
+# Temel güvenlik başlıkları — tarayıcı tarafı koruma. Not: sıkı bir
+# Content-Security-Policy buraya eklenmedi; WhatsApp widget'ı, Google
+# Haritalar embed'i ve /admin'in unpkg'den yüklediği Decap CMS betiği gibi
+# kaynakların hepsini kırmadan doğru şekilde listelemek her sayfada canlı
+# test gerektiriyor — o yüzden ayrı bir iş olarak bırakıldı.
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=15768000; includeSubDomains"
+</IfModule>
