@@ -73,8 +73,8 @@ collections:
           - name: featured
             label: Öne Çıkanlar (ana sayfada görünür)
             widget: list
-            collapsed: true
-            minimize_collapsed: true
+            collapsed: false
+            minimize_collapsed: false
             field:
               name: image
               label: Fotoğraf
@@ -86,8 +86,8 @@ collections:
             label: Dövme — Stil Kategorileri
             label_singular: Kategori
             widget: list
-            collapsed: true
-            minimize_collapsed: true
+            collapsed: false
+            minimize_collapsed: false
             summary: '{{fields.label}}'
             fields:
               - { name: label, label: Kategori adı, widget: string, hint: 'Portfolyo sayfasındaki filtre düğmesinde görünen isim.' }
@@ -99,8 +99,8 @@ collections:
               - name: images
                 label: Fotoğraflar
                 widget: list
-                collapsed: true
-                minimize_collapsed: true
+                collapsed: false
+                minimize_collapsed: false
                 field:
                   name: image
                   label: Fotoğraf
@@ -115,8 +115,8 @@ collections:
             label: Piercing — Bölge Kategorileri
             label_singular: Kategori
             widget: list
-            collapsed: true
-            minimize_collapsed: true
+            collapsed: false
+            minimize_collapsed: false
             summary: '{{fields.label}}'
             fields:
               - { name: label, label: Kategori adı, widget: string, hint: 'Portfolyo sayfasındaki filtre düğmesinde görünen isim. Örn. Kulak, Burun.' }
@@ -128,8 +128,8 @@ collections:
               - name: images
                 label: Fotoğraflar
                 widget: list
-                collapsed: true
-                minimize_collapsed: true
+                collapsed: false
+                minimize_collapsed: false
                 field:
                   name: image
                   label: Fotoğraf
@@ -143,8 +143,8 @@ collections:
           - name: studio
             label: Stüdyo Fotoğrafları
             widget: list
-            collapsed: true
-            minimize_collapsed: true
+            collapsed: false
+            minimize_collapsed: false
             field:
               name: image
               label: Fotoğraf
@@ -224,7 +224,7 @@ collections:
           - name: geo
             label: Harita koordinatları
             widget: object
-            collapsed: true
+            collapsed: false
             fields:
               - { name: latitude, label: Enlem, widget: number, value_type: float }
               - { name: longitude, label: Boylam, widget: number, value_type: float }
@@ -247,8 +247,8 @@ collections:
               - name: notes
                 label: Fiyat notları
                 widget: list
-                collapsed: true
-                minimize_collapsed: true
+                collapsed: false
+                minimize_collapsed: false
                 field: { name: note, label: Not, widget: text }
           - { name: kdvNote, label: KDV notu, widget: string }
           - { name: multiPiercingNote, label: Çoklu piercing notu, widget: text }
@@ -256,8 +256,8 @@ collections:
             label: Piercing Fiyat Tabloları
             label_singular: Tablo
             widget: list
-            collapsed: true
-            minimize_collapsed: true
+            collapsed: false
+            minimize_collapsed: false
             allow_add: false          # 5 tablo sabittir; yenisini eklemek sayfaları bozar
             summary: '{{fields.title}}'
             fields:
@@ -271,8 +271,8 @@ collections:
                 label: Satırlar
                 label_singular: Uygulama
                 widget: list
-                collapsed: true
-                minimize_collapsed: true
+                collapsed: false
+                minimize_collapsed: false
                 summary: '{{fields.name}}'
                 fields:
                   - { name: name, label: Uygulama adı, widget: string }
@@ -304,8 +304,8 @@ collections:
         label: Fotoğraflar
         widget: list
         required: false
-        collapsed: true
-        minimize_collapsed: true
+        collapsed: false
+        minimize_collapsed: false
         field: { name: image, label: Fotoğraf, widget: image }
         hint: İlk fotoğraf sayfanın üst görseli olarak kullanılır.
       - { name: healingTime, label: İyileşme süresi, widget: string, hint: 'Örn. "2 – 4 ay"' }
@@ -412,8 +412,8 @@ collections:
             label: Tasarımlar
             label_singular: Tasarım
             widget: list
-            collapsed: true
-            minimize_collapsed: true
+            collapsed: false
+            minimize_collapsed: false
             summary: '{{fields.label}}'
             fields:
               - { name: label, label: Tasarım adı, widget: string }
@@ -542,8 +542,8 @@ collections:
         label: Fotoğraflar
         widget: list
         required: false
-        collapsed: true
-        minimize_collapsed: true
+        collapsed: false
+        minimize_collapsed: false
         field: { name: image, label: Fotoğraf, widget: image }
         hint: İlk fotoğraf sayfanın üst görseli olarak kullanılır.
       - { name: healingTime, label: İyileşme süresi, widget: string, hint: 'Örn. "2 – 4 ay"' }
