@@ -1,6 +1,6 @@
 ---
 import { site } from '../data/site';
-import { LANGS, LANG_LABELS, DEFAULT_LANG, langFromPath } from '../i18n/config';
+import { LANGS, LANG_LABELS, DEFAULT_LANG, langFromPath, localizePath } from '../i18n/config';
 import { alternatesFor } from '../i18n/routes';
 
 interface Props {
@@ -30,6 +30,8 @@ const alternates = LANGS.map((l) => ({
 }));
 const xDefault = new URL(altPaths[DEFAULT_LANG], site.url).toString();
 const ogImage = new URL(image ?? '/brand/og-default.jpg', site.url).toString();
+const tattooUrl = new URL(localizePath('/dovme', lang), site.url).toString();
+const piercingUrl = new URL(localizePath('/piercing', lang), site.url).toString();
 
 const localBusinessSchema = {
   '@context': 'https://schema.org',
@@ -53,7 +55,11 @@ const localBusinessSchema = {
     latitude: site.geo.latitude,
     longitude: site.geo.longitude,
   },
-  sameAs: [site.instagram.url],
+  sameAs: [site.instagram.url, ...((site as any).googleBusinessUrl ? [(site as any).googleBusinessUrl] : [])],
+  areaServed: [
+    { '@type': 'City', name: 'Ankara' },
+    { '@type': 'AdministrativeArea', name: site.address.addressLocality },
+  ],
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
@@ -62,6 +68,24 @@ const localBusinessSchema = {
       closes: '20:00',
     },
   ],
+  // Google'ın "hangi hizmetleri sunuyor" sinyalini güçlendirir — fiyat ya da
+  // envanter iddiası değil, yalnızca iki ana hizmet kategorisi.
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: lang === 'en' ? 'Services' : 'Hizmetler',
+    itemListElement: [
+      {
+        '@type': 'OfferCatalog',
+        name: lang === 'en' ? 'Tattoo' : 'Dövme',
+        url: tattooUrl,
+      },
+      {
+        '@type': 'OfferCatalog',
+        name: 'Piercing',
+        url: piercingUrl,
+      },
+    ],
+  },
 };
 
 const schemas = [localBusinessSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
@@ -81,6 +105,7 @@ const schemas = [localBusinessSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? json
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
 <meta property="og:locale" content={LANG_LABELS[lang].ogLocale} />
+{LANGS.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={LANG_LABELS[l].ogLocale} />)}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
