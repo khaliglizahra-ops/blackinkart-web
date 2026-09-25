@@ -43,6 +43,35 @@ const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
   </section>
 
   <section class="section-tight">
+    <div class="container jewelry-inner surface" data-reveal>
+      <div class="jewelry-visual">
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" aria-label={t('jewelry.alt')}>
+          <img
+            src="/brand/piercingland-logo.png"
+            alt={t('jewelry.alt')}
+            loading="lazy"
+            width="900"
+            height="709"
+          />
+        </a>
+      </div>
+      <div class="jewelry-copy">
+        <p class="eyebrow">{t('jewelry.eyebrow')}</p>
+        <h2>{t('jewelry.title')}</h2>
+        <p>
+          {t('jewelry.body1')}
+        </p>
+        <p>
+          {t('jewelry.body2')}
+        </p>
+        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="btn btn-primary">
+          {t('cta.viewJewelryLong')}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
     <div class="container">
       <h2>{t('guide.guides')}</h2>
       <div class="guide-grid">
@@ -88,35 +117,6 @@ const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
             </a>
           );
         })}
-      </div>
-    </div>
-  </section>
-
-  <section class="section-tight">
-    <div class="container jewelry-inner surface" data-reveal>
-      <div class="jewelry-visual">
-        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" aria-label={t('jewelry.alt')}>
-          <img
-            src="/brand/piercingland-logo.png"
-            alt={t('jewelry.alt')}
-            loading="lazy"
-            width="900"
-            height="709"
-          />
-        </a>
-      </div>
-      <div class="jewelry-copy">
-        <p class="eyebrow">{t('jewelry.eyebrow')}</p>
-        <h2>{t('jewelry.title')}</h2>
-        <p>
-          {t('jewelry.body1')}
-        </p>
-        <p>
-          {t('jewelry.body2')}
-        </p>
-        <a href={site.jewelryShopUrl} target="_blank" rel="noopener" class="btn btn-primary">
-          {t('cta.viewJewelryLong')}
-        </a>
       </div>
     </div>
   </section>
