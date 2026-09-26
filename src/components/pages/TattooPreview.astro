@@ -1333,6 +1333,45 @@ const regions = [
     let decalTextureP: THREE.Texture | null = null;
     let textureAspectP = 1;
     let lastPoint: THREE.Vector3 | null = null;
+    let sampleCanvas: HTMLCanvasElement | null = null;
+    let sampleCtx: CanvasRenderingContext2D | null = null;
+
+    // Tıklanan noktadaki gerçek cilt tonunu okumak için fotoğrafı küçük bir
+    // tuvale çiziyoruz — ışık/renk sıcaklığı fotoğraftan fotoğrafa değişiyor,
+    // mürekkebi sabit bir renge değil, o bölgenin gerçek tonuna göre boyuyoruz.
+    function buildSampleCanvas(img: HTMLImageElement) {
+      sampleCanvas = document.createElement('canvas');
+      const maxDim = 300;
+      const r = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+      sampleCanvas.width = Math.max(1, Math.round(img.naturalWidth * r));
+      sampleCanvas.height = Math.max(1, Math.round(img.naturalHeight * r));
+      sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
+      sampleCtx?.drawImage(img, 0, 0, sampleCanvas.width, sampleCanvas.height);
+    }
+
+    // Dünya koordinatındaki tıklama noktasını fotoğraf pikseline çevirip
+    // etrafındaki küçük bir bölgenin ortalama rengini döndürür.
+    function sampleSkinColor(point: THREE.Vector3): THREE.Color | null {
+      if (!sampleCtx || !sampleCanvas) return null;
+      const u = point.x / photoAspect + 0.5;
+      const v = 0.5 - point.y;
+      const px = Math.round(u * sampleCanvas.width);
+      const py = Math.round(v * sampleCanvas.height);
+      const size = Math.max(4, Math.round(sampleCanvas.width * 0.03));
+      const x = Math.max(0, Math.min(sampleCanvas.width - size, px - size / 2));
+      const y = Math.max(0, Math.min(sampleCanvas.height - size, py - size / 2));
+      try {
+        const data = sampleCtx.getImageData(x, y, size, size).data;
+        let r = 0, g = 0, b = 0, n = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+        }
+        if (!n) return null;
+        return new THREE.Color(r / n / 255, g / n / 255, b / n / 255);
+      } catch {
+        return null; // tainted canvas vb. — sessizce vazgeç, düz renk kullanılır
+      }
+    }
 
     function fitCameraP() {
       const w = viewportP.clientWidth;
@@ -1378,6 +1417,10 @@ const regions = [
       // üzerine çiziyor ve CSS ile "multiply" bindiriliyor — mürekkep cildin
       // renk/gölgesiyle gerçekten karışıyor, üstüne yapıştırılmış gibi durmuyor.
       rendererP.domElement.style.mixBlendMode = 'multiply';
+      // Vektör kaynaklı tasarımların keskin/pürüzsüz kenarları ciltte iğneyle
+      // işlenmiş gibi durmuyordu — çok hafif bir bulanıklık mürekkebin dokuya
+      // hafifçe yayılmış hissini veriyor.
+      rendererP.domElement.style.filter = 'blur(0.5px)';
       viewportP.appendChild(rendererP.domElement);
       sceneP.add(new THREE.AmbientLight(0xffffff, 1));
 
@@ -1416,6 +1459,7 @@ const regions = [
       img.onload = () => {
         photoAspect = img.naturalWidth / img.naturalHeight || 1;
         photoBg.src = url;
+        buildSampleCanvas(img);
 
         if (photoPlane) {
           sceneP.remove(photoPlane);
@@ -1629,6 +1673,14 @@ const regions = [
         polygonOffset: true,
         polygonOffsetFactor: -4,
       });
+      // Mürekkebi o noktadaki gerçek cilt tonuna hafifçe boyayarak (saf beyaz
+      // yerine) fotoğrafın ışığına/renk sıcaklığına uydur — sabit, "yapıştırma"
+      // hissi veren tek bir siyahtan kurtarır. Çizginin kendisi görünür kalsın
+      // diye harman oranı düşük (%22) tutuldu.
+      const skinColor = sampleSkinColor(lastPoint);
+      if (skinColor) {
+        mat.color.copy(new THREE.Color(1, 1, 1).lerp(skinColor, 0.22));
+      }
       decalP = new THREE.Mesh(geo, mat);
       sceneP.add(decalP);
       placeHintP.textContent = L(
@@ -1719,7 +1771,9 @@ const regions = [
       const rect = containRect(photoBg.naturalWidth, photoBg.naturalHeight, cw, ch);
       ctx.drawImage(photoBg, rect.x, rect.y, rect.w, rect.h);
       ctx.globalCompositeOperation = 'multiply';
+      ctx.filter = 'blur(0.5px)'; // canlı önizlemedeki CSS filter:blur ile tutarlı olsun
       ctx.drawImage(rendererP.domElement, 0, 0, cw, ch);
+      ctx.filter = 'none';
       ctx.globalCompositeOperation = 'source-over';
       out.toBlob((blob) => {
         if (!blob) return;
