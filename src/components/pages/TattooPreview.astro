@@ -1084,7 +1084,7 @@ const regions = [
       const small = await downscale(file);
       setProgress(0.12, 'Arka plan kaldırılıyor…');
       const mod = await import('@imgly/background-removal');
-      const removeBackground = mod.default;
+      const { removeBackground } = mod;
       const out = await removeBackground(small, {
         model: 'isnet_quint8',
         progress: (_k: string, cur: number, total: number) => {
@@ -1343,6 +1343,9 @@ const regions = [
     let lastPoint: THREE.Vector3 | null = null;
     let sampleCanvas: HTMLCanvasElement | null = null;
     let sampleCtx: CanvasRenderingContext2D | null = null;
+    let bodyMaskImg: HTMLImageElement | null = null;
+    let bodyMaskUrl: string | null = null;
+    let maskGeneration = 0; // yeni fotoğraf yüklenince eski segmentasyon sonucu gelirse yok say
 
     // Tıklanan noktadaki gerçek cilt tonunu okumak için fotoğrafı küçük bir
     // tuvale çiziyoruz — ışık/renk sıcaklığı fotoğraftan fotoğrafa değişiyor,
@@ -1461,6 +1464,76 @@ const regions = [
       });
     });
 
+    // ---------------------------------------------------------- vücut algılama
+    // Fotoğraftaki kişiyi arka plandan ayırıp bir maske çıkarır (aynı, zaten
+    // projede olan kütüphane — dövme tasarımlarının arka planını kaldırmak
+    // için de kullanılıyor). Dövme katmanına bu maske CSS ile uygulanıyor;
+    // böylece tasarım ne kadar büyük/yanlış yerleştirilmiş olursa olsun
+    // arka plana (duvar, kıyafet dışına vb.) hiç taşmıyor, yalnızca kişinin
+    // olduğu alanda görünüyor.
+    function applyBodyMask(url: string) {
+      bodyMaskUrl = url;
+      const img = new Image();
+      img.onload = () => {
+        bodyMaskImg = img;
+      };
+      img.src = url;
+      if (rendererP) {
+        const style = rendererP.domElement.style as any;
+        style.maskImage = `url(${url})`;
+        style.webkitMaskImage = `url(${url})`;
+        style.maskSize = 'contain';
+        style.webkitMaskSize = 'contain';
+        style.maskRepeat = 'no-repeat';
+        style.webkitMaskRepeat = 'no-repeat';
+        style.maskPosition = 'center';
+        style.webkitMaskPosition = 'center';
+      }
+    }
+
+    function clearBodyMask() {
+      if (bodyMaskUrl) URL.revokeObjectURL(bodyMaskUrl);
+      bodyMaskUrl = null;
+      bodyMaskImg = null;
+      if (rendererP) {
+        const style = rendererP.domElement.style as any;
+        style.maskImage = 'none';
+        style.webkitMaskImage = 'none';
+      }
+    }
+
+    async function segmentBodyPhoto(blob: Blob) {
+      const myGeneration = ++maskGeneration;
+      // Yerleştirme henüz yapılmadıysa kullanıcıyı bilgilendir; zaten bir
+      // dövme yerleştirildiyse o mesajın üstüne yazmayalım.
+      if (!lastPoint) {
+        placeHintP.textContent = L('Vücut algılanıyor…', 'Detecting body…');
+      }
+      try {
+        const mod = await import('@imgly/background-removal');
+        const { removeBackground } = mod;
+        const out = await removeBackground(blob, {
+          model: 'isnet_quint8',
+          progress: () => {},
+        });
+        if (myGeneration !== maskGeneration) return; // bu arada başka fotoğraf yüklendi
+        applyBodyMask(URL.createObjectURL(out));
+        if (!lastPoint) {
+          placeHintP.textContent = decalTextureP
+            ? L('Dövmeyi koymak istediğiniz noktaya tıklayın.', 'Click where you want to place the tattoo.')
+            : L('Önce yukarıdan bir tasarım seçin ya da yükleyin.', 'First choose or upload a design above.');
+        }
+      } catch (err) {
+        console.error('vücut algılama başarısız', err);
+        // Sessizce vazgeç — maskesiz de araç normal şekilde çalışmaya devam eder.
+        if (!lastPoint) {
+          placeHintP.textContent = decalTextureP
+            ? L('Dövmeyi koymak istediğiniz noktaya tıklayın.', 'Click where you want to place the tattoo.')
+            : L('Önce yukarıdan bir tasarım seçin ya da yükleyin.', 'First choose or upload a design above.');
+        }
+      }
+    }
+
     // ---------------------------------------------------------- body photo upload
     function loadBodyPhoto(url: string) {
       const img = new Image();
@@ -1513,8 +1586,12 @@ const regions = [
 
     async function handleBodyPhoto(file: File) {
       if (!file.type.startsWith('image/')) return;
+      clearBodyMask();
       const small = await downscale(file, 1600);
       loadBodyPhoto(URL.createObjectURL(small));
+      // Beklemeden başlat: fotoğraf hemen görünür ve yerleştirme yapılabilir,
+      // maske birkaç saniye içinde hazır olunca kendiliğinden devreye girer.
+      segmentBodyPhoto(small);
     }
 
     photoInput.addEventListener('change', () => {
@@ -1578,7 +1655,7 @@ const regions = [
         progressFillP.style.width = '12%';
         progressLabelP.textContent = L('Arka plan kaldırılıyor…', 'Removing background…');
         const mod = await import('@imgly/background-removal');
-        const removeBackground = mod.default;
+        const { removeBackground } = mod;
         const out = await removeBackground(small, {
           model: 'isnet_quint8',
           progress: (_k: string, cur: number, total: number) => {
@@ -1778,9 +1855,25 @@ const regions = [
       // canlı önizlemedeki CSS mix-blend-mode:multiply'ın aynısı.
       const rect = containRect(photoBg.naturalWidth, photoBg.naturalHeight, cw, ch);
       ctx.drawImage(photoBg, rect.x, rect.y, rect.w, rect.h);
+
+      // Dövme katmanını ayrı bir tuvalde hazırlayıp — varsa — vücut maskesiyle
+      // kırpıyoruz (canlı önizlemedeki CSS mask-image'ın aynısı), sonra bu
+      // kırpılmış katmanı fotoğrafın üstüne 'multiply' ile bindiriyoruz.
+      const layer = document.createElement('canvas');
+      layer.width = cw;
+      layer.height = ch;
+      const lctx = layer.getContext('2d')!;
+      lctx.drawImage(rendererP.domElement, 0, 0, cw, ch);
+      if (bodyMaskImg) {
+        const maskRect = containRect(bodyMaskImg.naturalWidth, bodyMaskImg.naturalHeight, cw, ch);
+        lctx.globalCompositeOperation = 'destination-in';
+        lctx.drawImage(bodyMaskImg, maskRect.x, maskRect.y, maskRect.w, maskRect.h);
+        lctx.globalCompositeOperation = 'source-over';
+      }
+
       ctx.globalCompositeOperation = 'multiply';
       ctx.filter = 'blur(0.5px)'; // canlı önizlemedeki CSS filter:blur ile tutarlı olsun
-      ctx.drawImage(rendererP.domElement, 0, 0, cw, ch);
+      ctx.drawImage(layer, 0, 0, cw, ch);
       ctx.filter = 'none';
       ctx.globalCompositeOperation = 'source-over';
       out.toBlob((blob) => {
