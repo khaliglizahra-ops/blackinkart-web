@@ -994,11 +994,19 @@ const regions = [
     dummy.rotateZ(THREE.MathUtils.degToRad(Number(rotateInput.value)));
     orientation.copy(dummy.rotation);
 
+    // Derinlik (Z), tasarımın kendi boyutuna göre büyüdükçe gövdenin önden
+    // arkaya kalınlığını (bilek/kol gibi ince bölgelerde bunu kolayca) aşıp
+    // kutunun karşı yüzeye kadar uzanmasına, dolayısıyla dövmenin örn. göbeğe
+    // konunca sırtta da belirmesine yol açıyordu. Üst sınır, modelin en ince
+    // yerinden (bilek) bile taşmayacak şekilde sabit tutuldu — model 3 birim
+    // boyunda ölçekleniyor, 0.12 gerçek bir bileğin çapından belirgin şekilde
+    // daha ince.
+    const decalDepth = Math.min(Math.max(w, h) * 1.6, 0.12);
     const geo = new DecalGeometry(
       bodyMesh,
       lastHit.point,
       orientation,
-      new THREE.Vector3(w, h, Math.max(w, h) * 1.6)
+      new THREE.Vector3(w, h, decalDepth)
     );
 
     const mat = new THREE.MeshStandardMaterial({
