@@ -145,6 +145,7 @@ const regions = [
         <!-- photo viewport -->
         <div class="viewport-col">
           <div class="viewport photo-viewport" id="viewport-photo">
+            <img id="photo-bg" alt="" />
             <label class="photo-drop" id="photo-drop" for="body-photo-file">
               <input type="file" id="body-photo-file" accept="image/*" hidden />
               <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="currentColor" d="M4 5h3.2l1.6-2h6.4l1.6 2H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/></svg>
@@ -302,11 +303,34 @@ const regions = [
     background: radial-gradient(ellipse at 50% 30%, #17130d 0%, #050505 70%);
   }
 
+  /* Fotoğraf, katmanların en altında düz bir <img> — dövme katmanı (WebGL
+     tuvali) üstüne "multiply" ile biniyor. İkisi ayrı katman olduğu için
+     mürekkep gerçekten cildin altındaymış gibi görünüyor; tek katmanda
+     saydamlıkla bindirilseydi üstte yapışkan bir etiket gibi dururdu. */
+  #photo-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 0;
+    pointer-events: none;
+  }
+
   .photo-viewport :global(canvas) {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     display: block;
     width: 100% !important;
     height: 100% !important;
     cursor: crosshair;
+    mix-blend-mode: multiply;
+  }
+
+  .photo-drop,
+  #photo-hint {
+    z-index: 2;
   }
 
   .photo-change-btn {
@@ -1277,6 +1301,7 @@ const regions = [
     const modeButtons = document.querySelectorAll<HTMLButtonElement>('.mode-btn');
 
     const viewportP = document.getElementById('viewport-photo') as HTMLElement;
+    const photoBg = document.getElementById('photo-bg') as HTMLImageElement;
     const photoDrop = document.getElementById('photo-drop') as HTMLElement;
     const photoDropLabel = document.getElementById('photo-drop-label') as HTMLElement;
     const photoInput = document.getElementById('body-photo-file') as HTMLInputElement;
@@ -1314,7 +1339,10 @@ const regions = [
       const h = viewportP.clientHeight;
       if (!w || !h) return;
       const viewAspect = w / h;
-      const margin = 0.55; // yarım-genişlik: fotoğrafın etrafında biraz boşluk bıraksın
+      // Tam 0.5 (yarım-genişlik) — CSS'teki #photo-bg'nin object-fit:contain
+      // ile aynı "sığdır" hesabını yapıyor. Farklı bir oran, WebGL katmanındaki
+      // dövmeyle alttaki <img> fotoğrafın hizasını bozar.
+      const margin = 0.5;
       if (viewAspect > photoAspect) {
         cameraP.top = margin;
         cameraP.bottom = -margin;
@@ -1346,6 +1374,10 @@ const regions = [
       cameraP.lookAt(0, 0, 0);
       rendererP = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
       rendererP.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Fotoğraf ayrı bir <img> katmanı; bu tuval sadece dövmeyi şeffaf zemin
+      // üzerine çiziyor ve CSS ile "multiply" bindiriliyor — mürekkep cildin
+      // renk/gölgesiyle gerçekten karışıyor, üstüne yapıştırılmış gibi durmuyor.
+      rendererP.domElement.style.mixBlendMode = 'multiply';
       viewportP.appendChild(rendererP.domElement);
       sceneP.add(new THREE.AmbientLight(0xffffff, 1));
 
@@ -1383,17 +1415,18 @@ const regions = [
       const img = new Image();
       img.onload = () => {
         photoAspect = img.naturalWidth / img.naturalHeight || 1;
-        const tex = new THREE.Texture(img);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.needsUpdate = true;
+        photoBg.src = url;
 
         if (photoPlane) {
           sceneP.remove(photoPlane);
           photoPlane.geometry.dispose();
           (photoPlane.material as THREE.Material).dispose();
         }
+        // Bu düzlem hiç çizilmiyor (opacity 0) — yalnızca tıklama konumunu
+        // bulmak (raycasting) ve düz (sarmasız) modda dövmenin projekte
+        // edileceği yüzey olarak var. Gerçek fotoğraf altındaki #photo-bg'de.
         const geo = new THREE.PlaneGeometry(photoAspect, 1);
-        const mat = new THREE.MeshBasicMaterial({ map: tex });
+        const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
         photoPlane = new THREE.Mesh(geo, mat);
         photoPlane.position.set(0, 0, 0);
         sceneP.add(photoPlane);
@@ -1654,10 +1687,41 @@ const regions = [
         : L('Önce bir fotoğraf yükleyip bir tasarım seçin.', 'First upload a photo and choose a design.');
     });
 
+    // "contain" ile sığdırılmış dikdörtgeni hesaplar — #photo-bg'nin CSS
+    // object-fit:contain ile ekranda yaptığının aynısı, indirilen görselde de
+    // fotoğraf ile WebGL katmanının (dövme) hizası bozulmasın diye.
+    function containRect(srcW: number, srcH: number, boxW: number, boxH: number) {
+      const srcAspect = srcW / srcH;
+      const boxAspect = boxW / boxH;
+      let w: number, h: number;
+      if (srcAspect > boxAspect) {
+        w = boxW;
+        h = boxW / srcAspect;
+      } else {
+        h = boxH;
+        w = boxH * srcAspect;
+      }
+      return { x: (boxW - w) / 2, y: (boxH - h) / 2, w, h };
+    }
+
     shotBtnP.addEventListener('click', () => {
-      if (!sceneReady) return;
+      if (!sceneReady || !photoBg.src) return;
       rendererP.render(sceneP, cameraP);
-      rendererP.domElement.toBlob((blob) => {
+      const cw = rendererP.domElement.width;
+      const ch = rendererP.domElement.height;
+      const out = document.createElement('canvas');
+      out.width = cw;
+      out.height = ch;
+      const ctx = out.getContext('2d')!;
+      // Ekranda gördüğü ile aynı sonucu üretmek için: önce fotoğrafı çiz,
+      // sonra dövme katmanını (WebGL tuvali) 'multiply' ile üstüne bindir —
+      // canlı önizlemedeki CSS mix-blend-mode:multiply'ın aynısı.
+      const rect = containRect(photoBg.naturalWidth, photoBg.naturalHeight, cw, ch);
+      ctx.drawImage(photoBg, rect.x, rect.y, rect.w, rect.h);
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.drawImage(rendererP.domElement, 0, 0, cw, ch);
+      ctx.globalCompositeOperation = 'source-over';
+      out.toBlob((blob) => {
         if (!blob) return;
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
