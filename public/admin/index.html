@@ -67,6 +67,27 @@
       #bia-splash.is-error #bia-bar { display: none; }
       #bia-splash.is-error p { color: #f2a900; }
 
+      #bia-reset-storage {
+        position: fixed;
+        bottom: 10px;
+        right: 12px;
+        z-index: 10000;
+        background: transparent;
+        border: 1px solid #2c2822;
+        color: #8f8878;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 0.7rem;
+        padding: 0.35em 0.7em;
+        border-radius: 4px;
+        cursor: pointer;
+        opacity: 0.55;
+      }
+      #bia-reset-storage:hover {
+        opacity: 1;
+        border-color: var(--bia-gold);
+        color: var(--bia-gold);
+      }
+
       /* ------------------------------------------------------------ giriş ekranı
          Yalnızca panelin "çerçevesi" (giriş ekranı ve üst çubuk) markalanıyor.
          Form alanlarına dokunulmuyor: koyu temaya çevirmek, yazı ile zemin
@@ -202,6 +223,43 @@
       <p id="bia-msg">Yönetim paneli açılıyor…</p>
       <div id="bia-bar"><span></span></div>
     </div>
+
+    <!-- Panel bazen tarayıcıda birikmiş eski bir taslak/oturum verisi yüzünden bir
+         ekranda (ör. "Girdiler yükleniyor…") takılı kalabiliyor — bu, siteyle değil
+         yalnızca o tarayıcıyla ilgili bir durum. Bu düğme geliştirici konsoluna
+         gerek kalmadan o veriyi temizleyip sayfayı yeniler. Her zaman görünür
+         durmasın diye küçük ve göze batmayacak şekilde, sağ altta. -->
+    <button type="button" id="bia-reset-storage" title="Panel bir ekranda takılı kalırsa buraya basın">
+      Panel takıldıysa: verileri temizle
+    </button>
+    <script>
+      document.getElementById('bia-reset-storage').addEventListener('click', function () {
+        var ok = window.confirm(
+          'Panelin bu tarayıcıda biriktirdiği taslak/oturum verisi temizlenip sayfa yeniden yüklenecek. ' +
+          'Yayınlanmış hiçbir içerik etkilenmez. Devam edilsin mi?'
+        );
+        if (!ok) return;
+        try { localStorage.clear(); } catch (e) {}
+        try { sessionStorage.clear(); } catch (e) {}
+        function reload() { location.reload(); }
+        if (window.indexedDB && indexedDB.databases) {
+          indexedDB.databases().then(function (dbs) {
+            var pending = dbs.length;
+            if (!pending) return reload();
+            dbs.forEach(function (db) {
+              var req = indexedDB.deleteDatabase(db.name);
+              req.onsuccess = req.onerror = req.onblocked = function () {
+                pending -= 1;
+                if (pending <= 0) reload();
+              };
+            });
+          }).catch(reload);
+        } else {
+          try { indexedDB.deleteDatabase('localforage'); } catch (e) {}
+          reload();
+        }
+      });
+    </script>
 
     <script>
       // Panel gerçekten ekrana geldiğinde açılışı kaldır. Decap kendi kökünü
