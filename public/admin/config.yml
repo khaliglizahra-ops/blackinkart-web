@@ -52,8 +52,11 @@ media_processing:
 media_folder: public/images/yuklemeler
 public_folder: /images/yuklemeler
 
-# Sağdaki ham önizleme paneli sitenin gerçek görünümünü göstermiyor ve özellikle
-# telefonda formun yarısını yiyordu. Bunun yerine her bölümde "Siteyi gör" linki var.
+# Decap'in ham (stilsiz) önizlemesi sitenin gerçek görünümünü göstermiyordu; bu
+# yüzden varsayılan kapalı. Rehber yazıları, piercing bölgeleri, sanatçılar ve
+# fiyat listesi gibi sitenin gerçek tasarımına yakın özel bir önizlemesi
+# olan bölümlerde `editor: { preview: true }` ile tek tek açıldı (bkz. admin/
+# index.html'deki CMS.registerPreviewTemplate çağrıları ve admin/preview.css).
 editor:
   preview: false
 
@@ -232,6 +235,8 @@ collections:
   # ------------------------------------------------------------------ FİYATLAR
   - name: fiyatlar
     label: Fiyatlar
+    editor:
+      preview: true
     files:
       - name: fiyat_listesi
         label: Fiyat Listesi
@@ -285,6 +290,8 @@ collections:
   - name: piercing-bolgeleri
     label: Piercing Bölgeleri
     label_singular: Bölge sayfası
+    editor:
+      preview: true
     folder: src/content/piercing-bolgeleri
     create: true
     slug: '{{slug}}'
@@ -325,6 +332,8 @@ collections:
   - name: dovme-rehberi
     label: Dövme Rehberi (Yazılar)
     label_singular: Dövme yazısı
+    editor:
+      preview: true
     folder: src/content/dovme-rehberi
     create: true
     slug: '{{slug}}'
@@ -363,6 +372,8 @@ collections:
   - name: piercing-rehberi
     label: Piercing Rehberi (Yazılar)
     label_singular: Piercing yazısı
+    editor:
+      preview: true
     folder: src/content/piercing-rehberi
     create: true
     slug: '{{slug}}'
@@ -423,6 +434,8 @@ collections:
   - name: sanatcilar
     label: Sanatçılar
     label_singular: Sanatçı
+    editor:
+      preview: true
     folder: src/content/sanatcilar
     create: true
     delete: false          # son sanatçı silinirse ana sayfadaki tanıtım bölümü kaybolur
@@ -447,6 +460,8 @@ collections:
   - name: dovme-rehberi-en
     label: Dövme Rehberi — İngilizce
     label_singular: İngilizce dövme yazısı
+    editor:
+      preview: true
     folder: src/content/dovme-rehberi/en
     create: true
     slug: '{{slug}}'
@@ -485,6 +500,8 @@ collections:
   - name: piercing-rehberi-en
     label: Piercing Rehberi — İngilizce
     label_singular: İngilizce piercing yazısı
+    editor:
+      preview: true
     folder: src/content/piercing-rehberi/en
     create: true
     slug: '{{slug}}'
@@ -523,6 +540,8 @@ collections:
   - name: piercing-bolgeleri-en
     label: Piercing Bölgeleri — İngilizce
     label_singular: İngilizce bölge sayfası
+    editor:
+      preview: true
     folder: src/content/piercing-bolgeleri/en
     create: true
     slug: '{{slug}}'
@@ -563,6 +582,8 @@ collections:
   - name: sanatcilar-en
     label: Sanatçılar — İngilizce
     label_singular: İngilizce sanatçı
+    editor:
+      preview: true
     folder: src/content/sanatcilar/en
     create: true
     delete: false          # son sanatçı silinirse ana sayfadaki tanıtım bölümü kaybolur
