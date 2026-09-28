@@ -147,6 +147,52 @@
         flex: 1 1 120px !important;
         min-width: 100px !important;
       }
+
+      /* ------------------------------------------------ önizlemeyi genişlet
+         Canlı önizleme varsayılan olarak formun yanında yarı ekran duruyor.
+         Bu düğme formu geçici gizleyip önizlemeyi tam genişliğe çıkarır —
+         siteye gerçekten girmiş gibi tam boy görmek için. react-split-pane
+         .Pane1/.Pane2 genişliği satır-içi style ile kontrol ediyor; bunu
+         ezmek için !important dışında güvenilir bir yol yok. */
+      #bia-expand-preview {
+        position: fixed;
+        top: 12px;
+        right: 18px;
+        z-index: 10000;
+        background: var(--bia-gold);
+        color: #150f00;
+        border: 0;
+        border-radius: 4px;
+        padding: 0.55em 1.1em;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 700;
+        font-size: 0.82rem;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      }
+      #bia-expand-preview[hidden] {
+        display: none;
+      }
+      body.bia-preview-expanded [class*='ControlPaneContainer']:not([class*='PreviewPaneContainer']) {
+        display: none !important;
+      }
+      body.bia-preview-expanded .Pane1 {
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        flex: 0 0 0 !important;
+        overflow: hidden !important;
+      }
+      body.bia-preview-expanded .Pane2 {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+      }
+      body.bia-preview-expanded .Resizer {
+        display: none !important;
+      }
     </style>
     <!-- Giriş: kullanıcı adı + şifre, sitenin kendi sunucusunda (/api). -->
   </head>
@@ -412,6 +458,39 @@
         });
       }
 
+      // Canlı önizlemeyi tam genişliğe çıkaran düğme. Yalnızca bölünmüş
+      // editör görünümündeyken (form + önizleme yan yana) görünür; koleksiyon
+      // listesi gibi başka sayfalarda gizlenir. Yeni bir kayda girildiğinde
+      // her zaman daraltılmış (form görünür) modda başlar.
+      function ensurePreviewExpandButton() {
+        var hasSplit = document.querySelector('.Pane1') && document.querySelector('.Pane2');
+        var btn = document.getElementById('bia-expand-preview');
+        if (!hasSplit) {
+          if (btn) btn.hidden = true;
+          document.body.classList.remove('bia-preview-expanded');
+          return;
+        }
+        if (!btn) {
+          btn = document.createElement('button');
+          btn.type = 'button';
+          btn.id = 'bia-expand-preview';
+          btn.addEventListener('click', function () {
+            document.body.classList.toggle('bia-preview-expanded');
+            updateExpandButtonLabel();
+          });
+          document.body.appendChild(btn);
+        }
+        btn.hidden = false;
+        updateExpandButtonLabel();
+      }
+
+      function updateExpandButtonLabel() {
+        var btn = document.getElementById('bia-expand-preview');
+        if (!btn) return;
+        var expanded = document.body.classList.contains('bia-preview-expanded');
+        btn.textContent = expanded ? '← Formu göster' : 'Önizlemeyi genişlet ⛶';
+      }
+
       // Giriş formundaki "E-posta" alanı aslında kullanıcı adı.
       new MutationObserver(function () {
         var f = document.querySelector('#nc-root input[name="email"]');
@@ -421,13 +500,17 @@
           f.autocapitalize = 'none';
         }
         tagImageGridItems();
+        ensurePreviewExpandButton();
       }).observe(document.documentElement, { childList: true, subtree: true });
 
       // Yedek: bazı listelerde görsel kutusu, satır göründükten kısa bir süre
       // sonra (veri git-gateway'den gelince) DOM'a giriyor — o an mutasyon
       // gözlemcisi zaten tetiklenmiş oluyor ve resim henüz yokken satırı
       // "salt görsel değil" sanıp atlıyor. Kısa aralıklı bu tarama farkı kapatır.
-      setInterval(tagImageGridItems, 400);
+      setInterval(function () {
+        tagImageGridItems();
+        ensurePreviewExpandButton();
+      }, 400);
     </script>
   </body>
 </html>
