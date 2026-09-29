@@ -52,13 +52,8 @@ media_processing:
 media_folder: public/images/yuklemeler
 public_folder: /images/yuklemeler
 
-# Decap'in ham (stilsiz) önizlemesi sitenin gerçek görünümünü göstermiyordu; bu
-# yüzden varsayılan kapalı. Her koleksiyonun kendi özel, sitenin gerçek
-# tasarımına yakın önizlemesi var ve `editor: { preview: true }` ile tek tek
-# açıldı (bkz. admin/index.html'deki CMS.registerPreviewTemplate çağrıları ve
-# admin/preview.css). Yeni bir koleksiyon eklenirse, önce onun için de bir
-# önizleme şablonu yazılmadan burada preview: true açılmamalı — aksi hâlde
-# Decap'in stilsiz ham önizlemesi görünür (daha önce bilinçli kaldırılmıştı).
+# Sağdaki ham önizleme paneli sitenin gerçek görünümünü göstermiyor ve özellikle
+# telefonda formun yarısını yiyordu. Bunun yerine her bölümde "Siteyi gör" linki var.
 editor:
   preview: false
 
@@ -66,8 +61,6 @@ collections:
   # ------------------------------------------------------------------ PORTFOLYO
   - name: portfolyo
     label: Portfolyo (Dövme ve Piercing Fotoğrafları)
-    editor:
-      preview: true
     files:
       - name: portfolyo_listesi
         label: Fotoğraflar
@@ -163,8 +156,6 @@ collections:
   # ------------------------------------------------------- İLETİŞİM VE SAATLER
   - name: ayarlar
     label: İletişim ve Saatler
-    editor:
-      preview: true
     files:
       - name: iletisim
         label: Stüdyo Bilgileri
@@ -241,8 +232,6 @@ collections:
   # ------------------------------------------------------------------ FİYATLAR
   - name: fiyatlar
     label: Fiyatlar
-    editor:
-      preview: true
     files:
       - name: fiyat_listesi
         label: Fiyat Listesi
@@ -296,8 +285,6 @@ collections:
   - name: piercing-bolgeleri
     label: Piercing Bölgeleri
     label_singular: Bölge sayfası
-    editor:
-      preview: true
     folder: src/content/piercing-bolgeleri
     create: true
     slug: '{{slug}}'
@@ -338,8 +325,6 @@ collections:
   - name: dovme-rehberi
     label: Dövme Rehberi (Yazılar)
     label_singular: Dövme yazısı
-    editor:
-      preview: true
     folder: src/content/dovme-rehberi
     create: true
     slug: '{{slug}}'
@@ -378,8 +363,6 @@ collections:
   - name: piercing-rehberi
     label: Piercing Rehberi (Yazılar)
     label_singular: Piercing yazısı
-    editor:
-      preview: true
     folder: src/content/piercing-rehberi
     create: true
     slug: '{{slug}}'
@@ -417,8 +400,6 @@ collections:
   # -------------------------------------------------------------- 3D TASARIMLAR
   - name: sablonlar
     label: 3D Hazır Tasarımlar
-    editor:
-      preview: true
     files:
       - name: tasarim_listesi
         label: Hazır Dövme Tasarımları
@@ -442,8 +423,6 @@ collections:
   - name: sanatcilar
     label: Sanatçılar
     label_singular: Sanatçı
-    editor:
-      preview: true
     folder: src/content/sanatcilar
     create: true
     delete: false          # son sanatçı silinirse ana sayfadaki tanıtım bölümü kaybolur
@@ -468,8 +447,6 @@ collections:
   - name: dovme-rehberi-en
     label: Dövme Rehberi — İngilizce
     label_singular: İngilizce dövme yazısı
-    editor:
-      preview: true
     folder: src/content/dovme-rehberi/en
     create: true
     slug: '{{slug}}'
@@ -508,8 +485,6 @@ collections:
   - name: piercing-rehberi-en
     label: Piercing Rehberi — İngilizce
     label_singular: İngilizce piercing yazısı
-    editor:
-      preview: true
     folder: src/content/piercing-rehberi/en
     create: true
     slug: '{{slug}}'
@@ -548,8 +523,6 @@ collections:
   - name: piercing-bolgeleri-en
     label: Piercing Bölgeleri — İngilizce
     label_singular: İngilizce bölge sayfası
-    editor:
-      preview: true
     folder: src/content/piercing-bolgeleri/en
     create: true
     slug: '{{slug}}'
@@ -590,8 +563,6 @@ collections:
   - name: sanatcilar-en
     label: Sanatçılar — İngilizce
     label_singular: İngilizce sanatçı
-    editor:
-      preview: true
     folder: src/content/sanatcilar/en
     create: true
     delete: false          # son sanatçı silinirse ana sayfadaki tanıtım bölümü kaybolur
