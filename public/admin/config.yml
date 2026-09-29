@@ -53,10 +53,12 @@ media_folder: public/images/yuklemeler
 public_folder: /images/yuklemeler
 
 # Decap'in ham (stilsiz) önizlemesi sitenin gerçek görünümünü göstermiyordu; bu
-# yüzden varsayılan kapalı. Rehber yazıları, piercing bölgeleri, sanatçılar ve
-# fiyat listesi gibi sitenin gerçek tasarımına yakın özel bir önizlemesi
-# olan bölümlerde `editor: { preview: true }` ile tek tek açıldı (bkz. admin/
-# index.html'deki CMS.registerPreviewTemplate çağrıları ve admin/preview.css).
+# yüzden varsayılan kapalı. Her koleksiyonun kendi özel, sitenin gerçek
+# tasarımına yakın önizlemesi var ve `editor: { preview: true }` ile tek tek
+# açıldı (bkz. admin/index.html'deki CMS.registerPreviewTemplate çağrıları ve
+# admin/preview.css). Yeni bir koleksiyon eklenirse, önce onun için de bir
+# önizleme şablonu yazılmadan burada preview: true açılmamalı — aksi hâlde
+# Decap'in stilsiz ham önizlemesi görünür (daha önce bilinçli kaldırılmıştı).
 editor:
   preview: false
 
@@ -64,6 +66,8 @@ collections:
   # ------------------------------------------------------------------ PORTFOLYO
   - name: portfolyo
     label: Portfolyo (Dövme ve Piercing Fotoğrafları)
+    editor:
+      preview: true
     files:
       - name: portfolyo_listesi
         label: Fotoğraflar
@@ -159,6 +163,8 @@ collections:
   # ------------------------------------------------------- İLETİŞİM VE SAATLER
   - name: ayarlar
     label: İletişim ve Saatler
+    editor:
+      preview: true
     files:
       - name: iletisim
         label: Stüdyo Bilgileri
@@ -411,6 +417,8 @@ collections:
   # -------------------------------------------------------------- 3D TASARIMLAR
   - name: sablonlar
     label: 3D Hazır Tasarımlar
+    editor:
+      preview: true
     files:
       - name: tasarim_listesi
         label: Hazır Dövme Tasarımları

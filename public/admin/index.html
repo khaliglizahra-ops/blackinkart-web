@@ -468,7 +468,107 @@
         );
       }
 
+      function PortfolioPreview(props) {
+        var entry = props.entry;
+        function imgs(path) {
+          var v = entry.getIn(path);
+          return v ? v.toJS() : [];
+        }
+        var featured = imgs(['data', 'featured']);
+        var categoriesField = entry.getIn(['data', 'categories']);
+        var categories = categoriesField ? categoriesField.toJS() : [];
+        var piercingCategoriesField = entry.getIn(['data', 'piercingCategories']);
+        var piercingCategories = piercingCategoriesField ? piercingCategoriesField.toJS() : [];
+        var studio = imgs(['data', 'studio']);
+
+        function grid(images) {
+          return h('div', { className: 'portfolio-grid' }, images.map(function (src, i) {
+            return h('div', { className: 'p-tile', key: i }, h('img', { src: String(props.getAsset(src)) }));
+          }));
+        }
+
+        return h('div', { className: 'cms-preview' },
+          h('div', { className: 'container section-tight' },
+            h('h1', null, 'Portfolyo'),
+            h('div', { className: 'gold-rule' }),
+            h('h2', null, 'Öne Çıkanlar'),
+            grid(featured),
+            categories.length ? h('h2', { style: { marginTop: '2rem' } }, 'Dövme — Stil Kategorileri') : null,
+            categories.map(function (cat, i) {
+              return h('div', { key: 'd' + i, className: 'p-category' },
+                h('h3', null, cat.label),
+                grid(cat.images || [])
+              );
+            }),
+            piercingCategories.length ? h('h2', { style: { marginTop: '2rem' } }, 'Piercing — Bölge Kategorileri') : null,
+            piercingCategories.map(function (cat, i) {
+              return h('div', { key: 'p' + i, className: 'p-category' },
+                h('h3', null, cat.label),
+                grid(cat.images || [])
+              );
+            }),
+            studio.length ? h('h2', { style: { marginTop: '2rem' } }, 'Stüdyo Fotoğrafları') : null,
+            grid(studio)
+          )
+        );
+      }
+
+      function ContactPreview(props) {
+        var entry = props.entry;
+        var hoursField = entry.getIn(['data', 'hours']);
+        var hours = hoursField ? hoursField.toJS() : [];
+        var phone = entry.getIn(['data', 'phone']) || '';
+        var whatsapp = entry.getIn(['data', 'whatsapp']) || '';
+        var email = entry.getIn(['data', 'email']) || '';
+        var igHandle = entry.getIn(['data', 'instagram', 'handle']) || '';
+        var addressFull = entry.getIn(['data', 'address', 'full']) || '';
+
+        function row(label, value) {
+          if (!value) return null;
+          return h('li', { key: label }, h('span', { className: 'label' }, label), h('span', { className: 'value' }, value));
+        }
+
+        return h('div', { className: 'cms-preview' },
+          h('div', { className: 'container section-tight' },
+            h('h1', null, 'İletişim Bilgileri'),
+            h('div', { className: 'gold-rule' }),
+            h('ul', { className: 'info-list' },
+              row('Adres', addressFull),
+              row('Telefon', phone),
+              row('E-posta', email),
+              row('WhatsApp', whatsapp),
+              row('Instagram', igHandle ? '@' + igHandle.replace(/^@/, '') : '')
+            ),
+            h('h3', null, 'Çalışma Saatleri'),
+            hours.map(function (item, i) {
+              return h('p', { className: 'hours', key: i }, h('span', null, item.day), h('span', null, item.hours));
+            })
+          )
+        );
+      }
+
+      function TemplatesPreview(props) {
+        var entry = props.entry;
+        var templatesField = entry.getIn(['data', 'templates']);
+        var templates = templatesField ? templatesField.toJS() : [];
+        return h('div', { className: 'cms-preview' },
+          h('div', { className: 'container section-tight' },
+            h('h1', null, '3D Hazır Tasarımlar'),
+            h('div', { className: 'gold-rule' }),
+            h('div', { className: 'template-grid' }, templates.map(function (tpl, i) {
+              return h('div', { className: 'tpl-btn', key: i },
+                h('img', { src: String(props.getAsset(tpl.image)) }),
+                h('span', { className: 'tpl-label' }, tpl.label)
+              );
+            }))
+          )
+        );
+      }
+
       CMS.registerPreviewStyle('/admin/preview.css');
+      CMS.registerPreviewTemplate('portfolyo_listesi', PortfolioPreview);
+      CMS.registerPreviewTemplate('iletisim', ContactPreview);
+      CMS.registerPreviewTemplate('tasarim_listesi', TemplatesPreview);
       CMS.registerPreviewTemplate('dovme-rehberi', GuidePreview);
       CMS.registerPreviewTemplate('dovme-rehberi-en', GuidePreview);
       CMS.registerPreviewTemplate('piercing-rehberi', GuidePreview);
