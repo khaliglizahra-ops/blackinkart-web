@@ -27,6 +27,7 @@ const MAX_FAILS = 8;              // 15 dakikada aynı IP'den en fazla hatalı g
 $DATA_DIR = dirname(__DIR__, 2) . '/bia-panel';
 $CONFIG_FILE = $DATA_DIR . '/config.php';
 
+header_remove('X-Powered-By');
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store');
 

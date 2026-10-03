@@ -8,6 +8,11 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # FTP dağıtım eylemi sunucunun köküne tüm dosyaların envanterini içeren bir
+  # durum dosyası bırakıyor; herkese açık kalmasın. (Dağıtım FTP ile çalıştığı
+  # için HTTP'den engellemek dağıtımı etkilemez.)
+  RewriteRule ^\.ftp-deploy-sync-state\.json$ - [F,L]
+
   # HTTPS ve www'ye yönlendir (sitenin asıl adresi https://www.blackinkart.com.tr).
   RewriteCond %{HTTPS} off [OR]
   RewriteCond %{HTTP_HOST} !^www\. [NC]

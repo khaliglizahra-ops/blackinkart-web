@@ -194,7 +194,14 @@
       })();
     </script>
 
-    <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
+    <!-- Sürüm sabit (3.16.0) ve dosyanın sha384 özeti kilitli: unpkg ele geçirilse bile
+         farklı bir betik çalışmaz, panel açılmaz. Sürüm değiştirilirse özet de yenilenmeli:
+         curl -s <url> | openssl dgst -sha384 -binary | openssl base64 -A -->
+    <script
+      src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"
+      integrity="sha384-WFBlw1ZGvgE9W2ia0r2gJPu3HOVweIpoHCGmlm3f/9J2OURAjzuJ/lV55gUd4By4"
+      crossorigin="anonymous"
+    ></script>
     <script>
       // Salt görsel liste öğelerini (metin alanı olmayanları) ".bia-grid-item"
       // ile işaretler; CSS'teki ızgara kuralları bunları yakalar. Kategori
