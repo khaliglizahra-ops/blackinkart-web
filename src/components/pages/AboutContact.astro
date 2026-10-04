@@ -14,7 +14,7 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
 ---
 
 <BaseLayout
-  title={L('İletişim ve Adres — Ankara Çankaya Dövme Piercing Stüdyosu', 'Contact & Location — Tattoo & Piercing Studio in Ankara')}
+  title={L('İletişim ve Adres — Ankara Çankaya Stüdyo', 'Contact & Location — Ankara Studio')}
   description={L("Black Ink Art Tattoo Piercing'in hikayesi, Ankara Bahçelievler adresimiz, çalışma saatlerimiz ve iletişim bilgilerimiz.", 'The story of Black Ink Art Tattoo Piercing, our address in Bahçelievler, Ankara, our opening hours and contact details.')}
   path={localizePath('/hakkimizda-iletisim', lang)}
 >
@@ -72,50 +72,85 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
       </div>
 
       <div class="map-col" data-reveal>
-        <iframe
-          src={site.mapsEmbedSrc}
-          title={L('Black Ink Art konum haritası', 'Black Ink Art location map')}
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
+        <div class="map-slot" data-consent-embed data-embed-src={site.mapsEmbedSrc} data-embed-title={L('Black Ink Art konum haritası', 'Black Ink Art location map')}>
+          <div class="map-placeholder" data-embed-placeholder>
+            <p>{t('embed.mapText')}</p>
+            <div class="map-actions">
+              <button type="button" class="btn btn-outline" data-embed-load>{t('embed.mapLoad')}</button>
+              <a href={(site as any).mapsUrl ?? site.mapsEmbedSrc} target="_blank" rel="noopener" class="btn btn-ghost">{t('embed.mapOpen')} ↗</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section-tight">
     <div class="container narrow">
-      <h2>{L('Mesaj Bırakın', 'Leave a Message')}</h2>
-      <p class="form-sent" id="form-sent" role="status" hidden>
+      <h2 id="contact-form-title">{L('Mesaj Bırakın', 'Leave a Message')}</h2>
+      <p class="form-sent" id="form-sent" role="status" tabindex="-1" hidden>
         {L('Teşekkürler, mesajınız bize ulaştı. En kısa sürede dönüş yapacağız.', 'Thank you, your message has reached us. We will get back to you shortly.')}
       </p>
-      <p class="form-sent is-error" id="form-error" role="alert" hidden>
+      <p class="form-sent is-error" id="form-error" role="alert" tabindex="-1" hidden>
         {L('Mesaj gönderilemedi. Lütfen WhatsApp veya telefonla ulaşın.', 'The message could not be sent. Please reach us via WhatsApp or phone.')}
       </p>
-      <!-- Hostinger'da çalışan iletisim.php mesajı e-postayla iletir ve bu sayfaya geri yönlendirir. -->
-      <form name="iletisim" method="POST" action="/iletisim.php" class="contact-form" data-reveal>
+      <!-- Hostinger'da çalışan iletisim.php mesajı e-postayla iletir. JavaScript açıkken
+           form fetch ile gönderilir (sayfa yenilenmez); kapalıyken düz gönderim çalışır ve
+           ziyaretçi ?mesaj=ok / ?mesaj=hata ile bu sayfaya geri döner. -->
+      <form
+        id="contact-form"
+        name="iletisim"
+        method="POST"
+        action="/iletisim.php"
+        class="contact-form"
+        novalidate
+        aria-labelledby="contact-form-title"
+        data-reveal
+        data-messages={JSON.stringify({
+          required: L('Bu alan zorunlu.', 'This field is required.'),
+          nameShort: L('Lütfen adınızı yazın (en az 2 karakter).', 'Please enter your name (at least 2 characters).'),
+          nameLong: L('Ad en fazla 120 karakter olabilir.', 'The name can be at most 120 characters.'),
+          contactInvalid: L('Geçerli bir telefon numarası ya da e-posta adresi yazın.', 'Enter a valid phone number or e-mail address.'),
+          messageShort: L('Mesajınız en az 10 karakter olmalı.', 'Your message must be at least 10 characters.'),
+          messageLong: L('Mesaj en fazla 5000 karakter olabilir.', 'The message can be at most 5000 characters.'),
+          fix: L('Lütfen işaretli alanları düzeltin.', 'Please correct the highlighted fields.'),
+          sending: L('Gönderiliyor…', 'Sending…'),
+          send: L('Gönder', 'Send'),
+          network: L('Bağlantı kurulamadı. İnternetinizi kontrol edip tekrar deneyin ya da WhatsApp veya telefonla ulaşın.', 'Could not connect. Check your connection and try again, or reach us via WhatsApp or phone.'),
+          rate: L('Kısa sürede çok fazla mesaj gönderildi. Birkaç dakika sonra tekrar deneyin ya da WhatsApp ile yazın.', 'Too many messages were sent in a short time. Try again in a few minutes, or write to us on WhatsApp.'),
+          server: L('Mesaj gönderilemedi. Lütfen WhatsApp veya telefonla ulaşın.', 'The message could not be sent. Please reach us via WhatsApp or phone.'),
+        })}
+      >
         <input type="hidden" name="donus" value={localizePath('/hakkimizda-iletisim', lang)} />
-        <p class="honeypot"><label>{L('Bu alanı boş bırakın:', 'Leave this field empty:')} <input name="bot-field" /></label></p>
+        <p class="honeypot" aria-hidden="true"><label>{L('Bu alanı boş bırakın:', 'Leave this field empty:')} <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
         <div class="field-row">
-          <label>
-            {t('booking.name')}
-            <input type="text" name="name" required />
-          </label>
-          <label>
-            {L('Telefon veya E-posta', 'Phone or email')}
-            <input type="text" name="contact" required />
-          </label>
+          <div class="field">
+            <label for="cf-name">{t('booking.name')} <span class="req" aria-hidden="true">*</span></label>
+            <input id="cf-name" type="text" name="name" required minlength="2" maxlength="120" autocomplete="name" aria-describedby="cf-name-err" />
+            <p class="field-error" id="cf-name-err" hidden></p>
+          </div>
+          <div class="field">
+            <label for="cf-contact">{L('Telefon veya E-posta', 'Phone or email')} <span class="req" aria-hidden="true">*</span></label>
+            <input id="cf-contact" type="text" name="contact" required maxlength="160" aria-describedby="cf-contact-err" />
+            <p class="field-error" id="cf-contact-err" hidden></p>
+          </div>
         </div>
-        <label>
-          {L('Mesajınız', 'Your message')}
-          <textarea name="message" rows="5" required></textarea>
-        </label>
-        <button type="submit" class="btn btn-primary">{L('Gönder', 'Send')}</button>
+        <div class="field">
+          <label for="cf-message">{L('Mesajınız', 'Your message')} <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="cf-message" name="message" rows="5" required minlength="10" maxlength="5000" aria-describedby="cf-message-err"></textarea>
+          <p class="field-error" id="cf-message-err" hidden></p>
+        </div>
+        <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
+        <button type="submit" class="btn btn-primary" id="cf-submit">{L('Gönder', 'Send')}</button>
       </form>
     </div>
   </section>
 </BaseLayout>
 
 <script>
+  import { validateContactForm, classifyResponse } from '../../lib/form-validate.js';
+
+  // JavaScript'siz akışta iletisim.php ?mesaj=ok / ?mesaj=hata ile buraya döner.
   function showFormResult() {
     const q = new URLSearchParams(window.location.search).get('mesaj');
     if (!q) return;
@@ -125,7 +160,140 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
       el.scrollIntoView({ block: 'center' });
     }
   }
-  document.addEventListener('astro:page-load', showFormResult);
+
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = '1';
+
+    const msg = JSON.parse(form.dataset.messages || '{}') as Record<string, string>;
+    const submit = document.getElementById('cf-submit') as HTMLButtonElement;
+    const status = document.getElementById('form-status') as HTMLElement;
+    const sent = document.getElementById('form-sent') as HTMLElement;
+    const failed = document.getElementById('form-error') as HTMLElement;
+    const fields = ['name', 'contact', 'message'] as const;
+    let sending = false;
+
+    const input = (n: string) => form.elements.namedItem(n) as HTMLInputElement | HTMLTextAreaElement;
+    const errEl = (n: string) => document.getElementById(`cf-${n}-err`) as HTMLElement;
+
+    function setError(name: string, key: string | null) {
+      const field = input(name);
+      const err = errEl(name);
+      if (key) {
+        err.textContent = msg[key] || msg.required;
+        err.hidden = false;
+        field.setAttribute('aria-invalid', 'true');
+      } else {
+        err.hidden = true;
+        err.textContent = '';
+        field.removeAttribute('aria-invalid');
+      }
+    }
+
+    function showStatus(text: string | null) {
+      status.textContent = text || '';
+      status.hidden = !text;
+    }
+
+    function validate(): boolean {
+      const result = validateContactForm({
+        name: input('name').value,
+        contact: input('contact').value,
+        message: input('message').value,
+      });
+      let firstInvalid: HTMLElement | null = null;
+      for (const f of fields) {
+        const key = (result.errors as Record<string, string>)[f] || null;
+        setError(f, key);
+        if (key && !firstInvalid) firstInvalid = input(f);
+      }
+      if (firstInvalid) {
+        showStatus(msg.fix);
+        firstInvalid.focus();
+      } else {
+        showStatus(null);
+      }
+      return result.ok;
+    }
+
+    function setSending(on: boolean) {
+      sending = on;
+      submit.disabled = on;
+      submit.setAttribute('aria-busy', String(on));
+      submit.textContent = on ? msg.sending : msg.send;
+      if (on) showStatus(msg.sending);
+    }
+
+    // Yazarken, hatalı işaretli alan düzeldiyse hatayı hemen kaldır.
+    for (const f of fields) {
+      input(f).addEventListener('input', () => {
+        if (input(f).getAttribute('aria-invalid') !== 'true') return;
+        const r = validateContactForm({ name: input('name').value, contact: input('contact').value, message: input('message').value });
+        const key = (r.errors as Record<string, string>)[f] || null;
+        if (!key) setError(f, null);
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (sending) return; // çift gönderimi engelle
+      sent.hidden = true;
+      failed.hidden = true;
+      if (!validate()) return;
+
+      setSending(true);
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 20000);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'X-Requested-With': 'fetch', Accept: 'application/json' },
+          signal: controller.signal,
+        });
+        let data: { ok?: boolean; code?: string } | null = null;
+        try {
+          data = await response.json();
+        } catch {
+          data = null; // sunucu JSON dönmediyse genel hata
+        }
+        const outcome = classifyResponse(response.status, data);
+        if (outcome === 'ok') {
+          form.reset();
+          showStatus(null);
+          sent.hidden = false;
+          sent.focus();
+          document.dispatchEvent(new CustomEvent('bia:track', { detail: { name: 'generate_lead', params: { method: 'contact_form' } } }));
+        } else if (outcome === 'invalid') {
+          showStatus(msg.fix);
+          failed.hidden = true;
+        } else {
+          showStatus(null);
+          failed.textContent = outcome === 'rate' ? msg.rate : msg.server;
+          failed.hidden = false;
+          failed.focus();
+        }
+      } catch {
+        // Ağ yok ya da zaman aşımı.
+        showStatus(null);
+        failed.textContent = msg.network;
+        failed.hidden = false;
+        failed.focus();
+      } finally {
+        window.clearTimeout(timer);
+        setSending(false);
+        if (!sending) submit.textContent = msg.send;
+      }
+    });
+  }
+
+  function init() {
+    showFormResult();
+    initContactForm();
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
 </script>
 
 <style>
@@ -135,6 +303,12 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
     background: rgba(58, 107, 69, 0.18);
     border-radius: 6px;
     margin-bottom: 1.2rem;
+  }
+
+  /* JavaScript kapalıyken iletisim.php forma #form-sent / #form-error çapasıyla
+     döner; :target hedef mesajı JS olmadan da gösterir. */
+  .form-sent[hidden]:target {
+    display: block;
   }
 
   .form-sent.is-error {
@@ -209,12 +383,48 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
     min-height: 360px;
   }
 
-  .map-col iframe {
+  .map-slot {
+    height: 100%;
+    min-height: 360px;
+  }
+
+  /* İframe betikle sonradan ekleniyor; Astro'nun kapsamlı stili ona ulaşmaz. */
+  .map-slot :global(iframe) {
+    display: block;
     width: 100%;
     height: 100%;
     min-height: 360px;
     border: 0;
     filter: grayscale(0.3) invert(0.92) contrast(0.9);
+  }
+
+  .map-placeholder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.1rem;
+    min-height: 360px;
+    padding: 1.6rem;
+    background: var(--color-ink-950);
+  }
+
+  .map-placeholder[hidden] {
+    display: none;
+  }
+
+  .map-placeholder p {
+    max-width: 44ch;
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .map-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
   }
 
   .contact-form {
@@ -240,6 +450,46 @@ const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
     gap: 0.5em;
     font-size: 0.85rem;
     color: var(--color-ivory-dim);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .req {
+    color: var(--color-gold);
+  }
+
+  .field-error {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #ff9d9d;
+  }
+
+  .field-error[hidden] {
+    display: none;
+  }
+
+  input[aria-invalid='true'],
+  textarea[aria-invalid='true'] {
+    border-color: #d86a6a;
+  }
+
+  .form-status {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .form-status[hidden] {
+    display: none;
+  }
+
+  .contact-form .btn:disabled {
+    opacity: 0.65;
+    cursor: progress;
   }
 
   input,

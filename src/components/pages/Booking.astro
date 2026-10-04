@@ -33,6 +33,14 @@ const M = {
   tattoo: t('booking.tattoo'),
   piercing: t('booking.piercingType'),
 };
+const V = {
+  required: t('booking.err.required'),
+  nameShort: t('booking.err.nameShort'),
+  past: t('booking.err.past'),
+  fix: t('booking.err.fix'),
+  opening: t('booking.opening'),
+  submit: t('booking.submit'),
+};
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { site } from '../../data/site';
@@ -112,6 +120,7 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
               <textarea
                 name="tasarim"
                 rows="3"
+                maxlength="500"
                 placeholder={t('booking.ph.design')}
               ></textarea>
             </label>
@@ -119,11 +128,11 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
             <div class="field-row">
               <label class="field">
                 <span class="label">{t('booking.bodyArea')}</span>
-                <input type="text" name="dovme_bolge" placeholder={t('booking.ph.area')} />
+                <input type="text" name="dovme_bolge" maxlength="80" placeholder={t('booking.ph.area')} />
               </label>
               <label class="field">
                 <span class="label">{t('booking.size')}</span>
-                <input type="text" name="boyut" placeholder={t('booking.ph.size')} />
+                <input type="text" name="boyut" maxlength="40" placeholder={t('booking.ph.size')} />
               </label>
             </div>
 
@@ -157,6 +166,7 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
               <textarea
                 name="piercing_not"
                 rows="2"
+                maxlength="500"
                 placeholder={t('booking.ph.pnote')}
               ></textarea>
             </label>
@@ -171,7 +181,7 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
             <div class="field-row">
               <label class="field">
                 <span class="label">{t('booking.day')}</span>
-                <input type="date" name="gun" id="gun" />
+                <input type="date" name="gun" id="gun" aria-describedby="gun-err" />
               </label>
               <label class="field">
                 <span class="label">{t('booking.time')}</span>
@@ -183,6 +193,7 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
                 </select>
               </label>
             </div>
+            <p class="field-error" id="gun-err" hidden></p>
             <p class="note hours-note">
               {site.hours.map((h) => <span>{hDay(h)}: {hHours(h)}</span>)}
             </p>
@@ -193,12 +204,13 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
 
             <label class="field">
               <span class="label">{t('booking.name')} <em>*</em></span>
-              <input type="text" name="ad" id="ad" required placeholder={t('booking.ph.name')} />
+              <input type="text" name="ad" id="ad" required minlength="2" maxlength="80" autocomplete="name" aria-describedby="ad-err" placeholder={t('booking.ph.name')} />
             </label>
+            <p class="field-error" id="ad-err" hidden></p>
 
             <label class="field">
               <span class="label">{t('booking.ageLabel')} <em>*</em></span>
-              <select name="yas" id="yas" required>
+              <select name="yas" id="yas" required aria-describedby="yas-err">
                 <option value="">{t('booking.select')}</option>
                 <option value={t('booking.over18')}>{t('booking.over18')}</option>
                 <option value={t('booking.under18val')}>
@@ -210,19 +222,21 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
                 <a href={L('/yas-ve-onam-politikasi')}>{t('footer.ageDetails')}</a>
               </span>
             </label>
+            <p class="field-error" id="yas-err" hidden></p>
 
             <label class="field">
               <span class="label">{t('booking.extraLabel')}</span>
-              <textarea name="not" rows="2" placeholder={t('booking.ph.note')}></textarea>
+              <textarea name="not" rows="2" maxlength="500" placeholder={t('booking.ph.note')}></textarea>
             </label>
           </fieldset>
 
           <div class="block preview-block">
-            <p class="label">{t('booking.preview')}</p>
-            <pre class="msg-preview" id="msg-preview" aria-live="polite"></pre>
+            <p class="label" id="msg-preview-label">{t('booking.preview')}</p>
+            <pre class="msg-preview" id="msg-preview" tabindex="0" role="region" aria-labelledby="msg-preview-label"></pre>
           </div>
 
-          <button type="submit" class="btn btn-primary send-btn">
+          <p class="form-status" id="booking-status" role="status" aria-live="polite" hidden></p>
+          <button type="submit" class="btn btn-primary send-btn" id="booking-submit">
             {t('booking.submit')}
           </button>
           <p class="note send-note">
@@ -272,7 +286,7 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
   </section>
 </BaseLayout>
 
-<script define:vars={{ waNumber: site.whatsapp, M, lang }}>
+<script define:vars={{ waNumber: site.whatsapp, M, V, lang }}>
   function initRandevu() {
     const form = document.getElementById('randevu-form');
     if (!form || form.dataset.ready) return;
@@ -350,19 +364,81 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
     form.addEventListener('change', refresh);
     refresh();
 
+    const statusEl = document.getElementById('booking-status');
+    const submitBtn = document.getElementById('booking-submit');
+    const todayIso = () => new Date().toISOString().slice(0, 10);
+    let busy = false;
+
+    function setError(id, text) {
+      const field = document.getElementById(id);
+      const err = document.getElementById(id + '-err');
+      if (!field || !err) return;
+      if (text) {
+        err.textContent = text;
+        err.hidden = false;
+        field.setAttribute('aria-invalid', 'true');
+      } else {
+        err.hidden = true;
+        err.textContent = '';
+        field.removeAttribute('aria-invalid');
+      }
+    }
+
+    function showStatus(text) {
+      if (!statusEl) return;
+      statusEl.textContent = text || '';
+      statusEl.hidden = !text;
+    }
+
+    // Hatalı işaretli alan düzeldiğinde hatayı hemen kaldır.
+    form.addEventListener('input', (e) => {
+      const el = e.target;
+      if (el && el.getAttribute && el.getAttribute('aria-invalid') === 'true') {
+        if (el.id === 'ad' && [...el.value.trim()].length >= 2) setError('ad', null);
+        else if (el.id === 'yas' && el.value) setError('yas', null);
+        else if (el.id === 'gun' && (!el.value || el.value >= todayIso())) setError('gun', null);
+      }
+    });
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (busy) return; // çift tıklamada WhatsApp iki kez açılmasın
 
-      // Zorunlu alanları tarayıcının kendi uyarısıyla kontrol et.
-      const ad = form.elements['ad'];
-      const yas = form.elements['yas'];
-      for (const el of [ad, yas]) {
-        if (el && !el.value.trim()) {
-          el.reportValidity?.();
-          el.focus();
-          return;
-        }
+      const adVal = val('ad');
+      const yasVal = val('yas');
+      const gunVal = val('gun');
+      const adErr = !adVal ? V.required : [...adVal].length < 2 ? V.nameShort : null;
+      const yasErr = !yasVal ? V.required : null;
+      const gunErr = gunVal && gunVal < todayIso() ? V.past : null;
+      setError('ad', adErr);
+      setError('yas', yasErr);
+      setError('gun', gunErr);
+
+      const firstBad = adErr ? 'ad' : yasErr ? 'yas' : gunErr ? 'gun' : null;
+      if (firstBad) {
+        showStatus(V.fix);
+        document.getElementById(firstBad)?.focus();
+        return;
       }
+      showStatus(null);
+
+      busy = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('aria-busy', 'true');
+        submitBtn.textContent = V.opening;
+      }
+      // Birkaç saniye sonra yeniden kullanılabilsin (kullanıcı WhatsApp'tan dönebilir).
+      window.setTimeout(() => {
+        busy = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute('aria-busy');
+          submitBtn.textContent = V.submit;
+        }
+      }, 4000);
+
+      document.dispatchEvent(new CustomEvent('bia:track', { detail: { name: 'generate_lead', params: { method: 'whatsapp_booking' } } }));
 
       const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(buildMessage())}`;
       const win = window.open(url, '_blank', 'noopener');
@@ -376,6 +452,31 @@ const styles = portfolio.categories.map((c: any) => (lang === 'en' && c.labelEn 
 </script>
 
 <style>
+  .field-error {
+    margin: -0.4rem 0 1rem;
+    font-size: 0.82rem;
+    color: #ff9d9d;
+  }
+
+  .field-error[hidden] {
+    display: none;
+  }
+
+  input[aria-invalid='true'],
+  select[aria-invalid='true'] {
+    border-color: #d86a6a;
+  }
+
+  .form-status {
+    margin: 0 0 0.8rem;
+    font-size: 0.88rem;
+    color: var(--color-ivory-dim);
+  }
+
+  .form-status[hidden] {
+    display: none;
+  }
+
   .narrow {
     max-width: 780px;
   }
