@@ -51,14 +51,18 @@ ErrorDocument 404 /404.html
   AddType image/webp .webp
 </IfModule>
 
-# Temel güvenlik başlıkları — tarayıcı tarafı koruma. Not: sıkı bir
-# Content-Security-Policy buraya eklenmedi; WhatsApp widget'ı, Google
-# Haritalar embed'i ve /admin'in unpkg'den yüklediği Decap CMS betiği gibi
-# kaynakların hepsini kırmadan doğru şekilde listelemek her sayfada canlı
-# test gerektiriyor — o yüzden ayrı bir iş olarak bırakıldı.
+# Temel güvenlik başlıkları — tarayıcı tarafı koruma.
+# İçerik Güvenliği Politikası (CSP) buraya değil, her sayfanın <head>'ine
+# <meta> olarak (src/layouts/BaseLayout.astro) konuyor: /admin paneli unpkg'den
+# Decap CMS yüklüyor ve farklı bir politika ister; başlık olarak tüm siteye
+# koyulsaydı paneli bozardı. Meta etiketinde olmayan `frame-ancestors`
+# işini aşağıdaki X-Frame-Options görüyor.
+# Permissions-Policy: site kamera, mikrofon, konum, ödeme vb. hiçbir cihaz
+# özelliğini kullanmıyor; kapatmak, sayfaya sızan bir betiğin de kullanmasını önler.
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Strict-Transport-Security "max-age=15768000; includeSubDomains"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=(), interest-cohort=()"
 </IfModule>

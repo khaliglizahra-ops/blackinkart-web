@@ -1,7 +1,7 @@
 ---
 title: "Navel (Belly) Piercing"
 translationKey: "navel"
-description: "Navel piercing — the procedure, healing time, aftercare and price."
+description: "Navel (belly) piercing — the procedure, healing time, aftercare and price at the Black Ink Art studio in Çankaya, Ankara."
 order: 6
 updatedAt: "2026-02-01"
 priceSlug: "diger"

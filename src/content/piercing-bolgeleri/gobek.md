@@ -1,7 +1,7 @@
 ---
 title: "Göbek (Belly) Piercing"
 translationKey: "navel"
-description: "Göbek piercing uygulaması, iyileşme süresi, bakımı ve fiyatı."
+description: "Göbek piercing uygulaması, iyileşme süresi, bakımı ve fiyatı — Ankara Çankaya'daki Black Ink Art stüdyosundan."
 order: 6
 updatedAt: "2026-02-01"
 priceSlug: "diger"

@@ -1,7 +1,7 @@
 ---
 title: "What Is a Piercing?"
 translationKey: "what-is-a-piercing"
-description: "What a piercing is, a short history, and where it sits in modern practice."
+description: "What is a piercing? The definition, a short history, how it is done and where it sits in modern practice."
 order: 1
 updatedAt: "2026-02-01"
 heroImage: "/images/piercing/kulak/kulak-01.jpg"

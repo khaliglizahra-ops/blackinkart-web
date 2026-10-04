@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /iletisim.php
 
 Sitemap: https://www.blackinkart.com.tr/sitemap-index.xml

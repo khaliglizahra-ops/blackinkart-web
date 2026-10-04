@@ -1,7 +1,7 @@
 ---
 title: "Piercing Nedir?"
 translationKey: "what-is-a-piercing"
-description: "Piercingin tanımı, kısa tarihçesi ve modern uygulamadaki yeri."
+description: "Piercing nedir? Tanımı, kısa tarihçesi, nasıl uygulandığı ve modern uygulamadaki yeri."
 order: 1
 updatedAt: "2026-02-01"
 heroImage: "/images/piercing/kulak/kulak-01.jpg"

@@ -8,11 +8,12 @@ interface Props {
   description: string;
   path: string; // e.g. "/dovme/dovme-nedir"
   image?: string; // absolute or root-relative OG image
+  imageAlt?: string; // OG görselinin açıklaması; verilmezse sayfa başlığı / varsayılan görsel için marka açıklaması
   noindex?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description, path, image, noindex = false, jsonLd } = Astro.props;
+const { title, description, path, image, imageAlt, noindex = false, jsonLd } = Astro.props;
 
 const lang = langFromPath(path);
 const canonical = new URL(path, site.url).toString();
@@ -30,6 +31,16 @@ const alternates = LANGS.map((l) => ({
 }));
 const xDefault = new URL(altPaths[DEFAULT_LANG], site.url).toString();
 const ogImage = new URL(image ?? '/brand/og-default.jpg', site.url).toString();
+// Varsayılan paylaşım görselinin boyutu bilinen sabit; sayfaya özel görselin
+// boyutunu burada bilmediğimizden ona boyut yazmıyoruz.
+const ogImageSize = image ? null : { width: 1200, height: 630 };
+const ogImageAlt =
+  imageAlt ??
+  (image
+    ? title
+    : lang === 'en'
+      ? `${site.shortName} — tattoo and piercing studio in Ankara`
+      : `${site.shortName} — Ankara dövme ve piercing stüdyosu`);
 const tattooUrl = new URL(localizePath('/dovme', lang), site.url).toString();
 const piercingUrl = new URL(localizePath('/piercing', lang), site.url).toString();
 
@@ -104,6 +115,9 @@ const schemas = [localBusinessSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? json
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={ogImageAlt} />
+{ogImageSize && <meta property="og:image:width" content={String(ogImageSize.width)} />}
+{ogImageSize && <meta property="og:image:height" content={String(ogImageSize.height)} />}
 <meta property="og:locale" content={LANG_LABELS[lang].ogLocale} />
 {LANGS.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={LANG_LABELS[l].ogLocale} />)}
 
@@ -111,7 +125,8 @@ const schemas = [localBusinessSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? json
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
 
 {schemas.map((schema) => (
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, "\\u003c")} />
 ))}

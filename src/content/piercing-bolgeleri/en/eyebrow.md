@@ -1,7 +1,7 @@
 ---
 title: "Eyebrow Piercings"
 translationKey: "eyebrow"
-description: "Eyebrow piercing types, healing times and prices."
+description: "Eyebrow piercing types, healing times, aftercare and prices — from the Black Ink Art studio in Çankaya, Ankara."
 order: 5
 updatedAt: "2026-02-01"
 priceSlug: "diger"

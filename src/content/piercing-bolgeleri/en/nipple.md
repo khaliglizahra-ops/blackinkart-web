@@ -1,7 +1,7 @@
 ---
 title: "Nipple Piercing"
 translationKey: "nipple"
-description: "Nipple piercing — the procedure, healing time, aftercare and price."
+description: "Nipple piercing — the procedure, healing time, aftercare and price at the Black Ink Art studio in Çankaya, Ankara."
 order: 7
 updatedAt: "2026-02-01"
 priceSlug: "diger"
