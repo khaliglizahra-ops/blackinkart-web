@@ -210,15 +210,18 @@ test('llms.txt, favicon ve manifest yerinde', opts, () => {
   for (const icon of manifest.icons) assert.ok(fs.existsSync(path.join(DIST, icon.src)), icon.src);
 });
 
-test('özel 404 sayfaları var, noindex ve yönlendirme .htaccess ile bağlı', opts, () => {
+test('özel 404 sayfaları var ve noindex; /en altında .htaccess YOK', opts, () => {
   for (const f of ['404.html', 'en/404/index.html']) {
     const html = fs.readFileSync(path.join(DIST, f), 'utf8');
     assert.match(html, /name="robots" content="[^"]*noindex/, f);
   }
   const root = fs.readFileSync(path.join(DIST, '.htaccess'), 'utf8');
   assert.match(root, /ErrorDocument 404 \/404\.html/);
-  const en = fs.readFileSync(path.join(DIST, 'en/.htaccess'), 'utf8');
-  assert.match(en, /ErrorDocument 404 \/en\/404\/index\.html/);
+  // 4 Ekim 2026: /en/.htaccess eklenince LiteSpeed'de /en ile /en/ birbirine
+  // sonsuz yönlendirdi (kökteki "sondaki eğik çizgiyi at" kuralı + dizin
+  // eğik çizgisi). Yerel sunucu .htaccess okumadığı için derleme testleri bunu
+  // yakalayamaz; o yüzden dosyanın yeniden eklenmesini burada engelliyoruz.
+  assert.equal(fs.existsSync(path.join(DIST, 'en/.htaccess')), false, 'public/en/.htaccess döngü yaratıyor, eklemeyin');
 });
 
 test('yasal sayfalar iki dilde mevcut ve altbilgiden bağlı', opts, () => {
