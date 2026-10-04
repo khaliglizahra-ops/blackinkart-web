@@ -16,7 +16,12 @@ const { eyebrow, title, breadcrumbs, image, art, seed = 3 } = Astro.props;
 
 <header class="guide-hero">
   {image ? (
-    <div class="guide-hero-bg" style={`background-image:url(${image})`}></div>
+    <>
+      {/* CSS arka plan görseli HTML'de görünmediği için tarayıcı onu geç keşfediyor
+          ve sayfanın en büyük öğesi (LCP) gecikiyordu; önceden yüklemesini istiyoruz. */}
+      <link rel="preload" as="image" href={image} fetchpriority="high" />
+      <div class="guide-hero-bg" style={`background-image:url(${image})`}></div>
+    </>
   ) : (
     <ArtBackground variant={art ?? 'flow'} seed={seed} />
   )}

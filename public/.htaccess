@@ -49,6 +49,7 @@ ErrorDocument 404 /404.html
   AddType model/gltf+json .gltf
   AddType image/avif .avif
   AddType image/webp .webp
+  AddType application/manifest+json .webmanifest
 </IfModule>
 
 # Temel güvenlik başlıkları — tarayıcı tarafı koruma.
