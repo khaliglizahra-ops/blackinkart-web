@@ -1,0 +1,193 @@
+---
+/**
+ * Sık sorulan sorular — erişilebilir akordeon.
+ *
+ * Her soru bir <button> (aria-expanded + aria-controls), cevap ise ona bağlı
+ * bir bölge. Klavyeyle Enter/Boşluk çalışır (yerel düğme davranışı). JavaScript
+ * yoksa cevaplar kapalı kalmasın diye <noscript> ile hepsi açık gösteriliyor.
+ *
+ * Aynı kaynaktan üretilen FAQPage şeması sayfa tarafından BaseLayout'a
+ * `jsonLd` olarak veriliyor (bkz. data/faq.ts → faqSchema).
+ */
+import type { FaqItem } from '../data/faq';
+
+interface Props {
+  items: FaqItem[];
+  heading: string;
+  /** Aynı sayfada birden çok SSS olursa kimlikler çakışmasın. */
+  id?: string;
+}
+
+const { items, heading, id = 'faq' } = Astro.props;
+---
+
+<section class="section-tight faq" aria-labelledby={`${id}-title`}>
+  <div class="container">
+    <div class="faq-wrap">
+      <h2 id={`${id}-title`}>{heading}</h2>
+      <div class="faq-list" data-faq>
+        {items.map((item, i) => (
+          <div class="faq-item">
+            <h3>
+              <button
+                type="button"
+                class="faq-q"
+                id={`${id}-q${i}`}
+                aria-expanded="false"
+                aria-controls={`${id}-a${i}`}
+              >
+                <span>{item.q}</span>
+                <span class="faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div class="faq-a" id={`${id}-a${i}`} role="region" aria-labelledby={`${id}-q${i}`} hidden>
+              <p>{item.a}</p>
+              {item.link && (
+                <p class="faq-link">
+                  <a href={item.link.href} {...(item.link.external ? { target: '_blank', rel: 'noopener' } : {})}>
+                    {item.link.label}{item.link.external ? ' ↗' : ' →'}
+                  </a>
+                </p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<noscript>
+  <style>
+    .faq-a[hidden] { display: block !important; }
+    .faq-icon { display: none; }
+    .faq-q { cursor: default; }
+  </style>
+</noscript>
+
+<style>
+  .faq-wrap {
+    max-width: 820px;
+  }
+
+  .faq-wrap h2 {
+    margin-bottom: 1.2rem;
+  }
+
+  .faq-list {
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .faq-item h3 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+
+  .faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    width: 100%;
+    padding: 1.1rem 0;
+    font: inherit;
+    text-align: left;
+    color: var(--color-ivory);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    transition: color var(--dur-fast);
+  }
+
+  .faq-q:hover {
+    color: var(--color-gold);
+  }
+
+  /* Artı/eksi: iki çizgi; açıkken dikey çizgi kayboluyor. */
+  .faq-icon {
+    position: relative;
+    flex: none;
+    width: 14px;
+    height: 14px;
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .faq-icon::after {
+    transform: rotate(90deg);
+  }
+
+  .faq-q[aria-expanded='true'] .faq-icon::after {
+    transform: rotate(0deg);
+  }
+
+  .faq-a[hidden] {
+    display: none;
+  }
+
+  .faq-a {
+    padding: 0 0 1.2rem;
+    max-width: 68ch;
+  }
+
+  .faq-a p {
+    margin: 0 0 0.7rem;
+    font-size: 0.95rem;
+  }
+
+  .faq-a .faq-link {
+    margin: 0;
+    font-size: 0.88rem;
+  }
+
+  .faq-a .faq-link a {
+    color: var(--color-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-icon::before,
+    .faq-icon::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function initFaq() {
+    document.querySelectorAll<HTMLElement>('[data-faq]').forEach((list) => {
+      if (list.dataset.ready) return;
+      list.dataset.ready = '1';
+      list.addEventListener('click', (event) => {
+        const button = (event.target as Element).closest<HTMLButtonElement>('.faq-q');
+        if (!button) return;
+        const open = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!open));
+        const panel = document.getElementById(button.getAttribute('aria-controls') || '');
+        if (panel) panel.hidden = open;
+      });
+    });
+  }
+
+  initFaq();
+  document.addEventListener('astro:page-load', initFaq);
+</script>

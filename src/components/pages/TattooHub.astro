@@ -6,20 +6,23 @@ import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GuideHero from '../../components/GuideHero.astro';
 import PreviewToolTeaser from '../PreviewToolTeaser.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
 import { thumb } from '../../data/images';
+import Faq from '../Faq.astro';
+import { getFaq, faqSchema } from '../../data/faq';
 
 const guides = await getLocalizedCollection('dovme-rehberi', lang);
+const faq = await getFaq(lang, 'tattoo');
 ---
 
 <BaseLayout
   title={t('tattoo.pageTitle')}
   description={t('tattoo.pageDesc')}
   path={L('/dovme')}
+  jsonLd={faqSchema(faq)}
 >
   <GuideHero
     eyebrow={t('nav.tattoo')}
@@ -66,6 +69,8 @@ const guides = await getLocalizedCollection('dovme-rehberi', lang);
       </div>
     </div>
   </section>
+
+  <Faq items={faq} heading={t('faq.title')} id="faq-tattoo" />
 </BaseLayout>
 
 <style>

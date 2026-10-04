@@ -6,21 +6,24 @@ import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import GuideHero from '../../components/GuideHero.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
 import { site } from '../../data/site';
 import { thumb } from '../../data/images';
+import Faq from '../Faq.astro';
+import { getFaq, faqSchema } from '../../data/faq';
 
 const guides = await getLocalizedCollection('piercing-rehberi', lang);
 const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
+const faq = await getFaq(lang, 'piercing');
 ---
 
 <BaseLayout
   title={t('piercing.pageTitle')}
   description={t('piercing.pageDesc')}
   path={L('/piercing')}
+  jsonLd={faqSchema(faq)}
 >
   <GuideHero
     eyebrow={t('nav.piercing')}
@@ -47,7 +50,7 @@ const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
       <div class="jewelry-visual">
         <a href={site.jewelryShopUrl} target="_blank" rel="noopener" aria-label={t('jewelry.alt')}>
           <img
-            src="/brand/piercingland-logo.png"
+            src="/brand/piercingland-logo-600.png"
             alt={t('jewelry.alt')}
             loading="lazy"
             width="900"
@@ -120,6 +123,8 @@ const areas = await getLocalizedCollection('piercing-bolgeleri', lang);
       </div>
     </div>
   </section>
+
+  <Faq items={faq} heading={t('faq.title')} id="faq-piercing" />
 </BaseLayout>
 
 <style>

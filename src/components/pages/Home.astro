@@ -5,11 +5,12 @@ import PreviewToolTeaser from '../PreviewToolTeaser.astro';
 import { site } from '../../data/site';
 import { topPortfolio, studioPhotos } from '../../data/gallery';
 import { tattooPricing } from '../../data/prices';
-import { getCollection } from 'astro:content';
 import { thumb } from '../../data/images';
 import { langFromPath, localizePath, LANG_LABELS } from '../../i18n/config';
 import { useTranslations } from '../../i18n/ui';
 import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
+import Faq from '../Faq.astro';
+import { getFaq, faqSchema } from '../../data/faq';
 
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
@@ -20,9 +21,15 @@ const artists = await getLocalizedCollection('sanatcilar', lang);
 const artist = artists[0];   // panelden silinebilir; aşağıda koşullu render ediliyor
 const teaserImages = topPortfolio.slice(0, 8);
 const studioTeaser = studioPhotos.slice(0, 3);
+const faq = await getFaq(lang, 'general');
 ---
 
-<BaseLayout title={t('home.pageTitle')} description={lang === 'en' && (site as any).descriptionEn ? (site as any).descriptionEn : site.description} path={L('/')}>
+<BaseLayout
+  title={t('home.pageTitle')}
+  description={lang === 'en' && (site as any).descriptionEn ? (site as any).descriptionEn : site.description}
+  path={L('/')}
+  jsonLd={faqSchema(faq)}
+>
   <Hero />
 
   <section class="section pillars" id="hero-next">
@@ -51,7 +58,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
       <h2>{t('home.services.h')}</h2>
       <div class="service-grid">
         <a href={L('/dovme')} class="service-card" data-reveal>
-          <img src={teaserImages[0] ?? '/brand/og-default.jpg'} alt={t('nav.tattoo')} loading="lazy" />
+          <img src={teaserImages[0] ?? '/brand/og-default.jpg'} alt={t('nav.tattoo')} loading="lazy" decoding="async" width="800" height="1000" />
           <div class="service-overlay">
             <h3>{t('nav.tattoo')}</h3>
             <p>{t('home.tattooCard.p1')} {tattooPricing.openingPrice.toLocaleString(priceLocale)} {tattooPricing.currency}{t('home.tattooCard.p2')}</p>
@@ -59,7 +66,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
           </div>
         </a>
         <a href={L('/piercing')} class="service-card" data-reveal>
-          <img src="/images/piercing/kulak/kulak-01.jpg" alt="Piercing" loading="lazy" />
+          <img src="/images/piercing/kulak/kulak-01.jpg" alt="Piercing" loading="lazy" decoding="async" width="800" height="1000" />
           <div class="service-overlay">
             <h3>Piercing</h3>
             <p>{t('home.piercingCard.p')}</p>
@@ -127,7 +134,7 @@ const studioTeaser = studioPhotos.slice(0, 3);
     <div class="container jewelry-inner surface" data-reveal>
       <div class="jewelry-visual">
         <img
-          src="/brand/piercingland-logo.png"
+          src="/brand/piercingland-logo-600.png"
           alt={t('jewelry.alt')}
           loading="lazy"
           width="900"
@@ -145,6 +152,8 @@ const studioTeaser = studioPhotos.slice(0, 3);
       </div>
     </div>
   </section>
+
+  <Faq items={faq} heading={t('faq.title')} id="faq-general" />
 
   <section class="section final-cta">
     <div class="container cta-box surface" data-reveal>
