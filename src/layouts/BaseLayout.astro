@@ -4,8 +4,11 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
 import Lightbox from '../components/Lightbox.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+import { analytics } from '../data/analytics';
 import SEO from '../components/SEO.astro';
 import { langFromPath, LANG_LABELS } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
 import '../styles/global.css';
 
 interface Props {
@@ -23,6 +26,38 @@ const { title, description, path, image, noindex, jsonLd } = Astro.props;
 // bileşenler de aynı şekilde kendileri buluyor. Böylece iki dil eklemek
 // sayfa dosyalarında imza değişikliği gerektirmedi.
 const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+
+/**
+ * İçerik Güvenliği Politikası (CSP). Statik barındırmada istek başına nonce
+ * üretilemediği ve Astro küçük betikleri sayfaya gömdüğü için `script-src`
+ * 'unsafe-inline' içeriyor; yine de harici betik/çerçeve/bağlantı kaynağı, eklenti
+ * ve <base>/form hedefi kısıtlanıyor — yani sayfaya sızan bir içerik başka bir
+ * sunucuya veri taşıyamaz, yabancı bir betik yükleyemez.
+ *
+ * Kaynaklar sitenin gerçekten kullandıklarıyla sınırlı:
+ *  - staticimgly.com: 3D/fotoğraf aracının arka plan temizleme modeli (fetch)
+ *  - google.com: gömülü harita (çerçeve; yalnızca çerez onayından sonra oluşuyor)
+ *  - googletagmanager/google-analytics: yalnızca GA/GTM kimliği tanımlıysa
+ *  - 'wasm-unsafe-eval' + blob: işçi: ONNX modelini çalıştıran WebAssembly
+ * `frame-ancestors` meta etiketinde geçerli olmadığı için sunucudaki
+ * X-Frame-Options başlığı onu karşılıyor (public/.htaccess).
+ * Yeni bir harici hizmet eklenirse buraya da eklenmeli; `npm test` ihlalleri yakalar.
+ */
+const googleOn = analytics.enabled;
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${googleOn ? ' https://www.googletagmanager.com' : ''}`,
+  "style-src 'self' 'unsafe-inline'",
+  `img-src 'self' data: blob:${googleOn ? ' https://www.googletagmanager.com https://*.google-analytics.com' : ''}`,
+  "font-src 'self' data:",
+  `connect-src 'self' https://staticimgly.com${googleOn ? ' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net' : ''}`,
+  'frame-src https://www.google.com',
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join('; ');
 ---
 
 <!doctype html>
@@ -31,15 +66,20 @@ const lang = langFromPath(Astro.url.pathname);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <meta http-equiv="Content-Security-Policy" content={csp} />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/png" href="/brand/favicon-32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="/brand/favicon-192.png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <SEO title={title} description={description} path={path} image={image} noindex={noindex} jsonLd={jsonLd} />
     <ClientRouter />
   </head>
   <body>
+    <a class="skip-link" href="#main">{t('a11y.skip')}</a>
+    <CookieConsent />
     <Header />
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />

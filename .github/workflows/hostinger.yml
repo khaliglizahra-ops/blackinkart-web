@@ -24,7 +24,22 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      # Analitik kimlikleri depoya yazılmaz: GitHub → Settings → Secrets and
+      # variables → Actions → "Variables" bölümünden okunur. Boşsa site hiçbir
+      # analitik kodu yüklemez (bkz. .env.example).
       - run: npm run build
+        env:
+          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          GTM_ID: ${{ vars.GTM_ID }}
+
+      # Derlenmiş siteyi denetler (SEO, bağlantılar, yasal sayfalar, güvenlik
+      # başlıkları). Yayını ENGELLEMEZ: panelden kaydedilen bir içerik
+      # değişikliği bir test yüzünden yayınlanamaz hale gelmesin diye; sonuç
+      # Actions günlüğünde ve uyarı olarak görünür.
+      - name: Testleri çalıştır (yayını engellemez)
+        run: npm test
+        continue-on-error: true
 
       - name: FTP ile Hostinger'a yükle
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

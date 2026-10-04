@@ -35,6 +35,8 @@ export const ROUTES: Record<string, string> = {
   '/hijyen-ve-guvenlik': '/hygiene-and-safety',
   '/hakkimizda-iletisim': '/about-contact',
   '/randevu': '/booking',
+  '/gizlilik-politikasi': '/privacy-policy',
+  '/kullanim-sartlari': '/terms-of-use',
   '/kvkk': '/privacy-notice',
   '/cerez-politikasi': '/cookie-policy',
   '/yas-ve-onam-politikasi': '/age-and-consent-policy',

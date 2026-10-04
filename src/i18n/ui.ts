@@ -74,6 +74,42 @@ export const ui = {
     'legal.kvkk': 'KVKK Aydınlatma Metni',
     'legal.cookies': 'Çerez Politikası',
     'legal.age': '18 Yaş ve Onam Politikası',
+    'legal.privacy': 'Gizlilik Politikası',
+    'legal.terms': 'Kullanım Şartları',
+    'legal.cookieSettings': 'Çerez Tercihleri',
+    'faq.title': 'Sık Sorulan Sorular',
+
+    // — Erişilebilirlik —
+    'a11y.skip': 'İçeriğe geç',
+    'a11y.quickContact': 'Hızlı iletişim',
+
+    // — Çerez onayı —
+    'consent.title': 'Çerez tercihleriniz',
+    'consent.text':
+      'Sitenin çalışması için gerekenler dışında hiçbir şey kendiliğinden yüklenmez. Harita gibi harici içerikler ve analitik, yalnızca siz izin verirseniz çalışır.',
+    'consent.policy': 'Çerez Politikası',
+    'consent.acceptAll': 'Tümünü kabul et',
+    'consent.rejectAll': 'Tümünü reddet',
+    'consent.manage': 'Tercihleri yönet',
+    'consent.dialogTitle': 'Çerez tercihleri',
+    'consent.dialogIntro': 'Her kategoriyi ayrı ayrı açıp kapatabilirsiniz. Zorunlu olanlar sitenin çalışması için gerekli olduğundan kapatılamaz.',
+    'consent.save': 'Seçimimi kaydet',
+    'consent.close': 'Kapat',
+    'consent.alwaysOn': 'Her zaman açık',
+    'consent.unused': 'Şu an kullanılmıyor',
+    'consent.cat.necessary': 'Zorunlu',
+    'consent.cat.necessary.desc': 'Tercihinizi hatırlamak ve sitenin düzgün çalışması için gerekli. Kapatılamaz.',
+    'consent.cat.analytics': 'Analitik',
+    'consent.cat.analytics.desc': 'Sayfaların nasıl kullanıldığını ölçmemize yardım eder. Yalnızca izin verirseniz çalışır.',
+    'consent.cat.analytics.off': 'Bu sitede şu an analitik kullanılmıyor. Kullanılmaya başlanırsa izniniz olmadan çalışmaz.',
+    'consent.cat.marketing': 'Pazarlama',
+    'consent.cat.marketing.desc': 'Reklam ve yeniden pazarlama etiketleri. Yalnızca izin verirseniz çalışır.',
+    'consent.cat.marketing.off': 'Bu sitede şu an pazarlama çerezi kullanılmıyor.',
+    'consent.cat.functional': 'Fonksiyonel',
+    'consent.cat.functional.desc': 'Google Haritalar gibi harici içeriklerin sayfada gösterilmesini sağlar. Yüklendiğinde tarayıcınız Google ile bağlantı kurar.',
+    'embed.mapText': 'Harita Google tarafından sağlanır. Göstermek için yüklenmesine izin vermeniz gerekir; yüklendiğinde tarayıcınız Google ile bağlantı kurar.',
+    'embed.mapLoad': 'Haritayı göster',
+    'embed.mapOpen': "Google Haritalar'da aç",
 
     // — Görsel görüntüleyici —
     'lightbox.label': 'Görsel görüntüleyici',
@@ -295,6 +331,11 @@ export const ui = {
     'booking.msg.size': 'Boyut',
     'booking.msg.firstTattoo': 'İlk dövme',
     'booking.msg.unspecified': 'Belirtilmedi',
+    'booking.err.required': 'Bu alan zorunlu.',
+    'booking.err.nameShort': 'Lütfen adınızı yazın (en az 2 karakter).',
+    'booking.err.past': 'Geçmiş bir gün seçilemez.',
+    'booking.err.fix': 'Lütfen işaretli alanları düzeltin.',
+    'booking.opening': 'WhatsApp açılıyor…',
     'booking.msg.extra': 'Ek not',
 
 
@@ -369,6 +410,42 @@ export const ui = {
     'legal.kvkk': 'Privacy Notice (KVKK)',
     'legal.cookies': 'Cookie Policy',
     'legal.age': 'Age & Consent Policy',
+    'legal.privacy': 'Privacy Policy',
+    'legal.terms': 'Terms of Use',
+    'legal.cookieSettings': 'Cookie Preferences',
+    'faq.title': 'Frequently Asked Questions',
+
+    // — Accessibility —
+    'a11y.skip': 'Skip to content',
+    'a11y.quickContact': 'Quick contact',
+
+    // — Cookie consent —
+    'consent.title': 'Your cookie preferences',
+    'consent.text':
+      'Nothing loads on its own except what the site needs to work. External content such as the map, and analytics, only run if you allow them.',
+    'consent.policy': 'Cookie Policy',
+    'consent.acceptAll': 'Accept all',
+    'consent.rejectAll': 'Reject all',
+    'consent.manage': 'Manage preferences',
+    'consent.dialogTitle': 'Cookie preferences',
+    'consent.dialogIntro': 'You can switch each category on or off separately. Necessary items cannot be switched off because the site needs them to work.',
+    'consent.save': 'Save my choice',
+    'consent.close': 'Close',
+    'consent.alwaysOn': 'Always on',
+    'consent.unused': 'Not in use',
+    'consent.cat.necessary': 'Necessary',
+    'consent.cat.necessary.desc': 'Needed to remember your choice and keep the site working. Cannot be switched off.',
+    'consent.cat.analytics': 'Analytics',
+    'consent.cat.analytics.desc': 'Helps us measure how pages are used. Runs only if you allow it.',
+    'consent.cat.analytics.off': 'This site does not currently use analytics. If that changes, it will not run without your permission.',
+    'consent.cat.marketing': 'Marketing',
+    'consent.cat.marketing.desc': 'Advertising and remarketing tags. Runs only if you allow it.',
+    'consent.cat.marketing.off': 'This site does not currently use marketing cookies.',
+    'consent.cat.functional': 'Functional',
+    'consent.cat.functional.desc': 'Lets external content such as Google Maps show on the page. When it loads, your browser connects to Google.',
+    'embed.mapText': 'The map is provided by Google. To show it you need to allow it to load; once loaded, your browser connects to Google.',
+    'embed.mapLoad': 'Show map',
+    'embed.mapOpen': 'Open in Google Maps',
 
     // — Lightbox —
     'lightbox.label': 'Image viewer',
@@ -423,7 +500,7 @@ export const ui = {
     'home.final.p': "Let's talk through the design you have in mind at our studio on Aşkabat Caddesi, Çankaya, Ankara.",
     'home.pageTitle': 'Tattoo & Piercing Studio in Ankara Çankaya',
     'tattoo.hubTitle': 'Tattoo',
-    'tattoo.pageTitle': 'Tattoo Studio in Ankara — Styles, Aftercare & Prices',
+    'tattoo.pageTitle': 'Tattoo Studio in Ankara — Styles, Care & Prices',
     'tattoo.pageDesc': "Everything you need to know about tattoos in Ankara, Çankaya: styles, techniques, the stages of the process, aftercare and pricing.",
     'tattoo.hubLead': 'Articles to help you make an informed decision about a permanent tattoo: styles, techniques, the stages of the process, aftercare and more.',
     'cta.browsePortfolio': 'Browse the Portfolio',
@@ -590,6 +667,11 @@ export const ui = {
     'booking.msg.size': 'Size',
     'booking.msg.firstTattoo': 'First tattoo',
     'booking.msg.unspecified': 'Not specified',
+    'booking.err.required': 'This field is required.',
+    'booking.err.nameShort': 'Please enter your name (at least 2 characters).',
+    'booking.err.past': 'A past date cannot be chosen.',
+    'booking.err.fix': 'Please correct the highlighted fields.',
+    'booking.opening': 'Opening WhatsApp…',
     'booking.msg.extra': 'Additional note',
 
 

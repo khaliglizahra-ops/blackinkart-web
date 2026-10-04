@@ -1,0 +1,485 @@
+---
+/**
+ * Çerez onayı: altta bir şerit ("Tümünü kabul et / Tümünü reddet / Tercihleri
+ * yönet") ve kategori kategori seçim yapılan bir iletişim kutusu.
+ *
+ * - Zorunlu dışındaki hiçbir şey (Google Haritalar, analitik, pazarlama) ziyaretçi
+ *   izin vermeden yüklenmez. Harita yer tutucuları [data-consent-embed]
+ *   işaretiyle bu betik tarafından yönetilir.
+ * - Reddetmek kabul etmek kadar kolay: iki düğme eşit boyutta, aynı yerde.
+ * - Footer'daki "Çerez Tercihleri" ve çerez politikası sayfasındaki düğme
+ *   `data-consent-open` ile aynı iletişim kutusunu açar.
+ * - Mantık src/lib/consent.js'te (test edilebilir, DOM'suz); analitik yükleme
+ *   src/lib/analytics-client.js'te. Kimlik yoksa analitik/pazarlama kapalı
+ *   gösterilir, dürüstçe "şu an kullanılmıyor" yazar.
+ */
+import { useTranslations } from '../i18n/ui';
+import { langFromPath, localizePath } from '../i18n/config';
+import { analytics } from '../data/analytics';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const policy = localizePath('/cerez-politikasi', lang);
+
+const analyticsOn = analytics.enabled;
+const marketingOn = analytics.provider === 'gtm';
+---
+
+<div
+  id="consent-root"
+  data-provider={analytics.provider ?? ''}
+  data-ga={analytics.gaId}
+  data-gtm={analytics.gtmId}
+>
+  <section class="consent-banner" id="consent-banner" role="region" aria-labelledby="consent-title" hidden>
+    <h2 id="consent-title">{t('consent.title')}</h2>
+    <p>
+      {t('consent.text')}
+      <a href={policy}>{t('consent.policy')}</a>
+    </p>
+    <div class="consent-actions">
+      <button type="button" class="btn btn-primary" data-consent-action="accept-all">{t('consent.acceptAll')}</button>
+      <button type="button" class="btn btn-outline" data-consent-action="reject-all">{t('consent.rejectAll')}</button>
+      <button type="button" class="btn btn-outline manage" data-consent-action="manage">{t('consent.manage')}</button>
+    </div>
+  </section>
+
+  <dialog class="consent-dialog" id="consent-dialog" aria-labelledby="consent-dialog-title">
+    <button type="button" class="consent-close" data-consent-action="close" aria-label={t('consent.close')}>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z" /></svg>
+    </button>
+    <h2 id="consent-dialog-title">{t('consent.dialogTitle')}</h2>
+    <p class="intro">{t('consent.dialogIntro')}</p>
+
+    <form id="consent-form" method="dialog">
+      <ul class="cats">
+        <li>
+          <label for="cc-necessary">
+            <span class="cat-title">{t('consent.cat.necessary')}</span>
+            <span class="cat-desc" id="cc-necessary-d">{t('consent.cat.necessary.desc')}</span>
+          </label>
+          <span class="state">
+            <input type="checkbox" id="cc-necessary" checked disabled aria-describedby="cc-necessary-d" />
+            <span class="state-text">{t('consent.alwaysOn')}</span>
+          </span>
+        </li>
+        <li>
+          <label for="cc-analytics">
+            <span class="cat-title">{t('consent.cat.analytics')}</span>
+            <span class="cat-desc" id="cc-analytics-d">{analyticsOn ? t('consent.cat.analytics.desc') : t('consent.cat.analytics.off')}</span>
+          </label>
+          <span class="state">
+            <input type="checkbox" id="cc-analytics" name="analytics" disabled={!analyticsOn} aria-describedby="cc-analytics-d" />
+            {!analyticsOn && <span class="state-text">{t('consent.unused')}</span>}
+          </span>
+        </li>
+        <li>
+          <label for="cc-marketing">
+            <span class="cat-title">{t('consent.cat.marketing')}</span>
+            <span class="cat-desc" id="cc-marketing-d">{marketingOn ? t('consent.cat.marketing.desc') : t('consent.cat.marketing.off')}</span>
+          </label>
+          <span class="state">
+            <input type="checkbox" id="cc-marketing" name="marketing" disabled={!marketingOn} aria-describedby="cc-marketing-d" />
+            {!marketingOn && <span class="state-text">{t('consent.unused')}</span>}
+          </span>
+        </li>
+        <li>
+          <label for="cc-functional">
+            <span class="cat-title">{t('consent.cat.functional')}</span>
+            <span class="cat-desc" id="cc-functional-d">{t('consent.cat.functional.desc')}</span>
+          </label>
+          <span class="state">
+            <input type="checkbox" id="cc-functional" name="functional" aria-describedby="cc-functional-d" />
+          </span>
+        </li>
+      </ul>
+
+      <div class="dialog-actions">
+        <button type="submit" class="btn btn-primary" data-consent-action="save">{t('consent.save')}</button>
+        <button type="button" class="btn btn-outline" data-consent-action="accept-all">{t('consent.acceptAll')}</button>
+        <button type="button" class="btn btn-outline" data-consent-action="reject-all">{t('consent.rejectAll')}</button>
+      </div>
+    </form>
+  </dialog>
+</div>
+
+<style>
+  .consent-banner {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 90;
+    width: min(460px, calc(100vw - 2rem));
+    padding: 1.2rem 1.3rem 1.3rem;
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
+  }
+
+  .consent-banner[hidden] {
+    display: none;
+  }
+
+  .consent-banner h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .consent-banner p {
+    font-size: 0.84rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .consent-banner p a {
+    color: var(--color-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .consent-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .consent-actions .btn {
+    white-space: normal;
+    padding: 0.8em 1em;
+    font-size: 0.86rem;
+  }
+
+  .consent-actions .manage {
+    grid-column: 1 / -1;
+  }
+
+  /* — iletişim kutusu — */
+  .consent-dialog {
+    width: min(560px, calc(100vw - 2rem));
+    max-height: min(90vh, 760px);
+    padding: 1.6rem 1.5rem 1.5rem;
+    background: var(--color-ink-900);
+    color: var(--color-ivory);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    overflow-y: auto;
+  }
+
+  .consent-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+  }
+
+  .consent-dialog h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+    padding-right: 2.5rem;
+  }
+
+  .consent-dialog .intro {
+    font-size: 0.86rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .consent-close {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    color: var(--color-ivory-dim);
+    border: 1px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .consent-close:hover {
+    color: var(--color-gold);
+    border-color: var(--color-hairline);
+  }
+
+  .cats {
+    list-style: none;
+    margin: 0 0 1.3rem;
+    padding: 0;
+  }
+
+  .cats li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    padding-block: 0.95rem;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .cats li:last-child {
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .cats label {
+    display: block;
+    cursor: pointer;
+  }
+
+  .cat-title {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-ivory);
+  }
+
+  .cat-desc {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--color-ivory-dim);
+  }
+
+  .state {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: 0.15rem;
+  }
+
+  .state-text {
+    font-size: 0.74rem;
+    color: var(--color-ivory-faint);
+    white-space: nowrap;
+  }
+
+  .state input {
+    width: 1.35rem;
+    height: 1.35rem;
+    accent-color: var(--color-gold);
+    cursor: pointer;
+  }
+
+  .state input:disabled {
+    cursor: not-allowed;
+  }
+
+  .dialog-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .dialog-actions .btn {
+    flex: 1 1 140px;
+    padding: 0.8em 1em;
+    font-size: 0.86rem;
+    white-space: normal;
+  }
+
+  @media (max-width: 560px) {
+    .consent-banner {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      border-inline: 0;
+      border-bottom: 0;
+      padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+    }
+
+    /* Telefonda şerit ekranın yarısını yememeli: kabul/reddet yan yana, yönet altta. */
+    .consent-banner h2 {
+      font-size: 1.1rem;
+    }
+
+    .consent-banner p {
+      font-size: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .consent-actions .btn {
+      padding: 0.7em 0.5em;
+      font-size: 0.82rem;
+    }
+  }
+</style>
+
+<script>
+  import { createStore, acceptAll, rejectAll, fromChoices, isAllowed } from '../lib/consent.js';
+  import { configureAnalytics, applyAnalyticsConsent, pageView, track } from '../lib/analytics-client.js';
+
+  function safeStorage(): Storage | null {
+    try {
+      return window.localStorage;
+    } catch {
+      return null; // gizli mod / engellenmiş depolama
+    }
+  }
+
+  const store = createStore(safeStorage());
+  let consent = store.read();
+
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T | null;
+
+  function readConfig() {
+    const root = $('consent-root');
+    configureAnalytics({
+      provider: root?.dataset.provider || null,
+      gaId: root?.dataset.ga || '',
+      gtmId: root?.dataset.gtm || '',
+    });
+  }
+
+  function syncDialog() {
+    const set = (id: string, value: boolean) => {
+      const el = $<HTMLInputElement>(id);
+      if (el && !el.disabled) el.checked = value;
+    };
+    set('cc-analytics', isAllowed(consent, 'analytics'));
+    set('cc-marketing', isAllowed(consent, 'marketing'));
+    set('cc-functional', isAllowed(consent, 'functional'));
+  }
+
+  function render() {
+    const banner = $('consent-banner');
+    if (banner) banner.hidden = consent !== null;
+    syncDialog();
+  }
+
+  // Harici içerik: izin yokken yalnızca yer tutucu var; iframe hiç oluşturulmuyor.
+  function loadEmbed(el: HTMLElement) {
+    const src = el.dataset.embedSrc;
+    if (!src || el.dataset.loaded) return;
+    const frame = document.createElement('iframe');
+    frame.src = src;
+    frame.title = el.dataset.embedTitle || '';
+    frame.referrerPolicy = 'no-referrer-when-downgrade';
+    frame.loading = 'lazy';
+    el.querySelector('[data-embed-placeholder]')?.setAttribute('hidden', '');
+    el.append(frame);
+    el.dataset.loaded = '1';
+  }
+
+  function applyEmbeds() {
+    if (!isAllowed(consent, 'functional')) return;
+    document.querySelectorAll<HTMLElement>('[data-consent-embed]').forEach(loadEmbed);
+  }
+
+  function applyAll() {
+    applyEmbeds();
+    applyAnalyticsConsent(consent);
+  }
+
+  function save(next: ReturnType<typeof acceptAll>) {
+    consent = next;
+    store.write(next);
+    render();
+    applyAll();
+    closeDialog();
+  }
+
+  function openDialog() {
+    const dialog = $<HTMLDialogElement>('consent-dialog');
+    if (!dialog) return;
+    syncDialog();
+    if (typeof dialog.showModal === 'function') {
+      if (!dialog.open) dialog.showModal();
+    } else {
+      dialog.setAttribute('open', '');
+    }
+  }
+
+  function closeDialog() {
+    const dialog = $<HTMLDialogElement>('consent-dialog');
+    if (!dialog) return;
+    if (typeof dialog.close === 'function') dialog.close();
+    else dialog.removeAttribute('open');
+  }
+
+  function choicesFromDialog() {
+    const checked = (id: string) => Boolean($<HTMLInputElement>(id)?.checked);
+    return fromChoices({
+      analytics: checked('cc-analytics'),
+      marketing: checked('cc-marketing'),
+      functional: checked('cc-functional'),
+    });
+  }
+
+  // Olay yetkilendirme: ClientRouter sayfa gövdesini değiştirdiğinde bile çalışır.
+  function onClick(event: MouseEvent) {
+    const target = event.target as Element | null;
+    if (!target) return;
+
+    const action = target.closest<HTMLElement>('[data-consent-action]')?.dataset.consentAction;
+    if (action === 'accept-all') return void save(acceptAll());
+    if (action === 'reject-all') return void save(rejectAll());
+    if (action === 'manage') return void openDialog();
+    if (action === 'close') return void closeDialog();
+    if (action === 'save') {
+      event.preventDefault();
+      return void save(choicesFromDialog());
+    }
+
+    if (target.closest('[data-consent-open]')) {
+      event.preventDefault();
+      return void openDialog();
+    }
+
+    // Tek bir harici içeriği (ör. haritayı) yalnızca bu seferlik yükle; kalıcı izin vermez.
+    const loadBtn = target.closest<HTMLElement>('[data-embed-load]');
+    if (loadBtn) {
+      const embed = loadBtn.closest<HTMLElement>('[data-consent-embed]');
+      if (embed) loadEmbed(embed);
+      return;
+    }
+
+    // Önemli eylem takibi: yalnızca analitik izni varsa bir şey gönderir.
+    const link = target.closest<HTMLAnchorElement>('a[href]');
+    if (link) {
+      const href = link.getAttribute('href') || '';
+      const explicit = link.dataset.track;
+      let name = explicit || '';
+      if (!name) {
+        if (href.startsWith('tel:')) name = 'click_phone';
+        else if (href.startsWith('mailto:')) name = 'click_email';
+        else if (/^https?:\/\/wa\.me\//.test(href)) name = 'click_whatsapp';
+        else if (/instagram\.com/.test(href)) name = 'click_instagram';
+        else if (/\/(randevu|booking)$/.test(href.split('?')[0])) name = 'cta_book';
+        else if (/piercingland\.com\.tr/.test(href)) name = 'click_jewelry_shop';
+      }
+      if (name) track(name, { link_url: href, link_text: (link.textContent || '').trim().slice(0, 60) });
+    }
+  }
+
+  function initPage() {
+    render();
+    applyEmbeds();
+    pageView();
+  }
+
+  // Formlar `bia:track` olayıyla önemli eylemleri bildirir (ör. başarılı gönderim).
+  document.addEventListener('bia:track', (e) => {
+    const detail = (e as CustomEvent).detail || {};
+    if (detail.name) track(detail.name, detail.params || {});
+  });
+
+  readConfig();
+  document.addEventListener('click', onClick);
+  document.addEventListener('astro:page-load', initPage);
+  // Dialog dışına (arka plana) tıklayınca kapat.
+  document.addEventListener('click', (e) => {
+    const dialog = $<HTMLDialogElement>('consent-dialog');
+    if (dialog && e.target === dialog) closeDialog();
+  });
+
+  initPage();
+  applyAnalyticsConsent(consent);
+
+  // Başkalarının (ör. test) okuyabilmesi için küçük bir açık arayüz.
+  (window as unknown as { biaConsent: unknown }).biaConsent = {
+    get: () => consent,
+    open: openDialog,
+  };
+</script>

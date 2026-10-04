@@ -1,0 +1,312 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { site } from '../../data/site';
+import { legal } from '../../data/legal';
+import { analytics } from '../../data/analytics';
+import { langFromPath, localizePath } from '../../i18n/config';
+
+// Yasal metin sayfaya özgü; iki dil yan yana duruyor. Metin, sitenin gerçekte
+// yaptıklarına dayanıyor (iletişim formu e-postası, WhatsApp randevusu, Google
+// Haritalar, tarayıcıda çalışan araç). Site davranışı değişirse burası da
+// güncellenmeli ve `legal.updatedAt` yenilenmeli.
+const lang = langFromPath(Astro.url.pathname);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
+const path = localizePath('/gizlilik-politikasi', lang);
+const updated = new Date(legal.updatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'tr-TR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+const kvkk = localizePath('/kvkk', lang);
+const cookiePolicy = localizePath('/cerez-politikasi', lang);
+const agePolicy = localizePath('/yas-ve-onam-politikasi', lang);
+
+const controllerRows: [string, string | null][] = [
+  [L('İşletme', 'Business'), site.name],
+  [L('Ticaret unvanı', 'Registered name'), legal.companyTitle],
+  [L('Adres', 'Address'), site.address.full],
+  [L('Vergi dairesi / numarası', 'Tax office / number'), legal.taxOffice && legal.taxNumber ? `${legal.taxOffice} / ${legal.taxNumber}` : null],
+  [L('MERSİS no', 'MERSIS no.'), legal.mersisNo],
+  [L('KEP adresi', 'KEP (registered e-mail) address'), legal.kepAddress],
+  [L('E-posta', 'E-mail'), site.email],
+  [L('Telefon', 'Phone'), site.phone],
+];
+---
+
+<BaseLayout
+  title={L('Gizlilik Politikası', 'Privacy Policy')}
+  description={L(
+    'Black Ink Art Tattoo Piercing web sitesinde hangi kişisel verilerin işlendiği, çerezler, üçüncü taraf hizmetler ve KVKK kapsamındaki haklarınız.',
+    'Which personal data the Black Ink Art Tattoo Piercing website processes, cookies, third-party services and your rights under the KVKK.'
+  )}
+  path={path}
+  noindex={true}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: L('Gizlilik Politikası', 'Privacy Policy') }]} />
+      <p class="eyebrow">{L('Yasal', 'Legal')}</p>
+      <h1>{L('Gizlilik Politikası', 'Privacy Policy')}</h1>
+      <p class="updated">{L('Son güncelleme', 'Last updated')}: {updated}</p>
+
+      <div class="prose">
+        <p>
+          {L(
+            'Bu metin, bu siteyi ziyaret ettiğinizde hangi bilgilerin işlendiğini, bunun nedenini ve haklarınızı anlatır. Stüdyoda yüz yüze verdiğiniz bilgiler için ',
+            'This page explains what information is processed when you visit this website, why, and what your rights are. For information you give us in person at the studio, see the '
+          )}
+          <a href={kvkk}>{L('KVKK Aydınlatma Metni', 'Privacy Notice (KVKK)')}</a>{L("'ne bakın.", '.')}
+        </p>
+
+        <h2>{L('1. Veri sorumlusu', '1. Data controller')}</h2>
+        <dl class="facts">
+          {controllerRows
+            .filter(([, value]) => value)
+            .map(([label, value]) => (
+              <>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </>
+            ))}
+        </dl>
+
+        <h2>{L('2. Hangi bilgileri, nasıl işliyoruz?', '2. What we process, and how')}</h2>
+        <ul>
+          <li>
+            <strong>{L('İletişim formu.', 'Contact form.')}</strong>
+            {L(
+              ' Adınız, telefon numaranız ya da e-posta adresiniz ve mesajınız. Gönder dediğinizde bu bilgiler stüdyonun e-posta kutusuna iletilir; site bunları bir veri tabanında saklamaz.',
+              ' Your name, phone number or e-mail address and your message. When you press send, this is delivered to the studio\'s mailbox; the site does not keep it in a database.'
+            )}
+          </li>
+          <li>
+            <strong>{L('Randevu formu.', 'Booking form.')}</strong>
+            {L(
+              ' Form yalnızca tarayıcınızda çalışır. Doldurduğunuz bilgiler bize ulaşmaz; "WhatsApp\'ta gönder"e bastığınızda hazır bir mesaj olarak kendi WhatsApp uygulamanızda açılır. Biz ancak WhatsApp\'tan gönderdiğiniz mesajı alırız.',
+              ' The form runs only in your browser. What you fill in does not reach us; when you press "send on WhatsApp" it opens as a ready-made message in your own WhatsApp app. We only receive the message you actually send on WhatsApp.'
+            )}
+          </li>
+          <li>
+            <strong>{L('3D ve fotoğraf deneme aracı.', '3D and photo try-on tool.')}</strong>
+            {L(
+              ' Yüklediğiniz fotoğraflar ve tasarımlar tarayıcınızda işlenir, sunucumuza gönderilmez. Arka plan temizleme için gereken model dosyaları aracı ilk kullandığınızda IMG.LY\'nin sunucusundan (staticimgly.com) indirilir; bu istek sırasında yalnızca IP adresiniz ve tarayıcı bilginiz o sunucuya ulaşır, fotoğraflarınız ulaşmaz.',
+              ' Photos and designs you add are processed in your browser and are not sent to our server. The model files needed for background removal are downloaded from IMG.LY\'s server (staticimgly.com) the first time you use the tool; for that request only your IP address and browser details reach that server, not your photos.'
+            )}
+          </li>
+          <li>
+            <strong>{L('Teknik veriler.', 'Technical data.')}</strong>
+            {L(
+              ' Barındırma sağlayıcımızın sunucusu, güvenlik ve işleyiş için standart erişim kayıtları tutabilir: IP adresi, tarayıcı ve cihaz bilgisi, istenen adres, zaman. İletişim formunda ayrıca istenmeyen mesajları (spam) engellemek için IP adresinizin doğrudan değil özet (hash) hâli ve gönderim zamanları 10 dakikalık bir sayaçta tutulur; bu kayıt mesajınızın içeriğiyle ilişkilendirilmez ve süresi dolunca sunucudan silinir.',
+              ' Our hosting provider\'s server may keep standard access logs for security and operation: IP address, browser and device details, the address requested, and the time. The contact form also keeps a one-way hash of your IP address (not the address itself) and the send times in a 10-minute counter to block spam; it is not linked to the content of your message and is deleted from the server once it expires.'
+            )}
+          </li>
+          <li>
+            <strong>{L('Doğrudan yazdıklarınız.', 'What you write to us directly.')}</strong>
+            {L(
+              ' Bize telefon, WhatsApp, e-posta ya da Instagram üzerinden ulaşırsanız o kanalda paylaştığınız bilgiler, o kanalın kendi koşullarına ek olarak randevunuzu yanıtlamak için kullanılır.',
+              ' If you reach us by phone, WhatsApp, e-mail or Instagram, what you share on that channel is used to answer your request, in addition to that channel\'s own terms.'
+            )}
+          </li>
+        </ul>
+
+        <h2>{L('3. Çerezler ve tarayıcı depolaması', '3. Cookies and browser storage')}</h2>
+        <p>
+          {L(
+            'Site kendi başına çerez bırakmaz. Tarayıcınızda yalnızca çerez tercihinizi hatırlamak için bir kayıt tutulur. Harita gibi harici içerikler ve (kullanılırsa) analitik ancak siz izin verirseniz çalışır. Ayrıntılı liste için ',
+            'The site does not set cookies of its own. Your browser keeps only one record, to remember your cookie choice. External content such as the map and, if used, analytics, only run if you allow them. For the full list see the '
+          )}
+          <a href={cookiePolicy}>{L('Çerez Politikası', 'Cookie Policy')}</a>{L("'na bakın. Tercihinizi sayfanın altındaki \"Çerez Tercihleri\" bağlantısından istediğiniz zaman değiştirebilirsiniz.", '. You can change your choice at any time from the "Cookie Preferences" link at the bottom of the page.')}
+        </p>
+
+        <h2>{L('4. Analitik', '4. Analytics')}</h2>
+        {analytics.enabled ? (
+          <p>
+            {L(
+              'Site, ziyaretlerin nasıl kullanıldığını ölçmek için Google Analytics\'i kullanır (Google Tag Manager aracılığıyla olabilir). Bu araç yalnızca çerez tercihlerinizde "Analitik"e izin verirseniz çalışır; izin vermezseniz hiçbir analitik kodu yüklenmez. İzninizi istediğiniz zaman geri çekebilirsiniz.',
+              'The site uses Google Analytics to measure how visits are used (this may run through Google Tag Manager). It runs only if you allow "Analytics" in your cookie preferences; if you do not, no analytics code is loaded. You can withdraw your permission at any time.'
+            )}
+          </p>
+        ) : (
+          <p>
+            {L(
+              'Bu site şu anda analitik ya da pazarlama aracı kullanmıyor. Kullanılmaya başlanırsa yalnızca çerez tercihlerinizde izin verirseniz çalışır ve bu metin güncellenir.',
+              'This site does not currently use any analytics or marketing tool. If that changes, it will run only if you allow it in your cookie preferences, and this page will be updated.'
+            )}
+          </p>
+        )}
+
+        <h2>{L('5. Amaçlar ve hukuki sebepler', '5. Purposes and legal grounds')}</h2>
+        <ul>
+          <li>{L('Mesajınızı ve randevu talebinizi yanıtlamak: bir sözleşmenin kurulmasıyla doğrudan ilgili olması (KVKK m.5/2-c).', 'Answering your message and booking request: it is directly related to forming a contract (KVKK art. 5/2-c).')}</li>
+          <li>{L('Siteyi güvenli ve çalışır tutmak, spam ve kötüye kullanımı önlemek: meşru menfaat (KVKK m.5/2-f).', 'Keeping the site secure and working, and preventing spam and misuse: legitimate interest (KVKK art. 5/2-f).')}</li>
+          <li>{L('Harici içerik ve (kullanılırsa) analitik: açık rızanız; çerez tercihlerinizle verilir ve geri çekilebilir.', 'External content and, if used, analytics: your explicit consent, given through your cookie preferences and withdrawable at any time.')}</li>
+          <li>{L('Yasal yükümlülükler: ilgili mevzuatın gerektirdiği hâllerde.', 'Legal obligations: where the applicable law requires it.')}</li>
+        </ul>
+
+        <h2>{L('6. Kullandığımız üçüncü taraf hizmetler', '6. Third-party services we use')}</h2>
+        <div class="scroll" tabindex="0" role="region" aria-label={L('Üçüncü taraf hizmetler tablosu', 'Third-party services table')}>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">{L('Hizmet', 'Service')}</th>
+                <th scope="col">{L('Ne için', 'What for')}</th>
+                <th scope="col">{L('Ulaşan bilgi', 'What reaches them')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Hostinger</th>
+                <td>{L('Site barındırma, e-posta gönderimi', 'Website hosting, sending e-mail')}</td>
+                <td>{L('Sunucu erişim kayıtları; iletişim formu mesajı', 'Server access logs; the contact form message')}</td>
+              </tr>
+              <tr>
+                <th scope="row">Microsoft (Outlook / Hotmail)</th>
+                <td>{L('Stüdyonun e-posta kutusu', 'The studio\'s mailbox')}</td>
+                <td>{L('İletişim formundan gelen e-posta', 'E-mail sent from the contact form')}</td>
+              </tr>
+              <tr>
+                <th scope="row">WhatsApp (Meta)</th>
+                <td>{L('Randevu mesajı, doğrudan yazışma', 'Booking message, direct chat')}</td>
+                <td>{L('WhatsApp\'tan gönderdiğiniz mesaj', 'The message you send on WhatsApp')}</td>
+              </tr>
+              <tr>
+                <th scope="row">Google</th>
+                <td>{L('Google Haritalar gömülü haritası (yalnızca izin verirseniz)', 'Embedded Google Maps (only if you allow it)')}</td>
+                <td>{L('IP adresi, tarayıcı bilgisi, Google çerezleri', 'IP address, browser details, Google cookies')}</td>
+              </tr>
+              {analytics.enabled && (
+                <tr>
+                  <th scope="row">Google Analytics</th>
+                  <td>{L('Ziyaret istatistikleri (yalnızca izin verirseniz)', 'Visit statistics (only if you allow it)')}</td>
+                  <td>{L('Sayfa görüntüleme ve etkileşim verileri, çerez kimliği', 'Page views and interaction data, a cookie ID')}</td>
+                </tr>
+              )}
+              <tr>
+                <th scope="row">IMG.LY</th>
+                <td>{L('Deneme aracında arka plan temizleme modelinin indirilmesi', 'Downloading the background-removal model for the try-on tool')}</td>
+                <td>{L('IP adresi, tarayıcı bilgisi', 'IP address, browser details')}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          {L(
+            'Instagram, Piercingland ve WhatsApp bağlantıları sizi başka sitelere götürür; oradaki veri işleme o sitenin kendi politikasına tabidir.',
+            'Links to Instagram, Piercingland and WhatsApp take you to other sites; data processing there is governed by that site\'s own policy.'
+          )}
+        </p>
+
+        <h2>{L('7. Yurt dışına aktarım', '7. Transfers abroad')}</h2>
+        <p>
+          {L(
+            'Yukarıdaki hizmetlerin sunucuları Türkiye dışında olabilir; bu durumda bilgileriniz yurt dışına aktarılabilir. Harita ve analitik için bu aktarım çerez tercihlerinizle verdiğiniz rızaya, mesaj ve randevu için ise talep ettiğiniz hizmetin yerine getirilmesine dayanır.',
+            'The servers of the services above may be outside Türkiye, in which case your information may be transferred abroad. For the map and analytics this rests on the consent you give through your cookie preferences; for messages and bookings, on carrying out the service you asked for.'
+          )}
+        </p>
+
+        <h2>{L('8. Saklama süresi', '8. Retention')}</h2>
+        <ul>
+          <li>{L('İletişim formu mesajları: talebinizi yanıtlamak için gereken süre boyunca, sonrasında yasal saklama zorunluluğu yoksa silinir.', 'Contact form messages: kept as long as needed to answer your request, then deleted unless the law requires us to keep them.')}</li>
+          <li>{L('Spam sayaç kaydı: 10 dakika.', 'Spam counter record: 10 minutes.')}</li>
+          <li>{L('Çerez tercihiniz: tarayıcınızda en fazla 12 ay; istediğiniz zaman tarayıcı verilerini silerek kaldırabilirsiniz.', 'Your cookie choice: up to 12 months in your browser; you can remove it at any time by clearing browser data.')}</li>
+          <li>{L('Sunucu erişim kayıtları: barındırma sağlayıcımızın kendi saklama süresi geçerlidir.', 'Server access logs: our hosting provider\'s own retention period applies.')}</li>
+        </ul>
+
+        <h2>{L('9. Güvenlik', '9. Security')}</h2>
+        <p>
+          {L(
+            'Site bağlantısı HTTPS ile korunur. Yönetim paneline yalnızca yetkili kişiler girebilir ve giriş denemeleri sınırlandırılmıştır. Hiçbir internet bağlantısı mutlak güvenlik sağlayamaz; bu nedenle iletişim formuna parola, kimlik numarası ya da sağlık raporu gibi hassas bilgiler yazmamanızı rica ederiz.',
+            'The connection to this site is protected by HTTPS. Only authorised people can enter the admin panel, and login attempts are limited. No internet connection can be perfectly secure, so please do not put passwords, ID numbers or medical reports in the contact form.'
+          )}
+        </p>
+
+        <h2>{L('10. Haklarınız ve başvuru', '10. Your rights and how to apply')}</h2>
+        <p>
+          {L(
+            'KVKK m.11 uyarınca verilerinizin işlenip işlenmediğini öğrenme, işlenmişse bilgi isteme, amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, aktarıldığı kişileri bilme, eksik veya yanlışsa düzeltilmesini, koşulları oluşmuşsa silinmesini ya da yok edilmesini isteme, bu işlemlerin aktarıldığı kişilere bildirilmesini isteme, otomatik sistemlerle aleyhinize bir sonuç çıkmasına itiraz etme ve kanuna aykırı işleme nedeniyle zarara uğrarsanız zararın giderilmesini talep etme haklarına sahipsiniz.',
+            'Under art. 11 of the KVKK you may: learn whether your data is processed and request information; learn the purpose and whether it is used accordingly; know the third parties it is transferred to; request correction if incomplete or inaccurate; request erasure or destruction where the conditions are met; ask that these actions be notified to those third parties; object to a result against you produced solely by automated systems; and claim compensation if you suffer loss from unlawful processing.'
+          )}
+        </p>
+        <p>
+          {L('Başvurunuzu ', 'Send your request, with your name and a way to reach you, to ')}
+          <a href={`mailto:${legal.requestEmail}`}>{legal.requestEmail}</a>
+          {L(
+            ' adresine, adınızı ve size ulaşabileceğimiz bir yolu belirterek iletebilirsiniz. Başvurunuzu en geç otuz gün içinde yanıtlarız. Yanıtımızdan memnun kalmazsanız Kişisel Verileri Koruma Kurumu\'na şikâyet hakkınız saklıdır.',
+            '. We answer within thirty days. If you are not satisfied with our answer, you may complain to the Personal Data Protection Authority (KVKK).'
+          )}
+        </p>
+
+        <h2>{L('11. Çocukların verileri', '11. Children\'s data')}</h2>
+        <p>
+          {L(
+            'Hizmetlerimiz 18 yaş altındakilere yönelik değildir; ayrıntılar için ',
+            'Our services are not aimed at people under 18; for details see the '
+          )}
+          <a href={agePolicy}>{L('18 Yaş ve Onam Politikası', 'Age & Consent Policy')}</a>{L("'na bakın.", '.')}
+        </p>
+
+        <h2>{L('12. Değişiklikler', '12. Changes')}</h2>
+        <p>
+          {L(
+            'Site ya da mevzuat değiştiğinde bu metni güncelleriz; geçerli sürüm her zaman bu sayfadadır ve yukarıdaki tarih son güncellemeyi gösterir.',
+            'We update this page when the site or the law changes; the current version is always on this page and the date above shows the last update.'
+          )}
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+
+  .updated {
+    font-size: 0.8rem;
+    color: var(--color-ivory-faint);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.35rem 1.4rem;
+    margin: 0 0 1.5rem;
+    font-size: 0.92rem;
+  }
+
+  .facts dt {
+    color: var(--color-ivory-faint);
+  }
+
+  .facts dd {
+    margin: 0;
+    color: var(--color-ivory);
+  }
+
+  .scroll {
+    overflow-x: auto;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+  }
+
+  table {
+    min-width: 520px;
+  }
+
+  th[scope='row'] {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--color-ivory);
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.9rem;
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+</style>

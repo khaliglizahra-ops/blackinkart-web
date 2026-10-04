@@ -2,23 +2,35 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../Breadcrumbs.astro';
 import { site } from '../../data/site';
+import { legal } from '../../data/legal';
+import { analytics } from '../../data/analytics';
 import { langFromPath, localizePath } from '../../i18n/config';
 
 /**
  * Yasal metinler sayfaya özgü ve başka yerde kullanılmıyor; bu yüzden
  * uzaktaki bir sözlük yerine iki dil yan yana duruyor. Bir maddeyi
  * değiştirirken öbür dildeki karşılığı gözden kaçmıyor.
+ *
+ * Metin, sitenin gerçekte yaptıklarını anlatıyor: kendi çerezi yok, tek
+ * kayıt çerez tercihi; harita ve (tanımlıysa) analitik izne bağlı. Yeni bir
+ * araç eklenirse tabloya da eklenmeli.
  */
 const lang = langFromPath(Astro.url.pathname);
 const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
 const path = localizePath('/cerez-politikasi', lang);
+const privacy = localizePath('/gizlilik-politikasi', lang);
+const updated = new Date(legal.updatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'tr-TR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
 ---
 
 <BaseLayout
   title={L('Çerez Politikası', 'Cookie Policy')}
   description={L(
-    'Black Ink Art Tattoo Piercing web sitesinde kullanılan çerezler hakkında bilgilendirme.',
-    'Information about the cookies used on the Black Ink Art Tattoo Piercing website.'
+    'Black Ink Art Tattoo Piercing web sitesinde hangi çerez ve tarayıcı depolamasının kullanıldığı, hangilerinin izne bağlı olduğu ve tercihinizi nasıl değiştirebileceğiniz.',
+    'Which cookies and browser storage the Black Ink Art Tattoo Piercing website uses, which depend on your permission, and how to change your choice.'
   )}
   path={path}
   noindex={true}
@@ -28,62 +40,139 @@ const path = localizePath('/cerez-politikasi', lang);
       <Breadcrumbs items={[{ label: L('Çerez Politikası', 'Cookie Policy') }]} />
       <p class="eyebrow">{L('Yasal', 'Legal')}</p>
       <h1>{L('Çerez Politikası', 'Cookie Policy')}</h1>
+      <p class="updated">{L('Son güncelleme', 'Last updated')}: {updated}</p>
+
       <div class="prose">
         <p>
           {L(
-            'Bu web sitesi, ziyaretçilerine daha iyi bir deneyim sunmak amacıyla sınırlı sayıda çerez (cookie) ve benzeri teknolojiler kullanabilir.',
-            'This website may use a limited number of cookies and similar technologies in order to give visitors a better experience.'
+            'Çerez, bir siteyi ziyaret ettiğinizde tarayıcınıza kaydedilen küçük bir veri dosyasıdır; "yerel depolama" gibi benzer teknolojiler de aynı amaçla kullanılır. Bu site kendi başına çerez bırakmaz. Aşağıda neyin, neden ve hangi izinle çalıştığını bulabilirsiniz.',
+            'A cookie is a small data file saved in your browser when you visit a site; similar technologies such as "local storage" serve the same purpose. This site does not set cookies of its own. Below you can see what runs, why, and under which permission.'
           )}
         </p>
 
-        <h2>{L('Kullandığımız Çerez Türleri', 'The Types of Cookie We Use')}</h2>
+        <h2>{L('Çerez tercihinizi değiştirin', 'Change your cookie choice')}</h2>
+        <p>
+          <button type="button" class="btn btn-outline" data-consent-open>{L('Çerez tercihlerini aç', 'Open cookie preferences')}</button>
+        </p>
+
+        <h2>{L('Kullandıklarımız', 'What we use')}</h2>
+        <div class="scroll" tabindex="0" role="region" aria-label={L('Çerez ve depolama tablosu', 'Cookies and storage table')}>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">{L('Ad', 'Name')}</th>
+                <th scope="col">{L('Kategori', 'Category')}</th>
+                <th scope="col">{L('Ne için', 'Purpose')}</th>
+                <th scope="col">{L('Süre', 'Duration')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><code>bia_consent</code> ({L('yerel depolama', 'local storage')})</th>
+                <td>{L('Zorunlu', 'Necessary')}</td>
+                <td>{L('Çerez tercihinizi hatırlar; böylece her sayfada yeniden sormayız. Sitemize ait, sunucuya gönderilmez.', 'Remembers your cookie choice so we do not ask again on every page. First-party; not sent to a server.')}</td>
+                <td>{L('En fazla 12 ay', 'Up to 12 months')}</td>
+              </tr>
+              <tr>
+                <th scope="row">Google ({L('Haritalar', 'Maps')})</th>
+                <td>{L('Fonksiyonel', 'Functional')}</td>
+                <td>{L('Sayfadaki Google Haritalar gömülü haritasını gösterir. Yalnızca "Fonksiyonel"e izin verirseniz ya da haritayı kendiniz yüklerseniz çalışır; yüklenince Google, kendi çerezlerini bırakabilir ve IP adresinizi alır.', 'Shows the embedded Google Maps map on the page. It runs only if you allow "Functional" or load the map yourself; once loaded, Google may set its own cookies and receives your IP address.')}</td>
+                <td>{L('Google\'ın politikasına göre', 'As set by Google')}</td>
+              </tr>
+              {analytics.enabled && (
+                <tr>
+                  <th scope="row"><code>_ga</code>, <code>_ga_*</code> (Google Analytics)</th>
+                  <td>{L('Analitik', 'Analytics')}</td>
+                  <td>{L('Ziyaretlerin nasıl kullanıldığını ölçer. Yalnızca "Analitik"e izin verirseniz yüklenir.', 'Measures how visits are used. Loaded only if you allow "Analytics".')}</td>
+                  <td>{L('En fazla 2 yıl', 'Up to 2 years')}</td>
+                </tr>
+              )}
+              {analytics.provider === 'gtm' && (
+                <tr>
+                  <th scope="row">Google Tag Manager</th>
+                  <td>{L('Analitik / Pazarlama', 'Analytics / Marketing')}</td>
+                  <td>{L('Etiketleri yönetir; hangi çerezlerin bırakıldığı Tag Manager\'da tanımlı etiketlere bağlıdır. Yalnızca ilgili kategoriye izin verirseniz yüklenir.', 'Manages tags; which cookies are set depends on the tags defined in Tag Manager. Loaded only if you allow the relevant category.')}</td>
+                  <td>{L('Etikete göre', 'Depends on the tag')}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {!analytics.enabled && (
+          <p>
+            {L(
+              'Bu sitede şu anda analitik ya da pazarlama çerezi kullanılmıyor. İleride eklenirse yalnızca izin verirseniz çalışır ve bu tablo güncellenir.',
+              'This site does not currently use analytics or marketing cookies. If they are added later they will run only with your permission, and this table will be updated.'
+            )}
+          </p>
+        )}
+
+        <h2>{L('Kategoriler', 'Categories')}</h2>
         <ul>
-          <li>
-            <strong>{L('Zorunlu çerezler:', 'Essential cookies:')}</strong>{' '}
-            {L(
-              'Sitenin temel işlevlerini (ör. mobil menü durumu) çalıştırmak için gereklidir; kapatılamaz.',
-              'These are required to run the basic functions of the site, such as the state of the mobile menu. They cannot be turned off.'
-            )}
-          </li>
-          <li>
-            <strong>{L('Harici içerik çerezleri:', 'Third-party content cookies:')}</strong>{' '}
-            {L(
-              'İletişim sayfasındaki harita (Google Maps) gibi gömülü içerikler kendi çerezlerini kullanabilir. Bu çerezler ilgili üçüncü tarafların gizlilik politikalarına tabidir. Randevu formumuz gömülü bir takvim kullanmaz ve çerez oluşturmaz.',
-              'Embedded content such as the map on the contact page (Google Maps) may set its own cookies. These are subject to the privacy policies of the third parties concerned. Our booking form does not use an embedded calendar and sets no cookies.'
-            )}
-          </li>
-          <li>
-            <strong>{L('Analitik çerezler:', 'Analytics cookies:')}</strong>{' '}
-            {L(
-              'Sitenin nasıl kullanıldığını anlamak için ileride anonim istatistik araçları eklenmesi durumunda kullanılabilir.',
-              'These may be used if anonymous statistics tools are added in future to understand how the site is used.'
-            )}
-          </li>
+          <li><strong>{L('Zorunlu:', 'Necessary:')}</strong> {L('Sitenin çalışması ve tercihinizin hatırlanması için gerekli; kapatılamaz.', 'Needed for the site to work and to remember your choice; cannot be switched off.')}</li>
+          <li><strong>{L('Fonksiyonel:', 'Functional:')}</strong> {L('Harita gibi harici içeriklerin gösterilmesi.', 'Showing external content such as the map.')}</li>
+          <li><strong>{L('Analitik:', 'Analytics:')}</strong> {L('Ziyaret istatistikleri.', 'Visit statistics.')}</li>
+          <li><strong>{L('Pazarlama:', 'Marketing:')}</strong> {L('Reklam ve yeniden pazarlama etiketleri.', 'Advertising and remarketing tags.')}</li>
         </ul>
 
-        <h2>{L('Çerezleri Yönetme', 'Managing Cookies')}</h2>
+        <h2>{L('Çerezleri nasıl yönetirsiniz?', 'How to manage cookies')}</h2>
         <p>
           {L(
-            'Tarayıcınızın ayarlarından çerezleri silebilir veya engelleyebilirsiniz. Ancak bazı çerezlerin engellenmesi, gömülü harita gibi bazı özelliklerin düzgün çalışmamasına neden olabilir.',
-            'You can delete or block cookies in your browser settings. Blocking some cookies may, however, stop certain features — such as the embedded map — from working properly.'
+            'Tercihinizi yukarıdaki düğmeden ya da her sayfanın altındaki "Çerez Tercihleri" bağlantısından istediğiniz zaman değiştirebilirsiniz. Ayrıca tarayıcı ayarlarınızdan çerezleri silebilir veya engelleyebilirsiniz; harita gibi bazı içerikler bu durumda görünmeyebilir. İzninizi geri çektiğinizde yüklenmiş analitik çerezleri silinir.',
+            'You can change your choice at any time from the button above or from the "Cookie Preferences" link at the bottom of every page. You can also delete or block cookies in your browser settings; some content such as the map may not appear then. When you withdraw permission, analytics cookies that were set are removed.'
           )}
         </p>
 
         <h2>{L('İletişim', 'Contact')}</h2>
         <p>
           {L(
-            `Çerez kullanımıyla ilgili sorularınız için ${site.email} adresinden bize ulaşabilirsiniz.`,
-            `If you have questions about our use of cookies, you can reach us at ${site.email}.`
+            `Çerezlerle ilgili sorularınız için ${site.email} adresinden bize ulaşabilirsiniz. Kişisel verilerin işlenmesi hakkında ayrıntılar `,
+            `For questions about cookies you can reach us at ${site.email}. Details on how personal data is processed are in the `
           )}
+          <a href={privacy}>{L('Gizlilik Politikası', 'Privacy Policy')}</a>{L("'nda.", '.')}
         </p>
-
-        <blockquote>
-          {L(
-            'Bu metin genel bir bilgilendirme amacıyla hazırlanmıştır; yayınlanmadan önce bir hukuk danışmanı tarafından gözden geçirilmesi önerilir.',
-            'This text is provided for general information. We recommend having it reviewed by a legal adviser before publication.'
-          )}
-        </blockquote>
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+
+  .updated {
+    font-size: 0.8rem;
+    color: var(--color-ivory-faint);
+  }
+
+  .scroll {
+    overflow-x: auto;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+  }
+
+  table {
+    min-width: 560px;
+  }
+
+  th[scope='row'] {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--color-ivory);
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.9rem;
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  code {
+    font-size: 0.85em;
+  }
+</style>

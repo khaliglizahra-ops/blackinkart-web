@@ -9,3 +9,8 @@ blackinkart-web-netlify-drop.zip
 
 # build sırasında üretilen ızgara küçük resimleri
 public/images/_thumbs/
+
+# Ortam değişkenleri (gerçek ID/anahtarlar) depoya girmez; örnek dosya girer.
+.env
+.env.*
+!.env.example

@@ -17,6 +17,8 @@ const NAV: { key: UIKey; href: string }[] = [
 ];
 
 const LEGAL_NAV: { key: UIKey; href: string }[] = [
+  { key: 'legal.privacy', href: '/gizlilik-politikasi' },
+  { key: 'legal.terms', href: '/kullanim-sartlari' },
   { key: 'legal.kvkk', href: '/kvkk' },
   { key: 'legal.cookies', href: '/cerez-politikasi' },
   { key: 'legal.age', href: '/yas-ve-onam-politikasi' },

@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import { site } from '../../data/site';
+import { legal } from '../../data/legal';
+import { langFromPath, localizePath } from '../../i18n/config';
+
+// Yasal metin sayfaya özgü; iki dil yan yana duruyor. `legal.updatedAt`
+// metinde yapılan her değişiklikte yenilenmeli.
+const lang = langFromPath(Astro.url.pathname);
+const L = (tr: string, en: string) => (lang === 'en' ? en : tr);
+const path = localizePath('/kullanim-sartlari', lang);
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString(lang === 'en' ? 'en-GB' : 'tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+const privacy = localizePath('/gizlilik-politikasi', lang);
+const agePolicy = localizePath('/yas-ve-onam-politikasi', lang);
+const hygiene = localizePath('/hijyen-ve-guvenlik', lang);
+---
+
+<BaseLayout
+  title={L('Kullanım Şartları', 'Terms of Use')}
+  description={L(
+    'Black Ink Art Tattoo Piercing web sitesinin kullanım koşulları: içerik hakları, kullanıcı sorumlulukları, deneme aracı, harici bağlantılar ve sorumluluk sınırları.',
+    'Terms of use for the Black Ink Art Tattoo Piercing website: content rights, user responsibilities, the try-on tool, external links and limits of liability.'
+  )}
+  path={path}
+  noindex={true}
+>
+  <section class="section-tight">
+    <div class="container narrow">
+      <Breadcrumbs items={[{ label: L('Kullanım Şartları', 'Terms of Use') }]} />
+      <p class="eyebrow">{L('Yasal', 'Legal')}</p>
+      <h1>{L('Kullanım Şartları', 'Terms of Use')}</h1>
+      <p class="updated">{L('Yürürlük ve son güncelleme', 'In force since / last updated')}: {fmt(legal.updatedAt)}</p>
+
+      <div class="prose">
+        <p>
+          {L(
+            `Bu siteyi kullanarak aşağıdaki şartları kabul etmiş olursunuz. ${site.name} ("Black Ink Art", "biz") bu siteyi dövme ve piercing stüdyosunu tanıtmak, bilgi vermek ve randevu talebi almak için işletir. Şartları kabul etmiyorsanız siteyi kullanmayın.`,
+            `By using this site you accept the terms below. ${site.name} ("Black Ink Art", "we") runs this site to present the tattoo and piercing studio, give information and take booking requests. If you do not accept the terms, please do not use the site.`
+          )}
+        </p>
+
+        <h2>{L('1. Sitenin amacı', '1. What the site is for')}</h2>
+        <p>
+          {L(
+            'Sitedeki bilgiler, fiyatlar, çalışma saatleri ve örnek çalışmalar bilgilendirme amaçlıdır. Net fiyat ve randevu, stüdyoyla görüşülerek belirlenir; sitedeki bir fiyat ya da müsaitlik bilgisi bağlayıcı bir teklif sayılmaz. Randevu formu bir rezervasyon yapmaz, yalnızca talebinizi WhatsApp mesajı olarak hazırlar; randevu ancak stüdyonun onayıyla kesinleşir.',
+            'The information, prices, opening hours and sample work on the site are for information only. The exact price and the appointment are agreed with the studio; a price or availability on the site is not a binding offer. The booking form does not make a reservation, it only prepares your request as a WhatsApp message; an appointment is confirmed only once the studio agrees.'
+          )}
+        </p>
+
+        <h2>{L('2. Fikri mülkiyet', '2. Intellectual property')}</h2>
+        <p>
+          {L(
+            'Sitedeki metinler, fotoğraflar, çizimler, logo ve tasarım Black Ink Art\'a aittir ya da kullanım izniyle yayımlanmaktadır. Yazılı iznimiz olmadan kopyalanamaz, çoğaltılamaz, dağıtılamaz ya da ticari amaçla kullanılamaz. Paylaşım için bağlantı vermek serbesttir.',
+            'The text, photographs, drawings, logo and design on the site belong to Black Ink Art or are published with permission. They may not be copied, reproduced, distributed or used commercially without our written permission. Linking to the site to share it is welcome.'
+          )}
+        </p>
+
+        <h2>{L('3. Kullanıcı sorumlulukları', '3. Your responsibilities')}</h2>
+        <ul>
+          <li>{L('Formlara doğru ve size ait bilgileri yazmanız.', 'Give correct information that is yours in the forms.')}</li>
+          <li>
+            {L('18 yaş sınırı ve onam kuralları için ', 'For the 18+ rule and consent requirements see the ')}
+            <a href={agePolicy}>{L('18 Yaş ve Onam Politikası', 'Age & Consent Policy')}</a>{L("'nı okumanız.", '.')}
+          </li>
+          <li>{L('Deneme aracına yalnızca kendinize ait ya da kullanma hakkınız olan fotoğraf ve tasarımları yüklemeniz.', 'Only add photos and designs to the try-on tool that are yours or that you have the right to use.')}</li>
+        </ul>
+
+        <h2>{L('4. Yasaklı kullanım', '4. Prohibited use')}</h2>
+        <ul>
+          <li>{L('Siteye ya da sunucuya zarar vermeye, yavaşlatmaya veya erişimi engellemeye çalışmak.', 'Trying to damage, slow down or block access to the site or its server.')}</li>
+          <li>{L('Otomatik araçlarla toplu veri çekmek, formlara spam veya hukuka aykırı içerik göndermek.', 'Harvesting data in bulk with automated tools, or sending spam or unlawful content through the forms.')}</li>
+          <li>{L('Yönetim paneline ya da başkalarının bilgilerine izinsiz erişmeye çalışmak.', 'Trying to gain unauthorised access to the admin panel or to other people\'s information.')}</li>
+          <li>{L('Siteyi başkası adına yanıltıcı biçimde kullanmak.', 'Using the site to mislead others or to impersonate someone.')}</li>
+        </ul>
+
+        <h2>{L('5. Deneme aracı ve bakım yazıları', '5. The try-on tool and care articles')}</h2>
+        <p>
+          {L(
+            '3D ve fotoğraf deneme aracı bir simülasyondur: gerçek sonuç vücut hatlarınıza, cilt tonunuza, tasarımın uygulanma tekniğine ve sanatçının yorumuna göre farklı olabilir. Rehber ve bakım yazıları genel bilgilendirme içindir, tıbbi tavsiye değildir; bir sağlık sorununuz varsa ya da bakım sırasında belirti görürseniz hekime başvurun. Hijyen uygulamalarımız için ',
+            'The 3D and photo try-on tool is a simulation: the real result can differ depending on your body shape, skin tone, the technique used and the artist\'s interpretation. The guides and aftercare articles are general information, not medical advice; if you have a health problem or see symptoms during healing, see a doctor. For our hygiene practices see '
+          )}
+          <a href={hygiene}>{L('Hijyen ve Güvenlik', 'Hygiene and Safety')}</a>{L(' sayfasına bakın.', '.')}
+        </p>
+
+        <h2>{L('6. Harici bağlantılar', '6. External links')}</h2>
+        <p>
+          {L(
+            'Sitede Instagram, WhatsApp, Google Haritalar ve Piercingland (piercingland.com.tr) gibi başka sitelere bağlantılar bulunur. Piercingland stüdyonun kendi markasına ait ayrı bir mağaza sitesidir ve kendi koşulları geçerlidir. Diğer sitelerin içeriğinden ve gizlilik uygulamalarından sorumlu değiliz.',
+            'The site links to other sites such as Instagram, WhatsApp, Google Maps and Piercingland (piercingland.com.tr). Piercingland is a separate shop site belonging to the studio\'s own brand and has its own terms. We are not responsible for the content or privacy practices of other sites.'
+          )}
+        </p>
+
+        <h2>{L('7. Sorumluluğun sınırı', '7. Limits of liability')}</h2>
+        <p>
+          {L(
+            'Siteyi doğru ve güncel tutmaya çalışıyoruz, ancak her bilginin eksiksiz olduğunu ya da sitenin kesintisiz çalışacağını garanti edemeyiz. Kanunun izin verdiği ölçüde, siteye erişilememesinden veya sitedeki bilgilerin kullanılmasından doğan dolaylı zararlardan sorumlu tutulamayız. Tüketici mevzuatından doğan haklarınız saklıdır.',
+            'We try to keep the site accurate and up to date, but we cannot guarantee that every detail is complete or that the site will always be available. To the extent the law allows, we are not liable for indirect loss arising from being unable to reach the site or from using the information on it. Your rights under consumer law are unaffected.'
+          )}
+        </p>
+
+        <h2>{L('8. Hizmet ve şartlarda değişiklik', '8. Changes to the service and the terms')}</h2>
+        <p>
+          {L(
+            'Siteyi ve bu şartları önceden haber vermeden değiştirebiliriz. Geçerli sürüm her zaman bu sayfadadır; sayfanın başındaki tarih son güncellemeyi gösterir. Değişiklikten sonra siteyi kullanmaya devam etmeniz yeni şartları kabul ettiğiniz anlamına gelir.',
+            'We may change the site and these terms without notice. The current version is always on this page; the date at the top shows the last update. Continuing to use the site after a change means you accept the new terms.'
+          )}
+        </p>
+
+        <h2>{L('9. Uygulanacak hukuk', '9. Governing law')}</h2>
+        <p>
+          {L(
+            'Bu şartlara Türkiye Cumhuriyeti hukuku uygulanır. Kişisel verilerinizin işlenmesi için ',
+            'These terms are governed by the law of the Republic of Türkiye. For how your personal data is processed, see the '
+          )}
+          <a href={privacy}>{L('Gizlilik Politikası', 'Privacy Policy')}</a>{L("'na bakın.", '.')}
+        </p>
+
+        <h2>{L('10. İletişim', '10. Contact')}</h2>
+        <p>
+          {site.name}<br />
+          {site.address.full}<br />
+          <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a> ·
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+
+  .updated {
+    font-size: 0.8rem;
+    color: var(--color-ivory-faint);
+  }
+</style>
