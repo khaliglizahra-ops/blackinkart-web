@@ -7,6 +7,7 @@ const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 ---
 
+<aside aria-label={t('a11y.quickContact')}>
 <a
   class="whatsapp-fab"
   href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(t('cta.whatsappPrefill'))}`}
@@ -21,6 +22,7 @@ const t = useTranslations(lang);
     />
   </svg>
 </a>
+</aside>
 
 <style>
   .whatsapp-fab {

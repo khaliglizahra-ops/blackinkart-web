@@ -307,6 +307,43 @@ td.price {
   }
 }
 
+/* Atla bağlantısı: klavyeyle gezen ziyaretçi her sayfada menüyü geçip doğrudan
+   içeriğe atlayabilsin. Yalnızca odaklanınca görünür. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  padding: 0.7em 1.1em;
+  background: var(--color-gold);
+  color: #150f00;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 2px;
+  transform: translateY(-200%);
+  transition: transform var(--dur-fast);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Atlanan içerik odak alır ama etrafında halka çizilmesin (yalnızca bir kapsayıcı). */
+main:focus {
+  outline: none;
+}
+
+/* Paragraf içindeki, sınıfsız bağlantılar yalnızca renkle ayırt edilmesin
+   (WCAG 1.4.1): altı çizili olsun. Kart/düğme bağlantıları sınıflı olduğundan
+   etkilenmez. */
+main p a:not([class]),
+main li a:not([class]),
+main dd a:not([class]) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 /* Visually hidden but accessible */
 /* Klavye odağı. Sitede hiçbir yerde tanımlı değildi; siyah zeminde tarayıcı
    varsayılanı çoğu yerde kayboluyordu. :focus-visible kullanıldığı için fareyle

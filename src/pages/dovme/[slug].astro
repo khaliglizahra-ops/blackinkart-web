@@ -3,7 +3,7 @@ import GuidePage from '../../components/pages/GuidePage.astro';
 import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 
 export async function getStaticPaths() {
-  const out = [];
+  const out: any[] = [];
   for (const lang of ['tr'.split(',')].flat()) {
     const guides = await getLocalizedCollection('dovme-rehberi', lang as 'tr' | 'en');
     guides.forEach((entry, i) => {
@@ -28,7 +28,7 @@ export async function getStaticPaths() {
   return out.filter((p) => p.props.lang === 'tr');
 }
 
-const props = Astro.props;
+const props = Astro.props as any;
 ---
 
 <GuidePage {...props} hub="dovme" />

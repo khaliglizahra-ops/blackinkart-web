@@ -7,7 +7,6 @@ const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
 const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { piercingPriceTables, startingPrice } from '../../data/prices';

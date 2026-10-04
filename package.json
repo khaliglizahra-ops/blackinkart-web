@@ -12,7 +12,9 @@
     "optimize:images": "node scripts/optimize-images.mjs",
     "thumbs": "node scripts/make-thumbs.mjs",
     "i18n:check": "node scripts/i18n-check.mjs",
-    "i18n:leaks": "node scripts/i18n-leaks.mjs"
+    "i18n:leaks": "node scripts/i18n-leaks.mjs",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "config:check": "node scripts/config-check.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

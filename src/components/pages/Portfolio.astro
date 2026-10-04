@@ -1,7 +1,6 @@
 ---
 import { langFromPath, localizePath } from '../../i18n/config';
 import { useTranslations } from '../../i18n/ui';
-import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
@@ -145,7 +144,7 @@ import { thumb } from '../../data/images';
     position: absolute;
     left: 0.6em;
     bottom: 0.6em;
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;

@@ -73,9 +73,9 @@ const painLabel = kind === 'area'
       hubHref={base}
       title={entry.data.title}
       updatedAt={entry.data.updatedAt}
-      heroImage={entry.data.heroImage}
-      heroArt={entry.data.heroArt}
-      heroSeed={entry.data.heroSeed}
+      heroImage={(entry.data as any).heroImage}
+      heroArt={(entry.data as any).heroArt}
+      heroSeed={(entry.data as any).heroSeed}
       prev={prev ? { title: prev.title, href: `${base}/${prev.slug}` } : null}
       next={next ? { title: next.title, href: `${base}/${next.slug}` } : null}
     >
@@ -107,7 +107,7 @@ const painLabel = kind === 'area'
 
         {gallerySansHero.length > 0 && (
           <div class="area-gallery" data-reveal>
-            {gallerySansHero.map((src) => (
+            {gallerySansHero.map((src: string) => (
               <img src={thumb(src)} data-full={src} loading="lazy" alt={`${entry.data.title} — Black Ink Art`} width="400" height="500" data-lightbox="bolge" />
             ))}
           </div>

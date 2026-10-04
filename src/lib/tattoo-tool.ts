@@ -1,0 +1,1225 @@
+/**
+ * 3D dövme deneme aracı (3D model + fotoğraf modu).
+ *
+ * TattooPreview.astro yalnızca tarayıcı WebGL'i destekliyorsa bu dosyayı
+ * yükler; bu yüzden burada WebGL denetimi yok. Sayfanın işaretlemesi
+ * (kimlikler: viewport, template-grid, ctl-scale …) bileşende duruyor.
+ */
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+  import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+  import { DecalGeometry } from 'three/examples/jsm/geometries/DecalGeometry.js';
+  import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+  import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+
+  const viewport = document.getElementById('viewport') as HTMLElement;
+  const loadingEl = document.getElementById('loading') as HTMLElement;
+  const loadingLabel = document.getElementById('loading-label') as HTMLElement;
+  const templateGrid = document.getElementById('template-grid') as HTMLElement;
+  const uploadInput = document.getElementById('tattoo-file') as HTMLInputElement;
+  const uploadDrop = document.getElementById('upload-drop') as HTMLElement;
+  const uploadLabel = document.getElementById('upload-label') as HTMLElement;
+  const processingEl = document.getElementById('processing') as HTMLElement;
+  const progressFill = document.getElementById('progress-fill') as HTMLElement;
+  const progressLabel = document.getElementById('progress-label') as HTMLElement;
+  const scaleInput = document.getElementById('ctl-scale') as HTMLInputElement;
+  const rotateInput = document.getElementById('ctl-rotate') as HTMLInputElement;
+  const opacityInput = document.getElementById('ctl-opacity') as HTMLInputElement;
+  const clearBtn = document.getElementById('btn-clear') as HTMLButtonElement;
+  const shotBtn = document.getElementById('btn-shot') as HTMLButtonElement;
+  const placeHint = document.getElementById('place-hint') as HTMLElement;
+
+  // ---------------------------------------------------------------- scene
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  viewport.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 1.2;
+  controls.maxDistance = 9;
+  controls.enablePan = true;
+  controls.panSpeed = 0.9;
+  controls.maxPolarAngle = Math.PI * 0.92;
+  // shift + drag pans with the left button too — right-drag alone is undiscoverable
+  renderer.domElement.addEventListener('pointerdown', (e) => {
+    controls.mouseButtons.LEFT = e.shiftKey ? THREE.MOUSE.PAN : THREE.MOUSE.ROTATE;
+  });
+  // Wheel over the viewport must scroll the page, not zoom the model. Zoom is via the
+  // on-screen buttons, pinch on touch, or Ctrl/Cmd + wheel.
+  controls.enableZoom = false;
+
+  function dolly(factor: number) {
+    const dir = camera.position.clone().sub(controls.target);
+    const len = THREE.MathUtils.clamp(dir.length() * factor, controls.minDistance, controls.maxDistance);
+    camera.position.copy(controls.target.clone().add(dir.setLength(len)));
+    controls.update();
+  }
+
+  // soft studio image-based lighting for believable skin falloff
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.06).texture;
+  scene.environmentIntensity = 0.32;
+
+  scene.add(new THREE.HemisphereLight(0xdfe8f5, 0x2a1c12, 0.5));
+  const key = new THREE.DirectionalLight(0xfff4e8, 1.5);
+  key.position.set(2.2, 3.0, 3.6);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xcfe0ff, 0.45);
+  fill.position.set(-3.4, 1.2, 2.4);
+  scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xf2a900, 0.9);
+  rim.position.set(-1.8, 2.4, -3.2);
+  scene.add(rim);
+  const rimWarm = new THREE.DirectionalLight(0xffd9a8, 0.55);
+  rimWarm.position.set(2.6, 1.2, -3.0);
+  scene.add(rimWarm);
+
+  // ---------------------------------------------------------------- body model
+  let bodyMesh: THREE.Mesh | null = null;
+  let decal: THREE.Mesh | null = null;
+  let decalTexture: THREE.Texture | null = null;
+  let lastHit: { point: THREE.Vector3; normal: THREE.Vector3 } | null = null;
+  let textureAspect = 1;
+
+  const texLoader = new THREE.TextureLoader();
+  const skinColor = texLoader.load('/models/skin-color.jpg');
+  skinColor.colorSpace = THREE.SRGBColorSpace;
+  skinColor.wrapS = skinColor.wrapT = THREE.RepeatWrapping;
+  const skinBump = texLoader.load('/models/skin-bump.jpg');
+  skinBump.wrapS = skinBump.wrapT = THREE.RepeatWrapping;
+  // per-model muscle relief, baked through the mesh UVs
+  const anatomyMaps: Record<string, THREE.Texture> = {
+    '/models/human-body-male.obj': texLoader.load('/models/anatomy-male.jpg'),
+    '/models/human-body-female.obj': texLoader.load('/models/anatomy-female.jpg'),
+  };
+
+  const skinMaterial = new THREE.MeshStandardMaterial({
+    color: 0xeccbb0,
+    map: skinColor,
+    bumpMap: skinBump,
+    bumpScale: 0.055,
+    roughness: 0.64,
+    metalness: 0.0,
+  });
+
+  // Smooth shading: the OBJ is unwelded, so computeVertexNormals() alone gives flat/faceted
+  // normals. Weld a position-only copy, average the normals there, then map them back onto
+  // the original geometry (which keeps its UV seams intact).
+  function applySmoothNormals(geo: THREE.BufferGeometry) {
+    const posAttr = geo.getAttribute('position') as THREE.BufferAttribute;
+    const posOnly = new THREE.BufferGeometry();
+    posOnly.setAttribute('position', posAttr.clone());
+    const welded = mergeVertices(posOnly, 1e-4);
+    welded.computeVertexNormals();
+    const wPos = welded.getAttribute('position') as THREE.BufferAttribute;
+    const wNor = welded.getAttribute('normal') as THREE.BufferAttribute;
+    const key = (x: number, y: number, z: number) =>
+      `${Math.round(x * 1e4)},${Math.round(y * 1e4)},${Math.round(z * 1e4)}`;
+    const lookup = new Map<string, [number, number, number]>();
+    for (let i = 0; i < wPos.count; i++) {
+      lookup.set(key(wPos.getX(i), wPos.getY(i), wPos.getZ(i)), [wNor.getX(i), wNor.getY(i), wNor.getZ(i)]);
+    }
+    const normals = new Float32Array(posAttr.count * 3);
+    for (let i = 0; i < posAttr.count; i++) {
+      const n = lookup.get(key(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i)));
+      if (n) {
+        normals[i * 3] = n[0];
+        normals[i * 3 + 1] = n[1];
+        normals[i * 3 + 2] = n[2];
+      }
+    }
+    geo.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+    welded.dispose();
+    posOnly.dispose();
+  }
+
+  let bodyGroup: THREE.Group | null = null;
+  const objLoader = new OBJLoader();
+  const modelCache = new Map<string, THREE.BufferGeometry>();
+  let currentModel = '';
+
+  function buildBody(geometry: THREE.BufferGeometry, keepView: boolean) {
+    if (bodyGroup) {
+      scene.remove(bodyGroup);
+      bodyGroup.traverse((c) => {
+        const m = c as THREE.Mesh;
+        if (m.isMesh && m.geometry !== geometry) m.geometry.dispose();
+      });
+    }
+    const anat = anatomyMaps[currentModel];
+    if (anat) {
+      skinMaterial.bumpMap = anat;
+      skinMaterial.bumpScale = 0.055;
+      skinMaterial.needsUpdate = true;
+    }
+
+    const group = new THREE.Group();
+    const mesh = new THREE.Mesh(geometry, skinMaterial);
+    group.add(mesh);
+    bodyMesh = mesh;
+
+    const box = new THREE.Box3().setFromObject(group);
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    const scale = 3 / size.y;
+    group.scale.setScalar(scale);
+    group.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
+    scene.add(group);
+    bodyGroup = group;
+
+    // a decal belongs to the previous surface — drop it on model change
+    if (decal) {
+      scene.remove(decal);
+      decal.geometry.dispose();
+      decal = null;
+    }
+    lastHit = null;
+    placeHint.textContent = decalTexture
+      ? 'Modeli döndürüp dövmeyi koymak istediğiniz yere tıklayın.'
+      : 'Önce yukarıdan bir tasarım seçin ya da yükleyin.';
+
+    loadingEl.hidden = true;
+    if (!keepView) setRegion('full', false);
+  }
+
+  function loadModel(url: string, keepView = false) {
+    if (url === currentModel) return;
+    currentModel = url;
+    const cached = modelCache.get(url);
+    if (cached) {
+      buildBody(cached, keepView);
+      return;
+    }
+    loadingEl.hidden = false;
+    loadingLabel.textContent = '3D model yükleniyor…';
+    objLoader.load(
+      url,
+      (obj) => {
+        let geo: THREE.BufferGeometry | null = null;
+        obj.traverse((child) => {
+          const m = child as THREE.Mesh;
+          if (m.isMesh && !geo) geo = m.geometry;
+        });
+        if (!geo) return;
+        applySmoothNormals(geo);
+        modelCache.set(url, geo);
+        buildBody(geo, keepView);
+      },
+      (evt) => {
+        if (evt.total) {
+          loadingLabel.textContent = `3D model yükleniyor… ${Math.round((evt.loaded / evt.total) * 100)}%`;
+        }
+      },
+      () => {
+        loadingLabel.textContent = '3D model yüklenemedi. Sayfayı yenilemeyi deneyin.';
+      }
+    );
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.gender-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-active')) return;
+      document.querySelectorAll('.gender-btn').forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      loadModel(btn.dataset.model!, true);
+    });
+  });
+
+  loadModel('/models/human-body-female.obj');
+
+  // ---------------------------------------------------------------- camera regions
+  type View = { pos: [number, number, number]; target: [number, number, number] };
+  const VIEWS: Record<string, View> = {
+    full: { pos: [0, 0.45, 5.6], target: [0, 0.05, 0] },
+    onkol: { pos: [0.95, 0.5, 1.25], target: [0.6, 0.36, 0] },
+    ustkol: { pos: [0.92, 0.86, 1.45], target: [0.33, 0.6, 0] },
+    gogus: { pos: [0, 0.62, 1.75], target: [0, 0.55, 0] },
+    sirt: { pos: [0, 0.6, -1.95], target: [0, 0.5, 0] },
+    bacak: { pos: [0.72, -0.78, 1.75], target: [0.12, -0.95, 0] },
+  };
+
+  let anim: { from: THREE.Vector3; to: THREE.Vector3; fromT: THREE.Vector3; toT: THREE.Vector3; t: number } | null = null;
+
+  function setRegion(key: string, animate = true) {
+    const v = VIEWS[key];
+    if (!v) return;
+    const to = new THREE.Vector3(...v.pos);
+    const toT = new THREE.Vector3(...v.target);
+    if (!animate) {
+      camera.position.copy(to);
+      controls.target.copy(toT);
+      controls.update();
+      return;
+    }
+    anim = { from: camera.position.clone(), to, fromT: controls.target.clone(), toT, t: 0 };
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.region-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.region-btn').forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      setRegion(btn.dataset.region!);
+    });
+  });
+
+  // ---------------------------------------------------------------- decal
+  function buildDecal() {
+    if (!bodyMesh || !lastHit || !decalTexture) return;
+    if (decal) {
+      scene.remove(decal);
+      decal.geometry.dispose();
+      decal = null;
+    }
+
+    const sizeVal = Number(scaleInput.value) / 100; // 0.04 – 0.60
+    const w = sizeVal * 2.2;
+    const h = w / textureAspect;
+
+    const orientation = new THREE.Euler();
+    const dummy = new THREE.Object3D();
+    dummy.position.copy(lastHit.point);
+    dummy.lookAt(lastHit.point.clone().add(lastHit.normal));
+    dummy.rotateZ(THREE.MathUtils.degToRad(Number(rotateInput.value)));
+    orientation.copy(dummy.rotation);
+
+    // Derinlik (Z), tasarımın kendi boyutuna göre büyüdükçe gövdenin önden
+    // arkaya kalınlığını (bilek/kol gibi ince bölgelerde bunu kolayca) aşıp
+    // kutunun karşı yüzeye kadar uzanmasına, dolayısıyla dövmenin örn. göbeğe
+    // konunca sırtta da belirmesine yol açıyordu. Üst sınır, modelin en ince
+    // yerinden (bilek) bile taşmayacak şekilde sabit tutuldu — model 3 birim
+    // boyunda ölçekleniyor, 0.12 gerçek bir bileğin çapından belirgin şekilde
+    // daha ince.
+    const decalDepth = Math.min(Math.max(w, h) * 1.6, 0.12);
+    const geo = new DecalGeometry(
+      bodyMesh,
+      lastHit.point,
+      orientation,
+      new THREE.Vector3(w, h, decalDepth)
+    );
+
+    const mat = new THREE.MeshStandardMaterial({
+      map: decalTexture,
+      transparent: true,
+      opacity: Number(opacityInput.value) / 100,
+      depthTest: true,
+      depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -6,
+      roughness: 0.85,
+      metalness: 0,
+    });
+
+    decal = new THREE.Mesh(geo, mat);
+    scene.add(decal);
+    placeHint.textContent = 'Başka bir noktaya tıklayarak yeniden yerleştirebilirsiniz.';
+  }
+
+  function setDesign(url: string) {
+    texLoader.load(url, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      decalTexture = tex;
+      textureAspect = (tex.image as HTMLImageElement).width / (tex.image as HTMLImageElement).height || 1;
+      if (lastHit) buildDecal();
+      else placeHint.textContent = 'Tasarım hazır — modeli döndürüp yerleştirmek istediğiniz yere tıklayın.';
+    });
+  }
+
+  // template picking
+  templateGrid.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.tpl-btn') as HTMLElement | null;
+    if (!btn) return;
+    templateGrid.querySelectorAll('.tpl-btn').forEach((b) => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+    setDesign(btn.dataset.src!);
+  });
+
+  // ---------------------------------------------------------------- upload + bg removal
+  function setProgress(pct: number, label?: string) {
+    progressFill.style.width = `${Math.round(pct * 100)}%`;
+    if (label) progressLabel.textContent = label;
+  }
+
+  function downscale(file: File, maxDim = 1200): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        let { width, height } = img;
+        if (Math.max(width, height) > maxDim) {
+          const r = maxDim / Math.max(width, height);
+          width = Math.round(width * r);
+          height = Math.round(height * r);
+        }
+        const c = document.createElement('canvas');
+        c.width = width;
+        c.height = height;
+        c.getContext('2d')!.drawImage(img, 0, 0, width, height);
+        URL.revokeObjectURL(url);
+        c.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob'))), 'image/png');
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith('image/')) return;
+    uploadLabel.textContent = file.name;
+    processingEl.hidden = false;
+    setProgress(0.05, 'Görsel hazırlanıyor…');
+    try {
+      const small = await downscale(file);
+      setProgress(0.12, 'Arka plan kaldırılıyor…');
+      const mod = await import('@imgly/background-removal');
+      const { removeBackground } = mod;
+      const out = await removeBackground(small, {
+        model: 'isnet_quint8',
+        progress: (_k: string, cur: number, total: number) => {
+          setProgress(0.12 + 0.85 * (total ? cur / total : 0), 'Arka plan kaldırılıyor…');
+        },
+      });
+      setDesign(URL.createObjectURL(out));
+      setProgress(1, 'Hazır');
+    } catch (err) {
+      console.error('background removal failed', err);
+      setDesign(URL.createObjectURL(file));
+      progressLabel.textContent = 'Arka plan kaldırılamadı, görsel olduğu gibi kullanılıyor.';
+    }
+    templateGrid.querySelectorAll('.tpl-btn').forEach((b) => b.classList.remove('is-active'));
+    setTimeout(() => {
+      processingEl.hidden = true;
+    }, 800);
+  }
+
+  uploadInput.addEventListener('change', () => {
+    const f = uploadInput.files?.[0];
+    if (f) handleFile(f);
+  });
+  ['dragenter', 'dragover'].forEach((ev) =>
+    uploadDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      uploadDrop.classList.add('is-dragover');
+    })
+  );
+  ['dragleave', 'drop'].forEach((ev) =>
+    uploadDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      uploadDrop.classList.remove('is-dragover');
+    })
+  );
+  uploadDrop.addEventListener('drop', (e) => {
+    const f = (e as DragEvent).dataTransfer?.files?.[0];
+    if (f) handleFile(f);
+  });
+
+  // ---------------------------------------------------------------- picking
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  let downPos = { x: 0, y: 0, t: 0 };
+
+  let lastClick = { x: 0, y: 0, t: 0 };
+
+  renderer.domElement.addEventListener('pointerdown', (e) => {
+    downPos = { x: e.clientX, y: e.clientY, t: performance.now() };
+  });
+
+  renderer.domElement.addEventListener('pointerup', (e) => {
+    const moved = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
+    if (moved > 6 || performance.now() - downPos.t > 600) return; // was a drag
+
+    // second click of a double click: that's a zoom gesture, not a placement
+    const now = performance.now();
+    const isDouble =
+      now - lastClick.t < 320 && Math.hypot(e.clientX - lastClick.x, e.clientY - lastClick.y) < 12;
+    lastClick = { x: e.clientX, y: e.clientY, t: now };
+    if (isDouble) return;
+    if (!bodyMesh || !decalTexture) {
+      if (!decalTexture) placeHint.textContent = 'Önce yukarıdan bir tasarım seçin ya da yükleyin.';
+      return;
+    }
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(bodyMesh, false);
+    if (!hits.length) return;
+    const hit = hits[0];
+    const normal = hit.face ? hit.face.normal.clone() : new THREE.Vector3(0, 0, 1);
+    normal.transformDirection(bodyMesh.matrixWorld);
+    lastHit = { point: hit.point.clone(), normal };
+    buildDecal();
+  });
+
+  function pan(dx: number, dy: number) {
+    const dist = camera.position.distanceTo(controls.target);
+    const step = dist * 0.16;
+    const right = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0).multiplyScalar(dx * step);
+    const up = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1).multiplyScalar(dy * step);
+    const offset = right.add(up);
+    anim = {
+      from: camera.position.clone(),
+      to: camera.position.clone().add(offset),
+      fromT: controls.target.clone(),
+      toT: controls.target.clone().add(offset),
+      t: 0,
+    };
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.pan-pad button').forEach((btn) => {
+    const dirs: Record<string, [number, number]> = {
+      up: [0, 1], down: [0, -1], left: [-1, 0], right: [1, 0],
+    };
+    btn.addEventListener('click', () => {
+      const d = dirs[btn.dataset.pan!];
+      if (d) pan(d[0], d[1]);
+    });
+  });
+
+  document.getElementById('btn-zoom-in')!.addEventListener('click', () => dolly(0.75));
+  document.getElementById('btn-zoom-out')!.addEventListener('click', () => dolly(1.33));
+  document.getElementById('btn-zoom-fit')!.addEventListener('click', () => {
+    const active = document.querySelector('.region-btn.is-active') as HTMLElement | null;
+    setRegion(active?.dataset.region ?? 'full');
+  });
+
+  // Wheel zoom is enabled once the pointer is actually over/using the viewport, and
+  // released when it leaves — so scrolling past the section never gets hijacked.
+  viewport.addEventListener('pointerenter', () => {
+    controls.enableZoom = true;
+  });
+  viewport.addEventListener('pointerleave', () => {
+    controls.enableZoom = false;
+  });
+  function pointerToNDC(e: PointerEvent | MouseEvent) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  }
+
+  renderer.domElement.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    if (!bodyMesh) return;
+    pointerToNDC(e);
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(bodyMesh, false);
+
+    if (!hits.length) {
+      // double click on the backdrop pulls back out to the selected region
+      const active = document.querySelector('.region-btn.is-active') as HTMLElement | null;
+      setRegion(active?.dataset.region ?? 'full');
+      return;
+    }
+
+    // keep the current viewing angle, but orbit around — and move close to — the clicked spot
+    const p = hits[0].point.clone();
+    const dir = camera.position.clone().sub(controls.target).normalize();
+    const dist = THREE.MathUtils.clamp(
+      camera.position.distanceTo(controls.target) * 0.5,
+      controls.minDistance,
+      controls.maxDistance
+    );
+    anim = {
+      from: camera.position.clone(),
+      to: p.clone().add(dir.multiplyScalar(dist)),
+      fromT: controls.target.clone(),
+      toT: p,
+      t: 0,
+    };
+  });
+
+  [scaleInput, rotateInput].forEach((el) => el.addEventListener('input', buildDecal));
+  opacityInput.addEventListener('input', () => {
+    if (decal) (decal.material as THREE.MeshStandardMaterial).opacity = Number(opacityInput.value) / 100;
+  });
+
+  clearBtn.addEventListener('click', () => {
+    if (decal) {
+      scene.remove(decal);
+      decal.geometry.dispose();
+      decal = null;
+    }
+    lastHit = null;
+    placeHint.textContent = 'Modeli döndürüp dövmeyi koymak istediğiniz yere tıklayın.';
+  });
+
+  shotBtn.addEventListener('click', () => {
+    renderer.render(scene, camera);
+    renderer.domElement.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'black-ink-art-onizleme.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  });
+
+  // ---------------------------------------------------------------- loop + resize
+  function resize() {
+    const w = viewport.clientWidth;
+    const h = viewport.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => resize()).observe(viewport);
+  }
+  resize();
+
+  function tick() {
+    requestAnimationFrame(tick);
+    if (anim) {
+      anim.t = Math.min(1, anim.t + 0.045);
+      const e = 1 - Math.pow(1 - anim.t, 3);
+      camera.position.lerpVectors(anim.from, anim.to, e);
+      controls.target.lerpVectors(anim.fromT, anim.toT, e);
+      if (anim.t >= 1) anim = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  tick();
+
+  // ============================================================ PHOTO MODE
+  // Aynı fikir (Three.js DecalGeometry ile eğri bir yüzeye doku projeksiyonu),
+  // burada gerçek 3D vücut yerine kullanıcının kendi fotoğrafı + görünmez bir
+  // silindir kullanılıyor. Silindirin ön yüzü fotoğraftaki tıklanan noktadan
+  // geçiyor; DecalGeometry o noktadan projekte ediyor, silindirin gerçek
+  // eğriliği sarmayı (ve kenarlarda arkaya geçip kaybolmayı) kendiliğinden
+  // veriyor — özel shader matematiği yazmaya gerek kalmıyor.
+  (function initPhotoMode() {
+    const mode3dSection = document.getElementById('mode-3d') as HTMLElement;
+    const modePhotoSection = document.getElementById('mode-photo') as HTMLElement;
+    const modeButtons = document.querySelectorAll<HTMLButtonElement>('.mode-btn');
+
+    const viewportP = document.getElementById('viewport-photo') as HTMLElement;
+    const photoBg = document.getElementById('photo-bg') as HTMLImageElement;
+    const photoDrop = document.getElementById('photo-drop') as HTMLElement;
+    const photoInput = document.getElementById('body-photo-file') as HTMLInputElement;
+    const photoHint = document.getElementById('photo-hint') as HTMLElement;
+    const btnPhotoChange = document.getElementById('btn-photo-change') as HTMLButtonElement;
+
+    const templateGridP = document.getElementById('template-grid-p') as HTMLElement;
+    const uploadInputP = document.getElementById('tattoo-file-p') as HTMLInputElement;
+    const uploadDropP = document.getElementById('upload-drop-p') as HTMLElement;
+    const uploadLabelP = document.getElementById('upload-label-p') as HTMLElement;
+    const processingP = document.getElementById('processing-p') as HTMLElement;
+    const progressFillP = document.getElementById('progress-fill-p') as HTMLElement;
+    const progressLabelP = document.getElementById('progress-label-p') as HTMLElement;
+
+    const scaleP = document.getElementById('ctl-scale-p') as HTMLInputElement;
+    const rotateP = document.getElementById('ctl-rotate-p') as HTMLInputElement;
+    const wrapP = document.getElementById('ctl-wrap-p') as HTMLInputElement;
+    const opacityP = document.getElementById('ctl-opacity-p') as HTMLInputElement;
+    const clearBtnP = document.getElementById('btn-clear-p') as HTMLButtonElement;
+    const shotBtnP = document.getElementById('btn-shot-p') as HTMLButtonElement;
+    const placeHintP = document.getElementById('place-hint-p') as HTMLElement;
+    const maskStatusP = document.getElementById('mask-status-p') as HTMLElement;
+    const maskStatusTextP = document.getElementById('mask-status-text-p') as HTMLElement;
+
+    let sceneReady = false;
+    let sceneP: THREE.Scene, cameraP: THREE.OrthographicCamera, rendererP: THREE.WebGLRenderer;
+    let photoPlane: THREE.Mesh | null = null;
+    let photoAspect = 1;
+    let wrapMesh: THREE.Mesh | null = null;
+    let decalP: THREE.Mesh | null = null;
+    let decalTextureP: THREE.Texture | null = null;
+    let textureAspectP = 1;
+    let lastPoint: THREE.Vector3 | null = null;
+    let sampleCanvas: HTMLCanvasElement | null = null;
+    let sampleCtx: CanvasRenderingContext2D | null = null;
+    let bodyMaskImg: HTMLImageElement | null = null;
+    let bodyMaskUrl: string | null = null;
+    let maskGeneration = 0; // yeni fotoğraf yüklenince eski segmentasyon sonucu gelirse yok say
+
+    // Tıklanan noktadaki gerçek cilt tonunu okumak için fotoğrafı küçük bir
+    // tuvale çiziyoruz — ışık/renk sıcaklığı fotoğraftan fotoğrafa değişiyor,
+    // mürekkebi sabit bir renge değil, o bölgenin gerçek tonuna göre boyuyoruz.
+    function buildSampleCanvas(img: HTMLImageElement) {
+      sampleCanvas = document.createElement('canvas');
+      const maxDim = 300;
+      const r = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+      sampleCanvas.width = Math.max(1, Math.round(img.naturalWidth * r));
+      sampleCanvas.height = Math.max(1, Math.round(img.naturalHeight * r));
+      sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
+      sampleCtx?.drawImage(img, 0, 0, sampleCanvas.width, sampleCanvas.height);
+    }
+
+    // Dünya koordinatındaki tıklama noktasını fotoğraf pikseline çevirip
+    // etrafındaki küçük bir bölgenin ortalama rengini döndürür.
+    function sampleSkinColor(point: THREE.Vector3): THREE.Color | null {
+      if (!sampleCtx || !sampleCanvas) return null;
+      const u = point.x / photoAspect + 0.5;
+      const v = 0.5 - point.y;
+      const px = Math.round(u * sampleCanvas.width);
+      const py = Math.round(v * sampleCanvas.height);
+      const size = Math.max(4, Math.round(sampleCanvas.width * 0.03));
+      const x = Math.max(0, Math.min(sampleCanvas.width - size, px - size / 2));
+      const y = Math.max(0, Math.min(sampleCanvas.height - size, py - size / 2));
+      try {
+        const data = sampleCtx.getImageData(x, y, size, size).data;
+        let r = 0, g = 0, b = 0, n = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+        }
+        if (!n) return null;
+        return new THREE.Color(r / n / 255, g / n / 255, b / n / 255);
+      } catch {
+        return null; // tainted canvas vb. — sessizce vazgeç, düz renk kullanılır
+      }
+    }
+
+    function fitCameraP() {
+      const w = viewportP.clientWidth;
+      const h = viewportP.clientHeight;
+      if (!w || !h) return;
+      const viewAspect = w / h;
+      // Tam 0.5 (yarım-genişlik) — CSS'teki #photo-bg'nin object-fit:contain
+      // ile aynı "sığdır" hesabını yapıyor. Farklı bir oran, WebGL katmanındaki
+      // dövmeyle alttaki <img> fotoğrafın hizasını bozar.
+      const margin = 0.5;
+      if (viewAspect > photoAspect) {
+        cameraP.top = margin;
+        cameraP.bottom = -margin;
+        cameraP.left = -margin * viewAspect;
+        cameraP.right = margin * viewAspect;
+      } else {
+        cameraP.left = -margin * photoAspect;
+        cameraP.right = margin * photoAspect;
+        cameraP.top = (margin * photoAspect) / viewAspect;
+        cameraP.bottom = -(margin * photoAspect) / viewAspect;
+      }
+      cameraP.updateProjectionMatrix();
+    }
+
+    function resizeP() {
+      const w = viewportP.clientWidth;
+      const h = viewportP.clientHeight;
+      if (!w || !h) return;
+      rendererP.setSize(w, h);
+      fitCameraP();
+    }
+
+    function ensureSceneP() {
+      if (sceneReady) return;
+      sceneReady = true;
+      sceneP = new THREE.Scene();
+      cameraP = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
+      cameraP.position.set(0, 0, 10);
+      cameraP.lookAt(0, 0, 0);
+      rendererP = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+      rendererP.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // Fotoğraf ayrı bir <img> katmanı; bu tuval sadece dövmeyi şeffaf zemin
+      // üzerine çiziyor ve CSS ile "multiply" bindiriliyor — mürekkep cildin
+      // renk/gölgesiyle gerçekten karışıyor, üstüne yapıştırılmış gibi durmuyor.
+      rendererP.domElement.style.mixBlendMode = 'multiply';
+      // Vektör kaynaklı tasarımların keskin/pürüzsüz kenarları ciltte iğneyle
+      // işlenmiş gibi durmuyordu — çok hafif bir bulanıklık mürekkebin dokuya
+      // hafifçe yayılmış hissini veriyor.
+      rendererP.domElement.style.filter = 'blur(0.5px)';
+      viewportP.appendChild(rendererP.domElement);
+      sceneP.add(new THREE.AmbientLight(0xffffff, 1));
+
+      window.addEventListener('resize', resizeP);
+      if ('ResizeObserver' in window) new ResizeObserver(() => resizeP()).observe(viewportP);
+      resizeP();
+
+      function tickP() {
+        requestAnimationFrame(tickP);
+        rendererP.render(sceneP, cameraP);
+      }
+      tickP();
+    }
+
+    // ---------------------------------------------------------- mode switch
+    modeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('is-active')) return;
+        modeButtons.forEach((b) => {
+          b.classList.toggle('is-active', b === btn);
+          b.setAttribute('aria-selected', String(b === btn));
+        });
+        const isPhoto = btn.dataset.mode === 'photo';
+        mode3dSection.hidden = isPhoto;
+        modePhotoSection.hidden = !isPhoto;
+        if (isPhoto) {
+          ensureSceneP();
+          resizeP();
+        }
+      });
+    });
+
+    // ---------------------------------------------------------- vücut algılama
+    // Fotoğraftaki kişiyi arka plandan ayırıp bir maske çıkarır (aynı, zaten
+    // projede olan kütüphane — dövme tasarımlarının arka planını kaldırmak
+    // için de kullanılıyor). Dövme katmanına bu maske CSS ile uygulanıyor;
+    // böylece tasarım ne kadar büyük/yanlış yerleştirilmiş olursa olsun
+    // arka plana (duvar, kıyafet dışına vb.) hiç taşmıyor, yalnızca kişinin
+    // olduğu alanda görünüyor.
+    function applyBodyMask(url: string) {
+      bodyMaskUrl = url;
+      const img = new Image();
+      img.onload = () => {
+        bodyMaskImg = img;
+      };
+      img.src = url;
+      if (rendererP) {
+        const style = rendererP.domElement.style as any;
+        style.maskImage = `url(${url})`;
+        style.webkitMaskImage = `url(${url})`;
+        style.maskSize = 'contain';
+        style.webkitMaskSize = 'contain';
+        style.maskRepeat = 'no-repeat';
+        style.webkitMaskRepeat = 'no-repeat';
+        style.maskPosition = 'center';
+        style.webkitMaskPosition = 'center';
+      }
+    }
+
+    function clearBodyMask() {
+      if (bodyMaskUrl) URL.revokeObjectURL(bodyMaskUrl);
+      bodyMaskUrl = null;
+      bodyMaskImg = null;
+      if (rendererP) {
+        const style = rendererP.domElement.style as any;
+        style.maskImage = 'none';
+        style.webkitMaskImage = 'none';
+      }
+    }
+
+    // Yerleştirme ipucu (placeHintP) tasarım seçilir seçilmez üzerine yazılıyor,
+    // bu yüzden algılama durumunu ayrı, sabit bir rozette gösteriyoruz — aksi
+    // halde kullanıcı dövmeyi hemen yerleştirdiğinde "algılanıyor" mesajı hiç
+    // görünmeden kayboluyor ve özellik çalışmıyormuş gibi hissettiriyor.
+    let maskStatusHideTimer: ReturnType<typeof setTimeout> | null = null;
+    function showMaskStatus(text: string, autoHideMs: number | null) {
+      if (maskStatusHideTimer) clearTimeout(maskStatusHideTimer);
+      maskStatusTextP.textContent = text;
+      maskStatusP.hidden = false;
+      maskStatusP.classList.toggle('is-done', autoHideMs !== null);
+      if (autoHideMs !== null) {
+        maskStatusHideTimer = setTimeout(() => {
+          maskStatusP.hidden = true;
+        }, autoHideMs);
+      }
+    }
+
+    // Segmentasyon çıktısı bazen (yakın çekim, karmaşık arka plan) güvenilmez
+    // olabiliyor — ya neredeyse hiçbir şeyi "vücut" saymıyor ya da kareyi
+    // baştan sona vücut sayıyor. İkisi de dövmeyi tamamen gizleyip aracı
+    // bozuk gösterir; bu yüzden maskeyi uygulamadan önce kabaca ne kadarının
+    // opak olduğuna bakıyoruz.
+    async function maskCoverageRatio(blob: Blob): Promise<number> {
+      const bitmap = await createImageBitmap(blob);
+      const w = Math.min(bitmap.width, 96);
+      const h = Math.max(1, Math.round(w * (bitmap.height / bitmap.width)));
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = h;
+      const cx = c.getContext('2d')!;
+      cx.drawImage(bitmap, 0, 0, w, h);
+      const data = cx.getImageData(0, 0, w, h).data;
+      let opaque = 0;
+      for (let i = 3; i < data.length; i += 4) {
+        if (data[i] > 128) opaque++;
+      }
+      return opaque / (w * h);
+    }
+
+    async function segmentBodyPhoto(blob: Blob) {
+      const myGeneration = ++maskGeneration;
+      showMaskStatus(L('Vücut algılanıyor…', 'Detecting body…'), null);
+      try {
+        const mod = await import('@imgly/background-removal');
+        const { removeBackground } = mod;
+        const out = await removeBackground(blob, {
+          model: 'isnet_quint8',
+          progress: () => {},
+        });
+        if (myGeneration !== maskGeneration) return; // bu arada başka fotoğraf yüklendi
+        const coverage = await maskCoverageRatio(out);
+        if (coverage < 0.02 || coverage > 0.95) {
+          console.warn('vücut maskesi güvenilmez sayıldı, kapsama oranı:', coverage);
+          showMaskStatus(
+            L('Vücut net algılanamadı, dövme tüm görsele göre yerleştiriliyor.', 'Could not clearly detect the body — the tattoo uses the full photo instead.'),
+            2600
+          );
+          return;
+        }
+        applyBodyMask(URL.createObjectURL(out));
+        showMaskStatus(L('Vücut algılandı', 'Body detected'), 1600);
+      } catch (err) {
+        console.error('vücut algılama başarısız', err);
+        // Sessizce vazgeç — maskesiz de araç normal şekilde çalışmaya devam eder.
+        showMaskStatus(
+          L('Vücut algılanamadı, dövme tüm görsele göre yerleştiriliyor.', 'Body detection failed — the tattoo uses the full photo instead.'),
+          2600
+        );
+      }
+    }
+
+    // ---------------------------------------------------------- body photo upload
+    function loadBodyPhoto(url: string) {
+      const img = new Image();
+      img.onload = () => {
+        photoAspect = img.naturalWidth / img.naturalHeight || 1;
+        photoBg.src = url;
+        buildSampleCanvas(img);
+
+        if (photoPlane) {
+          sceneP.remove(photoPlane);
+          photoPlane.geometry.dispose();
+          (photoPlane.material as THREE.Material).dispose();
+        }
+        // Bu düzlem hiç çizilmiyor (opacity 0) — yalnızca tıklama konumunu
+        // bulmak (raycasting) ve düz (sarmasız) modda dövmenin projekte
+        // edileceği yüzey olarak var. Gerçek fotoğraf altındaki #photo-bg'de.
+        const geo = new THREE.PlaneGeometry(photoAspect, 1);
+        const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
+        photoPlane = new THREE.Mesh(geo, mat);
+        photoPlane.position.set(0, 0, 0);
+        sceneP.add(photoPlane);
+
+        // eski yerleştirme yeni fotoğrafla anlamsız — sıfırla
+        if (decalP) {
+          sceneP.remove(decalP);
+          decalP.geometry.dispose();
+          decalP = null;
+        }
+        if (wrapMesh) {
+          sceneP.remove(wrapMesh);
+          wrapMesh.geometry.dispose();
+          wrapMesh = null;
+        }
+        lastPoint = null;
+
+        photoDrop.hidden = true;
+        btnPhotoChange.hidden = false;
+        photoHint.hidden = false;
+        placeHintP.textContent = decalTextureP
+          ? L('Dövmeyi koymak istediğiniz noktaya tıklayın.', 'Click where you want to place the tattoo.')
+          : L('Önce yukarıdan bir tasarım seçin ya da yükleyin.', 'First choose or upload a design above.');
+        fitCameraP();
+      };
+      img.src = url;
+    }
+
+    function L(tr: string, en: string) {
+      return document.documentElement.lang === 'en' ? en : tr;
+    }
+
+    async function handleBodyPhoto(file: File) {
+      if (!file.type.startsWith('image/')) return;
+      clearBodyMask();
+      const small = await downscale(file, 1600);
+      loadBodyPhoto(URL.createObjectURL(small));
+      // Beklemeden başlat: fotoğraf hemen görünür ve yerleştirme yapılabilir,
+      // maske birkaç saniye içinde hazır olunca kendiliğinden devreye girer.
+      segmentBodyPhoto(small);
+    }
+
+    photoInput.addEventListener('change', () => {
+      const f = photoInput.files?.[0];
+      if (f) handleBodyPhoto(f);
+    });
+    ['dragenter', 'dragover'].forEach((ev) =>
+      photoDrop.addEventListener(ev, (e) => {
+        e.preventDefault();
+        photoDrop.classList.add('is-dragover');
+      })
+    );
+    ['dragleave', 'drop'].forEach((ev) =>
+      photoDrop.addEventListener(ev, (e) => {
+        e.preventDefault();
+        photoDrop.classList.remove('is-dragover');
+      })
+    );
+    photoDrop.addEventListener('drop', (e) => {
+      const f = (e as DragEvent).dataTransfer?.files?.[0];
+      if (f) handleBodyPhoto(f);
+    });
+    btnPhotoChange.addEventListener('click', () => {
+      photoDrop.hidden = false;
+      btnPhotoChange.hidden = true;
+      photoHint.hidden = true;
+    });
+
+    // ---------------------------------------------------------- tattoo design
+    function setDesignP(url: string) {
+      texLoader.load(url, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        decalTextureP = tex;
+        textureAspectP = (tex.image as HTMLImageElement).width / (tex.image as HTMLImageElement).height || 1;
+        if (lastPoint) buildDecalP();
+        else if (photoPlane) {
+          placeHintP.textContent = L(
+            'Tasarım hazır — dövmeyi koymak istediğiniz noktaya tıklayın.',
+            'Design ready — click where you want to place the tattoo.'
+          );
+        }
+      });
+    }
+
+    templateGridP.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.tpl-btn') as HTMLElement | null;
+      if (!btn) return;
+      templateGridP.querySelectorAll('.tpl-btn').forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      setDesignP(btn.dataset.src!);
+    });
+
+    async function handleDesignFileP(file: File) {
+      if (!file.type.startsWith('image/')) return;
+      uploadLabelP.textContent = file.name;
+      processingP.hidden = false;
+      progressFillP.style.width = '5%';
+      progressLabelP.textContent = L('Görsel hazırlanıyor…', 'Preparing image…');
+      try {
+        const small = await downscale(file);
+        progressFillP.style.width = '12%';
+        progressLabelP.textContent = L('Arka plan kaldırılıyor…', 'Removing background…');
+        const mod = await import('@imgly/background-removal');
+        const { removeBackground } = mod;
+        const out = await removeBackground(small, {
+          model: 'isnet_quint8',
+          progress: (_k: string, cur: number, total: number) => {
+            progressFillP.style.width = `${Math.round((0.12 + 0.85 * (total ? cur / total : 0)) * 100)}%`;
+          },
+        });
+        setDesignP(URL.createObjectURL(out));
+        progressFillP.style.width = '100%';
+      } catch (err) {
+        console.error('background removal failed', err);
+        setDesignP(URL.createObjectURL(file));
+        progressLabelP.textContent = L(
+          'Arka plan kaldırılamadı, görsel olduğu gibi kullanılıyor.',
+          'Could not remove background, using the image as-is.'
+        );
+      }
+      templateGridP.querySelectorAll('.tpl-btn').forEach((b) => b.classList.remove('is-active'));
+      setTimeout(() => {
+        processingP.hidden = true;
+      }, 800);
+    }
+
+    uploadInputP.addEventListener('change', () => {
+      const f = uploadInputP.files?.[0];
+      if (f) handleDesignFileP(f);
+    });
+    ['dragenter', 'dragover'].forEach((ev) =>
+      uploadDropP.addEventListener(ev, (e) => {
+        e.preventDefault();
+        uploadDropP.classList.add('is-dragover');
+      })
+    );
+    ['dragleave', 'drop'].forEach((ev) =>
+      uploadDropP.addEventListener(ev, (e) => {
+        e.preventDefault();
+        uploadDropP.classList.remove('is-dragover');
+      })
+    );
+    uploadDropP.addEventListener('drop', (e) => {
+      const f = (e as DragEvent).dataTransfer?.files?.[0];
+      if (f) handleDesignFileP(f);
+    });
+
+    // ---------------------------------------------------------- wrap + decal
+    // strength 0 -> düz (fotoğraf düzlemine doğrudan projeksiyon).
+    // strength 1 -> tasarımın kendi genişliğine yakın dar bir silindir (belirgin sarma).
+    function buildDecalP() {
+      if (!photoPlane || !lastPoint || !decalTextureP) return;
+      if (decalP) {
+        sceneP.remove(decalP);
+        decalP.geometry.dispose();
+        decalP = null;
+      }
+      if (wrapMesh) {
+        sceneP.remove(wrapMesh);
+        wrapMesh.geometry.dispose();
+        wrapMesh = null;
+      }
+
+      const sizeVal = Number(scaleP.value) / 100; // 0.04 – 0.60
+      const w = sizeVal * 1.3;
+      const h = w / textureAspectP;
+      const strength = Number(wrapP.value) / 100; // 0 – 1
+      const rotRad = THREE.MathUtils.degToRad(Number(rotateP.value));
+
+      let target: THREE.Mesh = photoPlane;
+
+      if (strength > 0.02) {
+        const tightRadius = Math.max(w, h) * 0.32;
+        const flatRadius = 40;
+        const radius = THREE.MathUtils.lerp(flatRadius, tightRadius, strength);
+        const cylGeo = new THREE.CylinderGeometry(radius, radius, h * 3, 48, 1, true);
+        wrapMesh = new THREE.Mesh(cylGeo, new THREE.MeshBasicMaterial());
+        // Silindir yalnızca DecalGeometry'nin projeksiyon hedefi — ekranda hiç
+        // görünmemeli. `visible` bir Object3D özelliği, Material'ınki değil.
+        wrapMesh.visible = false;
+        // silindirin ekseni varsayılan Y; ekranda döndürmek için Z etrafında çeviriyoruz —
+        // decal projeksiyonu da aynı açıyla dönüyor, ikisi birlikte kıvrılıyor.
+        wrapMesh.rotation.z = rotRad;
+        wrapMesh.position.copy(lastPoint);
+        // ön yüzü (kameraya bakan taraf) tam tıklanan noktadan geçsin diye merkezi geriye it.
+        wrapMesh.position.z = lastPoint.z - radius;
+        wrapMesh.updateMatrixWorld(true);
+        sceneP.add(wrapMesh);
+        target = wrapMesh;
+      }
+
+      const dummy = new THREE.Object3D();
+      dummy.position.copy(lastPoint);
+      dummy.lookAt(lastPoint.clone().add(new THREE.Vector3(0, 0, 1)));
+      dummy.rotateZ(rotRad);
+
+      const geo = new DecalGeometry(target, lastPoint, dummy.rotation.clone(), new THREE.Vector3(w, h, Math.max(w, h) * 1.6));
+      const mat = new THREE.MeshBasicMaterial({
+        map: decalTextureP,
+        transparent: true,
+        opacity: Number(opacityP.value) / 100,
+        depthTest: true,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -4,
+      });
+      // Mürekkebi o noktadaki gerçek cilt tonuna hafifçe boyayarak (saf beyaz
+      // yerine) fotoğrafın ışığına/renk sıcaklığına uydur — sabit, "yapıştırma"
+      // hissi veren tek bir siyahtan kurtarır. Çizginin kendisi görünür kalsın
+      // diye harman oranı düşük (%22) tutuldu.
+      const skinColor = sampleSkinColor(lastPoint);
+      if (skinColor) {
+        mat.color.copy(new THREE.Color(1, 1, 1).lerp(skinColor, 0.22));
+      }
+      decalP = new THREE.Mesh(geo, mat);
+      sceneP.add(decalP);
+      placeHintP.textContent = L(
+        'Başka bir noktaya tıklayarak yeniden yerleştirebilirsiniz.',
+        'Click another spot to reposition it.'
+      );
+    }
+
+    let downPosP = { x: 0, y: 0, t: 0 };
+    const raycasterP = new THREE.Raycaster();
+    const pointerP = new THREE.Vector2();
+
+    viewportP.addEventListener('pointerdown', (e) => {
+      downPosP = { x: e.clientX, y: e.clientY, t: performance.now() };
+    });
+
+    viewportP.addEventListener('pointerup', (e) => {
+      const moved = Math.hypot(e.clientX - downPosP.x, e.clientY - downPosP.y);
+      if (moved > 6 || performance.now() - downPosP.t > 600) return;
+      if (!photoPlane) return;
+      if (!decalTextureP) {
+        placeHintP.textContent = L('Önce yukarıdan bir tasarım seçin ya da yükleyin.', 'First choose or upload a design above.');
+        return;
+      }
+      const rect = rendererP.domElement.getBoundingClientRect();
+      pointerP.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      pointerP.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycasterP.setFromCamera(pointerP, cameraP);
+      const hits = raycasterP.intersectObject(photoPlane, false);
+      if (!hits.length) return;
+      lastPoint = hits[0].point.clone();
+      buildDecalP();
+    });
+
+    [scaleP, rotateP, wrapP].forEach((el) => el.addEventListener('input', () => {
+      if (lastPoint) buildDecalP();
+    }));
+    opacityP.addEventListener('input', () => {
+      if (decalP) (decalP.material as THREE.MeshBasicMaterial).opacity = Number(opacityP.value) / 100;
+    });
+
+    clearBtnP.addEventListener('click', () => {
+      if (decalP) {
+        sceneP.remove(decalP);
+        decalP.geometry.dispose();
+        decalP = null;
+      }
+      if (wrapMesh) {
+        sceneP.remove(wrapMesh);
+        wrapMesh.geometry.dispose();
+        wrapMesh = null;
+      }
+      lastPoint = null;
+      placeHintP.textContent = photoPlane
+        ? L('Dövmeyi koymak istediğiniz noktaya tıklayın.', 'Click where you want to place the tattoo.')
+        : L('Önce bir fotoğraf yükleyip bir tasarım seçin.', 'First upload a photo and choose a design.');
+    });
+
+    // "contain" ile sığdırılmış dikdörtgeni hesaplar — #photo-bg'nin CSS
+    // object-fit:contain ile ekranda yaptığının aynısı, indirilen görselde de
+    // fotoğraf ile WebGL katmanının (dövme) hizası bozulmasın diye.
+    function containRect(srcW: number, srcH: number, boxW: number, boxH: number) {
+      const srcAspect = srcW / srcH;
+      const boxAspect = boxW / boxH;
+      let w: number, h: number;
+      if (srcAspect > boxAspect) {
+        w = boxW;
+        h = boxW / srcAspect;
+      } else {
+        h = boxH;
+        w = boxH * srcAspect;
+      }
+      return { x: (boxW - w) / 2, y: (boxH - h) / 2, w, h };
+    }
+
+    shotBtnP.addEventListener('click', () => {
+      if (!sceneReady || !photoBg.src) return;
+      rendererP.render(sceneP, cameraP);
+      const cw = rendererP.domElement.width;
+      const ch = rendererP.domElement.height;
+      const out = document.createElement('canvas');
+      out.width = cw;
+      out.height = ch;
+      const ctx = out.getContext('2d')!;
+      // Ekranda gördüğü ile aynı sonucu üretmek için: önce fotoğrafı çiz,
+      // sonra dövme katmanını (WebGL tuvali) 'multiply' ile üstüne bindir —
+      // canlı önizlemedeki CSS mix-blend-mode:multiply'ın aynısı.
+      const rect = containRect(photoBg.naturalWidth, photoBg.naturalHeight, cw, ch);
+      ctx.drawImage(photoBg, rect.x, rect.y, rect.w, rect.h);
+
+      // Dövme katmanını ayrı bir tuvalde hazırlayıp — varsa — vücut maskesiyle
+      // kırpıyoruz (canlı önizlemedeki CSS mask-image'ın aynısı), sonra bu
+      // kırpılmış katmanı fotoğrafın üstüne 'multiply' ile bindiriyoruz.
+      const layer = document.createElement('canvas');
+      layer.width = cw;
+      layer.height = ch;
+      const lctx = layer.getContext('2d')!;
+      lctx.drawImage(rendererP.domElement, 0, 0, cw, ch);
+      if (bodyMaskImg) {
+        const maskRect = containRect(bodyMaskImg.naturalWidth, bodyMaskImg.naturalHeight, cw, ch);
+        lctx.globalCompositeOperation = 'destination-in';
+        lctx.drawImage(bodyMaskImg, maskRect.x, maskRect.y, maskRect.w, maskRect.h);
+        lctx.globalCompositeOperation = 'source-over';
+      }
+
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.filter = 'blur(0.5px)'; // canlı önizlemedeki CSS filter:blur ile tutarlı olsun
+      ctx.drawImage(layer, 0, 0, cw, ch);
+      ctx.filter = 'none';
+      ctx.globalCompositeOperation = 'source-over';
+      out.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'black-ink-art-fotografla-dene.png';
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    });
+  })();

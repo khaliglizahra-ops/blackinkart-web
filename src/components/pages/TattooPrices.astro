@@ -1,12 +1,10 @@
 ---
-import { langFromPath, localizePath, LANG_LABELS } from '../../i18n/config';
+import { langFromPath, localizePath } from '../../i18n/config';
 import { useTranslations } from '../../i18n/ui';
-import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
-const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { tattooPricing, tattooNotes, kdvNote } from '../../data/prices';

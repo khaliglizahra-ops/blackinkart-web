@@ -6,7 +6,6 @@ import { getLocalizedCollection, cleanSlug } from '../../i18n/content';
 const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
