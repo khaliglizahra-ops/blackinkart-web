@@ -52,6 +52,20 @@ const jsonLd = {
     padding-block: 1rem 0;
   }
 
+  /* Sabit header telefonda/tablette ~80 px; sayfanın ilk bölümünün üst boşluğu
+     (2,5 rem) onu aşamıyordu, ekmek kırıntısı header'ın altına girip logoya
+     yapışıyordu. Yalnızca hamburger menülü genişliklerde, bölümün başındaki
+     kırıntıya boşluk ekliyoruz (görselli rehber başlığı kendi boşluğunu taşıyor). */
+  @media (max-width: 1100px) {
+    :global(.section-tight) > :global(.container) > .breadcrumbs,
+    :global(.section-tight) .breadcrumbs:first-child {
+      padding-top: 3rem;
+    }
+    :global(.section) > :global(.container) > .breadcrumbs {
+      padding-top: 2rem;
+    }
+  }
+
   ol {
     display: flex;
     flex-wrap: wrap;
@@ -70,6 +84,9 @@ const jsonLd = {
   }
 
   a {
+    /* WCAG 2.2 AA (2.5.8): dokunma hedefi en az 24 px yüksekliğinde olsun. */
+    display: inline-block;
+    padding-block: 0.3rem;
     color: var(--color-ivory-faint);
     transition: color var(--dur-fast);
   }

@@ -119,6 +119,11 @@ const langLinks = LANGS.map((l) => ({
 </header>
 
 <div class="mobile-menu" id="mobile-menu" inert>
+  {/* Panel header'ın (z-index 60) üstünde (80) olduğu için hamburger düğmesi
+      açıkken örtülüyor; kapatmak için panelin kendi düğmesi var. */}
+  <button type="button" class="mobile-menu-close" aria-label={t('nav.closeMenu')}>
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg>
+  </button>
   <nav aria-label={t('nav.mobileMenu')}>
     <ul>
       {nav.map((item, i) =>
@@ -457,13 +462,58 @@ const langLinks = LANGS.map((l) => ({
     background: var(--color-ink-950);
     border-left: 1px solid var(--color-hairline);
     z-index: 80;
-    padding: 6.5rem 2rem 2rem;
+    /* Kaydırılan kısım içteki <nav>; kapat düğmesi sabit kalıyor. */
+    display: flex;
+    flex-direction: column;
     transform: translateX(100%);
     transition: transform var(--dur-mid) var(--ease-in-out);
   }
 
   .mobile-menu.is-open {
     transform: translateX(0);
+  }
+
+  /* Menü (8 satır + dil + randevu + WhatsApp, Portfolyo alt menüsü açılınca daha da
+     uzun) telefon ekranından yüksek; kaydırılamayınca "Randevu Al" ve kısa
+     telefonlarda alttaki öğeler ekran dışında kalıyordu. */
+  .mobile-menu nav {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 6.5rem 2rem 2rem;
+  }
+
+  .mobile-menu nav {
+    padding-top: 5.5rem;
+  }
+
+  .mobile-menu nav > ul > li > a,
+  .mobile-nav-row > a {
+    padding-block: 0.6em;
+    font-size: 1.35rem;
+  }
+
+  /* Açılmadan önceki hamburger düğmesiyle aynı yerde ve aynı boyutta. */
+  .mobile-menu-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-ivory);
+    background: transparent;
+    border: 1px solid var(--color-hairline);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: color var(--dur-fast), border-color var(--dur-fast);
+  }
+
+  .mobile-menu-close:hover {
+    color: var(--color-gold);
+    border-color: var(--color-gold-35);
   }
 
   .mobile-menu ul {
@@ -568,20 +618,29 @@ const langLinks = LANGS.map((l) => ({
     border-bottom: none;
   }
 
-  /* Seçici bilerek `.mobile-menu a.mobile-cta`: yukarıdaki `.mobile-menu a` kuralı
-     (özgüllük 0-1-1) tek başına `.mobile-cta`yı (0-1-0) yeniyor ve .btn-primary'nin
-     koyu metin rengini eziyordu — altın zemin üzerinde krem yazı 1.72:1 kalıyordu. */
+  /* Seçiciler bilerek `.mobile-menu a.…`: yukarıdaki `.mobile-menu a` kuralı
+     (özgüllük 0-1-1) tek sınıflı `.mobile-cta` / `.mobile-whatsapp`ı (0-1-0) eziyordu —
+     düğme sola yaslı, serif ve alt çizgili çıkıyor, altın zemin üzerinde krem yazı
+     1.72:1 kalıyordu. */
   .mobile-menu a.mobile-cta {
+    display: flex;
     width: 100%;
     margin-bottom: 1rem;
+    padding: 0.95em 1.4em;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
     color: #150f00;
+    border: 1px solid var(--color-gold);
   }
 
-  .mobile-whatsapp {
+  .mobile-menu a.mobile-whatsapp {
     display: block;
+    padding: 0.7em 0;
     text-align: center;
+    font-family: var(--font-body);
     color: var(--color-ivory-dim);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    border-bottom: none;
     text-decoration: underline;
     text-underline-offset: 4px;
   }
@@ -681,6 +740,8 @@ const langLinks = LANGS.map((l) => ({
     scrim?.classList.add('is-open');
     menu?.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
+    // Klavye / ekran okuyucu kullanıcısı menünün içine düşsün.
+    menu?.querySelector<HTMLElement>('.mobile-menu-close')?.focus({ preventScroll: true });
   }
 
   function syncHeader() {
@@ -703,8 +764,9 @@ const langLinks = LANGS.map((l) => ({
       if (t.closest('#menu-toggle')) {
         const { toggle } = els();
         toggle?.getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
-      } else if (t.closest('#mobile-menu-scrim')) {
+      } else if (t.closest('#mobile-menu-scrim') || t.closest('.mobile-menu-close')) {
         closeMenu();
+        els().toggle?.focus();
       } else if (t.closest('.mobile-submenu-toggle')) {
         const btn = t.closest('.mobile-submenu-toggle') as HTMLButtonElement;
         const submenu = document.getElementById(btn.getAttribute('aria-controls') || '');

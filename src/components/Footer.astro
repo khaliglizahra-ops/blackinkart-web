@@ -175,7 +175,8 @@ const legalNav = getLegalNav(lang);
   }
 
   .link-btn {
-    padding: 0;
+    padding: 0.2rem 0;
+    min-height: 24px;
     font: inherit;
     font-size: 0.88rem;
     text-align: left;
@@ -246,6 +247,10 @@ const legalNav = getLegalNav(lang);
   }
 
   @media (max-width: 860px) {
+    /* Yüzen WhatsApp düğmesi (sağ altta, ~56 px) sayfa sonunda son satırı örtüyordu. */
+    .site-footer {
+      padding-bottom: 5.5rem;
+    }
     .grid {
       grid-template-columns: 1fr 1fr;
     }
