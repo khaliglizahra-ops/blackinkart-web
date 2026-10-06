@@ -49,21 +49,18 @@
       "key": "black-work",
       "label": "Blackwork",
       "images": [
-        "/images/portfolyo/black-work/black-work-01.jpg",
-        "/images/portfolyo/black-work/black-work-02.jpg",
-        "/images/portfolyo/black-work/black-work-03.jpg",
-        "/images/portfolyo/black-work/black-work-04.jpg",
-        "/images/portfolyo/black-work/black-work-05.jpg",
-        "/images/portfolyo/black-work/black-work-06.jpg",
-        "/images/portfolyo/black-work/black-work-07.jpg",
-        "/images/portfolyo/black-work/black-work-08.jpg",
-        "/images/portfolyo/black-work/black-work-09.jpg",
-        "/images/portfolyo/black-work/black-work-10.jpg",
-        "/images/portfolyo/black-work/black-work-11.jpg",
-        "/images/portfolyo/black-work/black-work-12.jpg",
-        "/images/portfolyo/black-work/black-work-13.jpg",
-        "/images/portfolyo/black-work/black-work-14.jpg",
-        "/images/portfolyo/black-work/black-work-15.jpg"
+        "/images/portfolyo/78a53569-672b-4528-808e-705bc5834508-2.jpg",
+        "/images/portfolyo/23fcefe4-6098-4b91-9e4d-fbbd41286c31.jpg",
+        "/images/portfolyo/14b30d01-4038-4287-87dd-c23253e8a53e.jpeg",
+        "/images/portfolyo/9cfec115-af1e-4928-9358-67959a1b8cf0.jpg",
+        "/images/portfolyo/8b514398-86b2-4ea8-9470-eaf129216778.jpg",
+        "/images/portfolyo/4fa84d35-6d50-4e4c-96a3-6827bb4caf9f.jpg",
+        "/images/portfolyo/3ec07327-c8c0-4ed6-be15-b615c533c2b1.jpg",
+        "/images/portfolyo/2ef64d06-ccc7-495f-a576-22a77d6c7694.jpg",
+        "/images/portfolyo/2d783cd5-4394-450a-8cf1-d5f5e9587b80.jpg",
+        "/images/portfolyo/0e4919e3-c918-4d51-8df3-b08530561676.jpg",
+        "/images/portfolyo/_dsc0521.jpg",
+        "/images/portfolyo/_dsc0496.jpg"
       ],
       "labelEn": "Blackwork"
     },
@@ -209,6 +206,13 @@
         "/images/portfolyo/yazi-dovmeleri/yazi-dovmeleri-04.jpg"
       ],
       "labelEn": "Lettering"
+    },
+    {
+      "images": [
+        null
+      ],
+      "label": "Line work",
+      "key": "line-work"
     }
   ],
   "piercingCategories": [
