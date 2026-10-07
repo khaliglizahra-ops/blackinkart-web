@@ -1,52 +1,52 @@
 [
   {
-    "src": "/images/hero/hero-01.jpg",
+    "src": "/images/hero/hero-n01.jpg",
+    "position": "center 50%",
+    "label": "Üç sinekkuşu — köprücük"
+  },
+  {
+    "src": "/images/hero/hero-n02.jpg",
+    "position": "center 38%",
+    "label": "Maori kabile desen — üst kol"
+  },
+  {
+    "src": "/images/hero/hero-n03.jpg",
     "position": "center 48%",
-    "label": "Medusa — kol"
+    "label": "Fok portresi — kol"
   },
   {
-    "src": "/images/hero/hero-02.jpg",
+    "src": "/images/hero/hero-n04.jpg",
     "position": "center 42%",
-    "label": "Fırça vuruşu kuş — kaburga"
+    "label": "Kırmızı ejder — kalça"
   },
   {
-    "src": "/images/hero/hero-03.jpg",
-    "position": "center 42%",
-    "label": "Kelebekli kadın portresi — kol"
+    "src": "/images/hero/hero-n05.jpg",
+    "position": "center 45%",
+    "label": "Japon balığı — omuz"
   },
   {
-    "src": "/images/hero/hero-04.jpg",
-    "position": "center 58%",
-    "label": "Şakayık — omuz"
-  },
-  {
-    "src": "/images/hero/hero-05.jpg",
-    "position": "center 52%",
-    "label": "Geyik — ense"
-  },
-  {
-    "src": "/images/hero/hero-06.jpg",
-    "position": "center 50%",
-    "label": "Medusa — göğüs"
-  },
-  {
-    "src": "/images/hero/hero-07.jpg",
-    "position": "center 50%",
-    "label": "Gözler — göğüs"
-  },
-  {
-    "src": "/images/hero/hero-08.jpg",
-    "position": "center 46%",
-    "label": "Ornamental sternum"
-  },
-  {
-    "src": "/images/hero/hero-09.jpg",
+    "src": "/images/hero/hero-n06.jpg",
     "position": "center 55%",
-    "label": "Sinek kuşu — sırt"
+    "label": "Köpekbalığı — kol"
   },
   {
-    "src": "/images/hero/hero-10.jpg",
-    "position": "center 50%",
-    "label": "Köpek balığı — kaburga"
+    "src": "/images/hero/hero-n07.jpg",
+    "position": "center 42%",
+    "label": "Ejder çizgisi — kol"
+  },
+  {
+    "src": "/images/hero/hero-n08.jpg",
+    "position": "center 48%",
+    "label": "Kanatlı şeytan — kol"
+  },
+  {
+    "src": "/images/hero/hero-n09.jpg",
+    "position": "center 28%",
+    "label": "Aslan ailesi — üst kol"
+  },
+  {
+    "src": "/images/hero/hero-n10.jpg",
+    "position": "center 52%",
+    "label": "Medusa — bilek"
   }
 ]
