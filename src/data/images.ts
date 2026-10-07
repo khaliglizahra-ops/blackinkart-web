@@ -12,7 +12,7 @@
 const SKIPPED = ['/images/tattoo-templates/', '/images/sertifikalar/', '/images/_thumbs/'];
 
 export function thumb(src: string): string {
-  if (!src.startsWith('/images/')) return src;
+  if (typeof src !== 'string' || !src.startsWith('/images/')) return src;
   if (SKIPPED.some((p) => src.startsWith(p))) return src;
   return src.replace('/images/', '/images/_thumbs/');
 }
