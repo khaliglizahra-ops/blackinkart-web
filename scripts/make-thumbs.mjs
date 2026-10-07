@@ -84,3 +84,9 @@ console.log(
   `[küçük resim] ${made} üretildi, ${skipped} güncel` +
     (made ? `, ızgaralarda ${(savedBytes / 1024 / 1024).toFixed(1)} MB tasarruf` : '')
 );
+
+// KALICI: Hostinger FTP'si klasör silmeyi (rmd) kabul etmiyor; dağıtım eylemi eski top30
+// klasörlerini silmeye çalışınca "550 No such file" ile düşüyordu (7 Ekim 2026). Klasörler boş
+// bir işaret dosyasıyla yerinde bırakıldı; SİLMEYİN (public/images/portfolyo/top30/.keep dahil).
+await fs.mkdir(path.join(OUT, 'portfolyo/top30'), { recursive: true });
+await fs.writeFile(path.join(OUT, 'portfolyo/top30/.keep'), '');
