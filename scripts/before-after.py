@@ -3,12 +3,17 @@
 Önce / sonra fotoğraflarını tek görselde birleştirir (Cover-up & Scar-up için).
 
   python3 scripts/before-after.py ONCE.jpg SONRA.jpg cikti.jpg [--layout auto|side|stack]
+         [--box-aspect 2.0] [--focus-before x,y] [--focus-after x,y]
 
 - İki fotoğraf da dikeyse yan yana (önce solda), ikisi de yataysa üst üste (sonra
   üstte, önce altta — stüdyonun mevcut "yengeç" görseliyle aynı düzen). `--layout`
   ile elle seçilebilir.
-- Hiçbir fotoğraf kırpılmaz: oranları farklıysa eksik kısım, fotoğrafın kendi
-  bulanık/karartılmış kopyasıyla doldurulur.
+- Varsayılan olarak hiçbir fotoğraf kırpılmaz: oranları farklıysa eksik kısım,
+  fotoğrafın kendi bulanık/karartılmış kopyasıyla doldurulur.
+- Biri yatay biri dikey gibi oranlar çok farklıysa, bulanık şeritler fotoğrafı küçültür.
+  O zaman `--box-aspect` (kutu en/boy oranı) ile kutuyu seçip `--focus-before` /
+  `--focus-after` (0–1 arası "x,y", dövmenin fotoğraftaki yeri) ile o fotoğrafı
+  dövmeye odaklı kırparak kutuyu doldurabilirsiniz.
 - Etiketler çift dilli ("ÖNCE · BEFORE", "SONRA · AFTER") ve sitenin yazı tipiyle
   (Manrope) çizilir; kırpma payı için fotoğrafın ortasına konur — ızgara kareye
   kırptığında kenar etiketleri kaybolmasın diye.
@@ -37,8 +42,11 @@ def load(path):
     return im.convert('RGB')
 
 
-def fit_box(im, box_w, box_h):
-    """Fotoğrafı kırpmadan kutuya sığdırır; boşlukları kendi bulanık kopyasıyla doldurur."""
+def fit_box(im, box_w, box_h, focus=None):
+    """Fotoğrafı kutuya sığdırır. `focus` (x, y; 0–1) verilirse kutuyu doldurana kadar o noktaya
+    odaklı kırpar; verilmezse kırpmadan sığdırıp boşlukları kendi bulanık kopyasıyla doldurur."""
+    if focus:
+        return ImageOps.fit(im, (box_w, box_h), Image.LANCZOS, centering=focus)
     bg = ImageOps.fit(im, (box_w, box_h), Image.LANCZOS).filter(ImageFilter.GaussianBlur(28))
     bg = Image.eval(bg, lambda v: int(v * 0.35))
     scale = min(box_w / im.width, box_h / im.height)
@@ -69,6 +77,9 @@ def main():
     ap.add_argument('after')
     ap.add_argument('out')
     ap.add_argument('--layout', choices=['auto', 'side', 'stack'], default='auto')
+    ap.add_argument('--box-aspect', type=float, help='her fotoğraf kutusunun en/boy oranı (örn. 2.0 = geniş)')
+    ap.add_argument('--focus-before', help='önce fotoğrafını "x,y" noktasına odaklı kırp (0–1)')
+    ap.add_argument('--focus-after', help='sonra fotoğrafını "x,y" noktasına odaklı kırp (0–1)')
     a = ap.parse_args()
 
     if not os.path.exists(FONT):
@@ -79,7 +90,7 @@ def main():
     layout = a.layout if a.layout != 'auto' else ('side' if portrait else 'stack')
 
     # Kutu boyutu: iki fotoğrafın ortalama oranı, ortalama boyutuyla.
-    aspect = (before.width / before.height + after.width / after.height) / 2
+    aspect = a.box_aspect or (before.width / before.height + after.width / after.height) / 2
     if layout == 'side':
         box_h = round((before.height + after.height) / 2)
         box_w = round(box_h * aspect)
@@ -90,7 +101,9 @@ def main():
         total_w, total_h = box_w, box_h * 2 + GAP
 
     canvas = Image.new('RGB', (total_w, total_h), INK)
-    b_img, a_img = fit_box(before, box_w, box_h), fit_box(after, box_w, box_h)
+    focus = lambda v: tuple(float(p) for p in v.split(',')) if v else None
+    b_img = fit_box(before, box_w, box_h, focus(a.focus_before))
+    a_img = fit_box(after, box_w, box_h, focus(a.focus_after))
     if layout == 'side':
         b_pos, a_pos = (0, 0), (box_w + GAP, 0)
     else:  # sonra üstte, önce altta
