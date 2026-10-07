@@ -84,10 +84,3 @@ console.log(
   `[küçük resim] ${made} üretildi, ${skipped} güncel` +
     (made ? `, ızgaralarda ${(savedBytes / 1024 / 1024).toFixed(1)} MB tasarruf` : '')
 );
-
-// GEÇİCİ (7 Ekim 2026): eski top30 klasörleri silinirken FTP dağıtımı, sunucuda zaten
-// bulunmayan `_thumbs/portfolyo/top30` klasörünü silmeye çalışıp "550 No such file" ile
-// takılıyordu. Klasörün var olması için boş bir işaret dosyası bırakıyoruz; dağıtım bir kez
-// başarılı olunca bu satırlar ve public/images/portfolyo/top30/.keep silinebilir.
-await fs.mkdir(path.join(OUT, 'portfolyo/top30'), { recursive: true });
-await fs.writeFile(path.join(OUT, 'portfolyo/top30/.keep'), '');
