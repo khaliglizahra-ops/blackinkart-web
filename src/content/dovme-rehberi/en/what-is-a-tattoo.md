@@ -4,7 +4,7 @@ translationKey: "what-is-a-tattoo"
 description: "What a tattoo actually is, a short history, and what it means today. What to know before getting a permanent tattoo in Ankara."
 order: 1
 updatedAt: "2026-02-01"
-heroImage: "/images/portfolyo/top30/top-06.jpg"
+heroImage: "/images/portfolyo/top60/top-n03.jpg"
 ---
 
 A tattoo is a permanent design created by using a needle to place coloured pigment into the **dermis**, the deeper layer of the skin. The epidermis — the outer layer — renews itself over time, but pigment that reaches the dermis stays put. That is why a tattoo is permanent.

@@ -4,7 +4,7 @@ translationKey: "tattoo-styles"
 description: "Realistik, minimal, blackwork, geleneksel ve daha fazlası — dövme stillerine genel bakış ve size uygun tarzı bulun."
 order: 2
 updatedAt: "2026-02-01"
-heroImage: "/images/portfolyo/top30/top-24.jpg"
+heroImage: "/images/portfolyo/top60/top-n01.jpg"
 ---
 
 Hangi stilde dövme yaptıracağınıza karar vermek düşündüğünüzden zor olabilir. İşte stüdyomuzda en çok tercih edilen başlıca stiller:

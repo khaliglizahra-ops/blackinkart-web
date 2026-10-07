@@ -7,7 +7,7 @@
  * opens the untouched original via each image's data-full attribute.
  *
  * Output mirrors the source tree under public/images/_thumbs/, so
- * /images/portfolyo/top30/top-01.jpg -> /images/_thumbs/portfolyo/top30/top-01.jpg
+ * /images/portfolyo/top60/top-n01.jpg -> /images/_thumbs/portfolyo/top60/top-n01.jpg
  *
  * Runs on every build, after optimize-images.mjs (so thumbnails come from the
  * already-optimised original). Output is gitignored — it is regenerated, not authored.

@@ -4,7 +4,7 @@ translationKey: "tattoo-styles"
 description: "Realism, minimal, blackwork, traditional and more — an overview of tattoo styles and how to find the one that suits you."
 order: 2
 updatedAt: "2026-02-01"
-heroImage: "/images/portfolyo/top30/top-24.jpg"
+heroImage: "/images/portfolyo/top60/top-n01.jpg"
 ---
 
 Deciding which style to get can be harder than you expect. These are the styles most often chosen at our studio:

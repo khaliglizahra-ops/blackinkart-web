@@ -79,8 +79,8 @@ collections:
               name: image
               label: Fotoğraf
               widget: image
-              media_folder: /public/images/portfolyo/top30
-              public_folder: /images/portfolyo/top30
+              media_folder: /public/images/portfolyo/top60
+              public_folder: /images/portfolyo/top60
             hint: Ana sayfada ve portfolyo sayfasının en üstünde gösterilir.
           - name: categories
             label: Dövme — Stil Kategorileri
@@ -333,8 +333,8 @@ collections:
     summary: '{{order}} — {{title}}'
     sortable_fields: [order, title]
     preview_path: 'dovme/{{slug}}'
-    media_folder: /public/images/portfolyo/top30
-    public_folder: /images/portfolyo/top30
+    media_folder: /public/images/portfolyo/top60
+    public_folder: /images/portfolyo/top60
     fields:
       - { name: translationKey, label: İngilizce eşleşme anahtarı (değiştirmeyin), widget: string, required: false, hint: 'Bu sayfayı İngilizce karşılığına bağlar. Dil değiştirici bunu kullanıyor.' }
       - { name: title, label: Başlık, widget: string }
@@ -455,8 +455,8 @@ collections:
     summary: '{{order}} — {{title}}'
     sortable_fields: [order, title]
     preview_path: 'en/tattoo/{{slug}}'
-    media_folder: /public/images/portfolyo/top30
-    public_folder: /images/portfolyo/top30
+    media_folder: /public/images/portfolyo/top60
+    public_folder: /images/portfolyo/top60
     fields:
       - { name: translationKey, label: Türkçe eşleşme anahtarı (değiştirmeyin), widget: string, hint: 'Bu sayfayı Türkçe karşılığına bağlar. Türkçe dosyadakiyle birebir aynı olmalı.' }
       - { name: title, label: Başlık, widget: string }
