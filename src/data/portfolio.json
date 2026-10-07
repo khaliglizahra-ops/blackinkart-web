@@ -105,9 +105,7 @@
         "/images/portfolyo/img_5716.jpeg",
         "/images/portfolyo/img_1213-2.jpeg",
         "/images/portfolyo/img_1978.jpeg",
-        "/images/portfolyo/img_8289.jpeg",
-        "/images/portfolyo/black-work/black-work-s01.jpg",
-        "/images/portfolyo/black-work/black-work-s02.jpg"
+        "/images/portfolyo/img_8289.jpeg"
       ],
       "labelEn": "Blackwork"
     },
@@ -127,7 +125,13 @@
         "/images/portfolyo/coverup-scarup/coverup-10.jpg",
         "/images/portfolyo/coverup-scarup/coverup-11.jpg",
         "/images/portfolyo/coverup-scarup/coverup-12.jpg",
-        "/images/portfolyo/coverup-scarup/coverup-13.jpg"
+        "/images/portfolyo/coverup-scarup/coverup-13.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-14.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-15.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-16.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-17.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-18.jpg",
+        "/images/portfolyo/coverup-scarup/coverup-19.jpg"
       ],
       "labelEn": "Cover-up & Scar-up"
     },
@@ -288,8 +292,7 @@
         "/images/portfolyo/743d9950-5972-4742-887d-0df558bd4f7e.jpg",
         "/images/portfolyo/12f52ed2-1f69-4a48-8881-28ff7103f10b.png",
         "/images/portfolyo/6fffa709-3aba-4a16-b6c2-58aad3431e64.jpg",
-        "/images/portfolyo/5d2d051c-6fce-42c7-9da9-54178c7c1909.jpg",
-        "/images/portfolyo/portreler/portreler-s01.jpg"
+        "/images/portfolyo/5d2d051c-6fce-42c7-9da9-54178c7c1909.jpg"
       ],
       "labelEn": "Portrait"
     },
@@ -334,7 +337,6 @@
         "/images/portfolyo/renkliler/renkliler-s38.jpg",
         "/images/portfolyo/renkliler/renkliler-s39.jpg",
         "/images/portfolyo/renkliler/renkliler-s40.jpg",
-        "/images/portfolyo/renkliler/renkliler-s41.jpg",
         "/images/portfolyo/renkliler/renkliler-s42.jpg",
         "/images/portfolyo/renkliler/renkliler-s43.jpg",
         "/images/portfolyo/renkliler/renkliler-s44.jpg",
@@ -367,8 +369,7 @@
         "/images/portfolyo/renkliler/renkliler-s71.jpg",
         "/images/portfolyo/renkliler/renkliler-s72.jpg",
         "/images/portfolyo/renkliler/renkliler-s73.jpg",
-        "/images/portfolyo/renkliler/renkliler-s74.jpg",
-        "/images/portfolyo/renkliler/renkliler-s75.jpg"
+        "/images/portfolyo/renkliler/renkliler-s74.jpg"
       ],
       "labelEn": "Colour"
     },
@@ -587,8 +588,7 @@
         "/images/portfolyo/line-work/line-work-61.jpg",
         "/images/portfolyo/line-work/line-work-62.jpg",
         "/images/portfolyo/line-work/line-work-63.jpg",
-        "/images/portfolyo/line-work/line-work-64.jpg",
-        "/images/portfolyo/line-work/line-work-65.jpg"
+        "/images/portfolyo/line-work/line-work-64.jpg"
       ],
       "label": "Line work",
       "key": "line-work",
