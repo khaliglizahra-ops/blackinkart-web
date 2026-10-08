@@ -3,22 +3,30 @@ title: "Piercing Malzemeleri: Titanyum, Cerrahi Çelik ve Bioplastik"
 translationKey: "piercing-materials"
 description: "Titanyum, 316L cerrahi çelik ve bioplastik (PTFE) piercing malzemelerinin karşılaştırması ve ilk delim için doğru seçim."
 order: 2
-updatedAt: "2026-02-01"
+updatedAt: "2026-10-08"
 heroImage: "/images/piercing/kulak/kulak-02.jpg"
 ---
 
-Piercing takısının malzemesi, iyileşme sürecinizi doğrudan etkiler. Stüdyomuzda üç ana malzeme kullanıyoruz:
+Piercing takısının malzemesi iyileşme sürecinizi doğrudan etkiler. Stüdyomuzda üç ana malzeme kullanıyoruz:
 
 ## Titanyum
 
-Biyo-uyumlu ve nikel içermeyen titanyum, tıbbi implantlarda da kullanılan birinci sınıf bir malzemedir. Çelik takılara göre yaklaşık %50 daha hafiftir ve alerjik reaksiyon riski en düşük seçenektir. **İlk delimde önerimiz her zaman titanyumdur.**
+Titanyum, biyo-uyumluluğu ve nikel içermemesi nedeniyle tıbbi implantlarda ve piercinglerde kullanmak için birinci sınıf bir malzemedir. Çelik takılara göre hissedilir bir hafifliğe (%50) sahiptir. Alerjik reaksiyon için minimum risk oluşturduğundan ilk delimde özellikle tavsiye edilir.
 
-## 316L Cerrahi Çelik
+## 316L Cerrahi çelik
 
-Doğru alaşımda (316L) üretildiğinde güvenli bir seçenektir; nikel oranı AB ve Türkiye düzenlemelerine uygun olmalıdır (%0,01 mg/cm²'nin altı). Ne yazık ki piyasada bu standardın altında, ucuz ve düşük kaliteli çelik takılar da satılmaktadır — bunlar alerjik reaksiyon riskini ciddi şekilde artırır ve altın/gümüş gibi damgalanmadığı için ayırt edilmeleri zordur.
+Cerrahi çelik piercingler sadece 316L alaşımlı çelikten kullanılmalıdır. İçeriğindeki nikel miktarı %0,01 mg/cm² olmalıdır; bu oran AB ve Türkiye nikel düzenlemesine uygundur.
+
+Maalesef piyasada daha ucuz, düşük kaliteli çelikten yapılmış piercingler de bulunmaktadır ve bunlar kullananlarda alerjik reaksiyon riskini çok artırır. Altın, gümüş gibi üzerinde kodu yazmadığı için ayırt etmek çok zordur. Bizim önerimiz riske atmamak için ilk delimde her zaman titanyum kullanmaktır.
 
 ## Bioplastik (PTFE)
 
-Yüzeyi son derece pürüzsüz olan bioplastik, yara sıvısının ve yabancı maddelerin yapışmasını engelleyerek ilk delimde sorunsuz bir iyileşme sağlar. Esnek yapısı sayesinde özellikle dil, dudak, göbek, meme ucu ve genital bölge gibi hareketli alanlarda tercih edilir; diş minesine zarar vermez. Elektriği iletmediği için ameliyat, röntgen, tomografi ve MRI sırasında da takılı kalabilir. Ayrıca keloid tedavisi sürecinde iyileşmeyi hızlandırmaya yardımcı olur.
+Bioplastik (politetrafloroetilen), yüzeyinin son derece pürüzsüz olması nedeniyle yabancı maddelerin ve yara sıvısının yapışmasını engeller. Bu sayede ilk delimde iyileşme sürecini minimum ve sorunsuz geçirmenizi sağlar.
 
-**Özet:** İlk delim için titanyum, hassas/hareketli bölgeler ve keloid süreci için bioplastik öneriyoruz; cerrahi çelik ise yalnızca doğru 316L standardında güvenlidir.
+- **Esnektir.** Özellikle dil ve dudak bölgelerinde diş minesine ve diş etine zarar vermediği için tavsiye edilir.
+- **Hareketli bölgelerde rahattır.** Hareket kabiliyeti yüksek olduğundan göbek, meme ucu ve genital bölgelerde kullanım rahatlığı sağlar.
+- **Görünmezdir.** Şeffaf modelleri sayesinde istenildiğinde minimum görünürlük sağlar.
+- **Elektriği iletmez.** Cerrahi operasyonlar, X-Ray, CT ve MRI sırasında takılı kalabilir. Kapanma riski olan yeni delinmiş piercinglerinizi bioplastikle koruyarak üniversite, KPSS gibi sınavlara girebilirsiniz.
+- **Keloid sürecinde yardımcıdır.** Bakımla birlikte keloid tedavisinde daha hızlı sonuç almak mümkündür.
+
+**Özet:** İlk delim için titanyum, hassas ve hareketli bölgeler ile keloid süreci için bioplastik öneriyoruz. Cerrahi çelik yalnızca doğru 316L standardında güvenlidir.

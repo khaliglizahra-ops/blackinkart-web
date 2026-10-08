@@ -3,28 +3,45 @@ title: "Bump ve Keloid: Nedenleri ve Ev Tedavisi"
 translationKey: "bumps-and-keloids"
 description: "Piercing bump ve keloid oluşumunun nedenleri, aspirin ve Fucicort ile ev bakım protokolü."
 order: 5
-updatedAt: "2026-09-29"
+updatedAt: "2026-10-08"
 heroImage: "/images/piercing/dermal/dermal-01.jpg"
 ---
 
 ## Bump nedir, neden oluşur?
 
-Piercing bump; en sık enfeksiyon, iltihaplanma, uygun olmayan takı malzemesi, piercingin çok hareket ettirilmesi veya üzerine yatılması sonucu oluşan şişlik ve kızarıklıktır. Zamanında ilgilenilmezse kalıcı keloide dönüşebilir.
+Piercing bump oluşumu pek çok farklı nedenden kaynaklanabilir. Piercingin enfekte olması ve iltihaplanması en sık görülen nedenler arasındadır.
 
-## Keloid nedir?
+Piercing delimi sonrasında yaranın iyileşmesi için belirli bir zaman gerekir. Sağlıklı bir iyileşme için doğru ve düzenli bakım uygulanmalı; enfeksiyon riskini ortadan kaldırmak için bölge temiz tutulmalı, önerilen solüsyonlar kullanılmalı ve delim bölgesine temas edilmemelidir. Buna özen gösterilmezse bölgeye bakteri ve mikroplar girebilir ve enfeksiyon oluşabilir. Enfekte olan piercingin çevresinde şişmiş, kırmızı bir bump meydana gelebilir.
 
-Keloid, cildin yaralanma, ameliyat, dövme veya piercing gibi bir travmaya karşı gösterdiği anormal ve aşırı doku büyümesidir. Parlak, sert ve kabarık bir görünümü vardır; bazen travmadan 3 ay veya daha uzun süre sonra da ortaya çıkabilir.
+Bump oluşumuna yol açan diğer etkenler:
 
-## Ev bakım protokolü
+- **Uygun olmayan takı:** Cilt sağlığına uygun olmayan, kalitesiz malzemeden üretilmiş takılar, özellikle alerjik bünyeli kişilerde bump sebebidir.
+- **Erken takı değişimi:** Piercing tamamen iyileşmeden değiştirilmeye çalışılması riski artırır.
+- **Yetersiz takı temizliği:** Takıların doğru şekilde temizlenmemesi riski artırır.
+- **Hareket ve baskı:** Piercingin çok hareket ettirilmesi veya üzerine yatılması bilinen nedenlerdendir.
 
-> **Bu protokolü uygulamadan önce mutlaka piercerinize danışın.** Yayılan kızarıklık, artan sıcaklık, kokulu akıntı ya da ateş varsa evde bir şey denemeyin, hekime başvurun. Fucicort reçeteli bir ilaçtır.
+Gerekli önlem ve zamanında tedavi yapılmayan bumpların keloide dönüştüğü gözlemlenmiştir. Özellikle keloid yatkınlığı olan kişilerin daha hassas olması gerekir; böyle durumlarda zaman kaybetmeden piercerinize danışmanızı öneririz.
 
-1. Bir aspirin tabletini havanda ezerek toz hâline getirin.
-2. Tozu temiz bir kaba alıp çam ağacı yağı ya da suyla karıştırarak kulak çöpüyle uygulanabilir kıvamda bir krem elde edin. Aspirin yerine eczaneden edineceğiniz **Rif ampulü** de kullanabilirsiniz.
-3. Karışımı ya da Rifi problemli deliğin giriş, çıkış ve çevresine günde **4 kez** sürün; aspirin için her gün taze karışım hazırlayın.
-4. Aspirin ya da Rif kuruduktan sonra üzerine kortizonlu **Fucicort** merhem sürün.
-5. Bu rutini **7 gün boyunca günde 4 kez** tekrarlayın.
+## Keloid nedir, neden oluşur?
 
-Gelişme görülmezse takı malzemesine karşı bir reaksiyon söz konusu olabilir. Bu durumda bioplastik piercinge geçilmesini, bakımın 1 hafta daha sürdürülmesini ve ardından 1 ay boyunca bioplastikle devam edilmesini öneriyoruz.
+Keloid, ciltteki yaralanma, sıyrık, cerrahi işlem, dövme veya piercing gibi herhangi bir nedenle travmaya uğramış cilde karşı oluşan anormal ve aşırı doku büyümesidir.
 
-Zamanında müdahale edilmeyen bump ve keloidler büyüyerek tedavisi daha zor bir hâl alabilir; ciddi vakalarda hastanede kortizon enjeksiyonu veya cerrahi müdahale gerekebilir. **Bakımınızı ihmal etmeyin ve herhangi bir belirtide piercerinize danışın.**
+Yara izi görünümünün oluştuğu bu bölgeler hassas, parlak, kabarık ve sert görülebilir. Keloid, piercing, dövme veya ameliyattan sonra da gelişebilir; bazı durumlarda cilt yaralandıktan 3 ay veya daha uzun süre sonra ortaya çıkar.
+
+Keloide yatkın olmanın dışında, zamanında tedavi edilmeyip büyüyen bumplar da keloide dönüşebilir. Bu yüzden anlatılan bakımlara özenle uyulmalı; piercing kesinlikle hareket ettirilmemeli, temiz tutulmalı ve üzerine yatılmamalıdır.
+
+## Bump ve keloid nasıl tedavi edilir?
+
+Bump veya keloid ilk oluştuğunda öncelikle piercerinize danışmalısınız. Bunun dışında yapılması gereken bakım şöyledir:
+
+1. Bir aspirin tabletini havanda ezerek toz haline getirin.
+2. Tozu küçük, temiz, boş bir krem kabı gibi bir kaba dökün. Çam ağacı yağı veya hazır su ile kulak çöpü yardımıyla, cıvık bir krem kıvamına gelene kadar karıştırın.
+3. Karışımı problemli deliğin giriş ve çıkışına ve çevresine sürün. Günde **4 kez** uygulayın; her gün yeni aspirinli karışım hazırlamanız gerekir.
+4. Aspirini her uyguladığınızda, kuruduktan sonra kortizonlu merhem olan **Fucicort** merhemi sürün.
+5. Bu işlemi **7 gün boyunca günde 4 kez** tekrarlayın; bump iyileşmeye başlayacaktır.
+
+Gelişme yoksa vücudunuz metale reaksiyon gösteriyor olabilir. Böyle bir durumda bioplastik piercing takıp aynı bakımı 1 hafta daha sürdürmeli, ardından 1 ay boyunca plastik piercingle tamamen iyileşmesini beklemelisiniz. Bu şekilde %90 oranında kesin sonuç alıyoruz.
+
+Tedavisi zamanında yapılmayan keloid ve bump giderek büyür ve çözümü zorlaşır. Böyle durumlarda hastane şartlarında iğneli kortizon uygulanır; geçmezse cerrahi işlemle sonuç alınır. Lütfen bakımlarınızı ihmal etmeyin.
+
+> Yayılan kızarıklık, artan sıcaklık, kokulu akıntı veya ateş varsa evde bir şey denemeyin, hekime başvurun.

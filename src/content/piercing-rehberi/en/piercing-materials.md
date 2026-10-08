@@ -3,22 +3,30 @@ title: "Piercing Materials: Titanium, Surgical Steel and Bioplast"
 translationKey: "piercing-materials"
 description: "Comparing titanium, 316L surgical steel and bioplast (PTFE) piercing jewellery, and the right choice for a first piercing."
 order: 2
-updatedAt: "2026-02-01"
+updatedAt: "2026-10-08"
 heroImage: "/images/piercing/kulak/kulak-02.jpg"
 ---
 
-The material your jewellery is made of directly affects how well you heal. We use three main materials in our studio:
+The material of your jewellery directly affects how you heal. We use three main materials in the studio:
 
 ## Titanium
 
-Biocompatible and nickel-free, titanium is a first-class material also used in medical implants. It is roughly 50% lighter than steel jewellery and carries the lowest risk of an allergic reaction. **For a first piercing, our recommendation is always titanium.**
+Because it is biocompatible and nickel-free, titanium is a first-class material for medical implants and for piercings. It is noticeably lighter than steel jewellery (by about 50%). Since it carries the lowest risk of an allergic reaction, it is especially recommended for a first piercing.
 
 ## 316L surgical steel
 
-Made to the correct alloy specification (316L), this is a safe option. The nickel content must comply with EU and Turkish regulations — below 0.01 mg/cm². Unfortunately, cheap low-grade steel jewellery that falls short of this standard is also sold on the market. It significantly raises the risk of an allergic reaction, and because steel is not hallmarked the way gold and silver are, it is hard to tell apart.
+Surgical steel piercing jewellery should only be made from 316L alloy steel. Its nickel content should be 0.01% mg/cm², a level that complies with EU and Turkish nickel regulations.
+
+Unfortunately, cheaper, lower-quality steel piercings are also on the market, and they greatly increase the risk of an allergic reaction in those who wear them. Because, unlike gold or silver, they carry no hallmark, they are very hard to tell apart. To be safe, our recommendation is always to use titanium for a first piercing.
 
 ## Bioplast (PTFE)
 
-Bioplast has an extremely smooth surface, which stops wound fluid and foreign matter from adhering and allows a first piercing to heal cleanly. Because it flexes, it is particularly suited to areas that move — tongue, lip, navel, nipple and genital piercings — and it does not damage tooth enamel. As it does not conduct electricity, it can stay in during surgery, X-rays, CT scans and MRI. It can also help speed healing during keloid treatment.
+Because its surface is extremely smooth, bioplast (polytetrafluoroethylene) stops foreign matter and wound fluid from sticking to it. That lets you get through the healing of a first piercing with minimal trouble.
 
-**In short:** titanium for a first piercing; bioplast for sensitive or mobile areas and during keloid treatment; surgical steel only when it genuinely meets the 316L standard.
+- **It is flexible.** It is recommended especially for the tongue and lip, as it does not harm tooth enamel or gums.
+- **It is comfortable in areas that move.** Its high mobility makes it comfortable in the navel, nipple and genital areas.
+- **It can be nearly invisible.** Its transparent models give minimum visibility when you want it.
+- **It does not conduct electricity.** It can stay in during surgery, X-rays, CT scans and MRIs. Using bioplast to protect a fresh piercing that risks closing lets you sit exams such as university entrance or the KPSS.
+- **It helps with keloids.** With proper care, faster results are possible in keloid treatment.
+
+**In short:** titanium for a first piercing; bioplast for sensitive and moving areas and for the keloid process. Surgical steel is safe only at the correct 316L standard.

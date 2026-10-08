@@ -3,18 +3,19 @@ title: "The Piercing Process"
 translationKey: "the-piercing-process"
 description: "How a professional piercing is carried out — sterile setup, disinfection and the piercing itself, step by step."
 order: 3
-updatedAt: "2026-02-01"
+updatedAt: "2026-10-08"
 heroImage: "/images/piercing/kas/kas-02.jpg"
 ---
 
-A safe piercing starts with the preparation that happens before anything touches you. This is our process at Black Ink Art:
+Before anything else, you need to find a piercer who will do the work professionally and hygienically. At Black Ink Art, the process runs like this:
 
-1. **Setup** — The work surface is sterilised. Forceps, scissors and other instruments are autoclave-sterilised and opened from their single-use packaging in front of you.
-2. **Marking** — We decide the exact point together and mark it.
-3. **Disinfection** — The area is disinfected first with povidone-iodine, then with alcohol. Single-use sterile gloves are worn throughout.
-4. **Securing** — The tissue is held with forceps, and the area is lightly numbed if needed.
-5. **The piercing** — The piercing is made through the marked point with a single-use sterile cannula. The needle is withdrawn, the jewellery is passed through the cannula, and the ball is fitted.
-6. **For dermal piercings** — An anchor implant is placed into a pocket opened with a single-use punch, and the tightness of the gem is checked.
-7. **Waste handling** — Needles go into clinical waste. Reusable metal instruments are re-sterilised.
+1. **Setup preparation** — The piercing setup table is sterilised, and sterilised forceps, scissors and tools are laid out.
+2. **Choosing the jewellery and disinfecting** — A piercing suited to the area is chosen; the area is disinfected first with povidone-iodine (Betadine) and then with alcohol.
+3. **Gloves** — Every step is carried out in single-use sterile gloves.
+4. **Securing the tissue** — Once the area has been cleaned with Betadine, the tissue is held with forceps; blood flow is stopped and the area is numbed.
+5. **The piercing** — The piercing is made at the points marked beforehand, using a single-use sterile cannula needle. With the needle withdrawn, the cannula is passed through the skin, the jewellery is threaded through it, and the ball is fitted.
+6. **Waste handling** — Afterwards the needle goes into medical waste, and all metal tools are sterilised so that they can be used again.
 
-For more on the equipment and hygiene protocols we use, see our [hygiene and safety](/en/hygiene-and-safety) page.
+**For dermal piercings**, the opening is made with a single-use dermal punch, and the procedure ends with the anchor implant being seated in the opening. The tightness of the stone on top is checked.
+
+For more on our hygiene protocols, see our [hygiene and safety](/en/hygiene-and-safety) page.

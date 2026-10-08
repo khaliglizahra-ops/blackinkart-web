@@ -3,18 +3,26 @@ title: "What Is a Piercing?"
 translationKey: "what-is-a-piercing"
 description: "What is a piercing? The definition, a short history, how it is done and where it sits in modern practice."
 order: 1
-updatedAt: "2026-02-01"
+updatedAt: "2026-10-08"
 heroImage: "/images/piercing/kulak/kulak-01.jpg"
 ---
 
-A piercing is a form of body art in which the skin, fatty tissue or cartilage is pierced and a piece of jewellery is placed through it. It can be done almost anywhere on the body — from the ear and nose to the lip, eyebrow, navel, nipple and genital area.
+A piercing is a form of body adornment in which the skin, the fat layer beneath it or cartilage is pierced and a piece of jewellery or a needle is placed in the opening. It can be done almost anywhere on the face, and piercings can also be worn on the navel, nipples and genital area.
 
-## A short history
+In other words, a piercing means that almost any part of your body you like is pierced with a needle and fitted with jewellery suited to that area.
 
-Piercing goes back some 5,000 years. In Ancient Egypt, pharaohs and statesmen wore navel piercings. In Ancient Rome, soldiers wore chest piercings as a symbol of their courage. In Mayan culture, spiritual leaders pierced their tongues, and in Victorian England piercing was widespread among the nobility. Throughout history it has signalled fertility, bravery and status. Today it is largely a matter of personal aesthetic choice.
+## The history of piercing
 
-## How it is done
+Looking at the history of piercing, we can see it has been used from primitive societies through to modern ones. In primitive societies it was generally a sign of status; as societies modernised, it became an accessory that beautifies the body, and it has come down to us in that role.
 
-A professional piercing is carried out with sterile equipment, a single-use needle or cannula, and the right piece of jewellery. The tissue is disinfected first, the piercing is made through the marked point with a single-use sterile cannula, and the appropriate jewellery is fitted. For dermal piercings, an implant is placed into a pocket opened with a single-use punch.
+With a meaning that reaches far back in history, piercing is today a decorative and cosmetic practice. Keeping pace with changing eras, it has served as an ornament for people in many parts of the world, and in its history it has stood for fertility, courage, aristocracy and nobility.
 
-For more detail, see our guides to [the piercing process](/en/piercing/the-piercing-process) and [piercing materials](/en/piercing/piercing-materials).
+- Archaeological research finds traces of piercing as far back as 5,000 years ago.
+- In Ancient Egypt, the wealthy, statesmen and pharaohs had their navels pierced.
+- In Ancient Rome, piercing was a sign of courage, and soldiers had their chests pierced.
+- In the Maya culture of South America, spiritual leaders had their tongues pierced.
+- In Victorian England, nobles had their genitals and nipples pierced.
+
+Today ear, tongue, navel and nose piercings remain widespread, and piercings are also done on the nipples, lip, eyebrow and genitals.
+
+To see how it is done, read [the piercing process](/en/piercing/the-piercing-process); for choosing jewellery, see [piercing materials](/en/piercing/piercing-materials).

@@ -3,28 +3,45 @@ title: "Bumps and Keloids: Causes and Home Care"
 translationKey: "bumps-and-keloids"
 description: "Why piercing bumps and keloids form, and a home care protocol using aspirin and Fucicort."
 order: 5
-updatedAt: "2026-09-29"
+updatedAt: "2026-10-08"
 heroImage: "/images/piercing/dermal/dermal-01.jpg"
 ---
 
 ## What is a bump, and why does it form?
 
-A piercing bump is swelling and redness most often caused by infection, inflammation, unsuitable jewellery material, moving the piercing too much, or sleeping on it. Left unattended, it can turn into a permanent keloid.
+A piercing bump can come from many different causes. Infection and inflammation of the piercing are among the most common.
 
-## What is a keloid?
+After a piercing, the wound needs a certain amount of time to heal. For healthy healing you must follow correct, regular aftercare: keep the area clean, use the recommended solutions and avoid touching the piercing, which removes the risk of infection. If this is neglected, bacteria and germs can enter the area and infection can set in. An infected piercing can develop a swollen, red bump around it.
 
-A keloid is an abnormal, excessive growth of tissue in response to trauma such as an injury, surgery, a tattoo or a piercing. It looks shiny, firm and raised, and can sometimes appear 3 months or more after the trauma itself.
+Other factors that can lead to a bump:
 
-## Home care protocol
+- **Unsuitable jewellery:** Jewellery made of low-quality material that is not suited to skin health is a cause of bumps, especially in people with allergies.
+- **Changing the jewellery too early:** Trying to change a piercing before it has fully healed raises the risk.
+- **Poor cleaning of the jewellery:** Jewellery that is not cleaned properly raises the risk.
+- **Movement and pressure:** Moving the piercing a lot or sleeping on it are well-known causes.
 
-> **Always speak to your piercer before following this protocol.** If there are signs of infection — spreading redness, heat, discharge or fever — see a doctor rather than treating it at home. Fucicort is a prescription medicine.
+Bumps that are not prevented and treated in time have been observed to turn into keloids. People prone to keloids need to be especially careful; in such cases we recommend consulting your piercer without losing time.
 
-1. Crush an aspirin tablet in a mortar until it is a fine powder.
-2. Put the powder into a clean container and mix it with pine oil or plain water to a consistency you can apply with a cotton bud. You can use a **Rif ampoule** from the pharmacy instead of the aspirin treatment.
-3. Apply the mixture or the Rif to the entry point, the exit point and the surrounding area **4 times a day**; if using aspirin, prepare a fresh mixture each day.
-4. Once the aspirin or Rif has dried, apply **Fucicort** ointment over it.
-5. Repeat this routine **4 times a day for 7 days**.
+## What is a keloid, and why does it form?
 
-If there is no improvement, the problem may be a reaction to the jewellery material. In that case we recommend switching to bioplast jewellery and continuing the care for another week, then staying with bioplast for a further month.
+A keloid is an abnormal, excessive growth of tissue in skin that has suffered trauma of any kind — an injury, a graze, a surgical procedure, a tattoo or a piercing.
 
-Bumps and keloids that are not dealt with promptly can grow and become harder to treat. Severe cases may need a cortisone injection or surgery at a hospital. **Do not neglect your aftercare, and speak to your piercer at the first sign of a problem.**
+These areas look like scars and can appear tender, shiny, raised and hard. A keloid can develop after a piercing, a tattoo or an operation, and in some cases it appears 3 months or more after the skin was injured.
+
+Besides being prone to keloids, bumps that grow without being treated in time can also turn into keloids. So follow the aftercare described here closely: the piercing must never be moved, must be kept clean and must not be slept on.
+
+## How are bumps and keloids treated?
+
+When a bump or keloid first appears, consult your piercer first. Beyond that, the care to follow is:
+
+1. Crush one aspirin tablet into a powder in a mortar.
+2. Pour the powder into a small, clean, empty container such as a cream jar. Using a cotton bud, mix it with pine oil or bottled water until it becomes a runny cream.
+3. Apply the mixture to the entry and exit of the problem hole and the area around it. Apply it **4 times a day**; you will need to make fresh aspirin mixture every day.
+4. Each time you apply the aspirin, once it has dried, apply **Fucicort**, a cortisone ointment.
+5. Repeat this **4 times a day for 7 days**, and the bump will start to heal.
+
+If there is no improvement, your body may be reacting to the metal. In that case, fit a bioplast piercing, continue the same care for 1 more week, and then wait for it to heal completely with a plastic piercing over 1 month. With this approach we get a definite result in 90% of cases.
+
+Keloids and bumps that are not treated in time keep growing and become harder to resolve. In such cases an injection of cortisone is given in a hospital, and if that does not clear it, surgery is used. Please do not neglect your aftercare.
+
+> If you have spreading redness, rising warmth, foul-smelling discharge or a fever, do not try anything at home; see a doctor.
