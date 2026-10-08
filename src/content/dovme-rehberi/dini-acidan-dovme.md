@@ -7,10 +7,8 @@ updatedAt: "2026-02-01"
 heroImage: "/images/portfolyo/black-work/black-work-09.jpg"
 ---
 
-Dövme yaptırmanın müşterilerimiz tarafından sıkça sorulan bir boyutu da dini bakış açısıdır. Bu sayfada, konuyla ilgili genel kabul gören dini görüşü bilgi amaçlı paylaşıyoruz; nihai karar elbette kişinin kendi inancına ve tercihine aittir.
+### Dini açıdan kalıcı dövme
 
-İslami kaynaklara göre kalıcı dövme yaptırmak hadis-i şerifle caiz görülmemiştir; bu görüşe göre yaptıran kişinin tövbe edip tekrarlamaması istenir. Caiz olmama gerekçesi, emanet olarak görülen bedene kalıcı bir değişiklik yapılmasının mekruh sayılmasına dayanır.
+Dövme yaptırmanın caiz olmadığı, hadis-i şerifle bildirilmiştir. Yaptıranın tevbe etmesi ve bir daha yaptırmaması gerekir. Dövme, deri üstünde bir tabaka meydana getirmeyip, deri altından yapıldığı için gusle ve abdeste mani olmaz. Deri üstüne yapılmış olsa da, kolayca çıkarma imkânı yoksa, yine abdeste ve gusle mani olmaz.
 
-Buna karşın, dövmenin abdest veya gusle engel olup olmadığı ayrı bir konudur: dövme deri **altına** uygulandığı ve derinin üzerinde su geçirmez bir tabaka oluşturmadığı için, dini hükümlere göre abdest ve gusle mani teşkil etmez.
-
-Bu bilgi, stüdyomuzun bir dini görüş dayatması değil, sıkça gelen bir sorunun şeffaf yanıtıdır. Kararınızı özgürce ve bilgilendirilmiş şekilde vermeniz bizim için önemlidir.
+Caiz olmama sebebi de emanet bedene zarar vermenin mekruh olmasından dolayıdır. Aynı sigara içmek veya faça atmak gibi. İslam yaratılış şeklini kabul edip bedeninde değişiklik yapmamanı ister. Canını acıtarak görünüşünde yaptığın her değişiklik mekruhtur buna kaş almak da dahildir.
