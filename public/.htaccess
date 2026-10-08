@@ -60,6 +60,16 @@ ErrorDocument 404 /404.html
 # işini aşağıdaki X-Frame-Options görüyor.
 # Permissions-Policy: site kamera, mikrofon, konum, ödeme vb. hiçbir cihaz
 # özelliğini kullanmıyor; kapatmak, sayfaya sızan bir betiğin de kullanmasını önler.
+# HTML sayfaları her seferinde sunucuya sorulsun (no-cache = önbellekte tut ama kullanmadan
+# önce doğrula). Başlık olmadığında tarayıcılar sayfayı sezgisel olarak saatlerce
+# önbellekten gösterebiliyor; bir düzeltme yayınlansa bile ziyaretçi eski sayfayı görüyordu.
+# Görseller, _astro betikleri ve yazı tipleri kendi klasörlerinin kuralını izlemeye devam eder.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
