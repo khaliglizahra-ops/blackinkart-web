@@ -9,7 +9,7 @@ import HealingChart from '../HealingChart.astro';
 import { site } from '../../data/site';
 import { piercingPriceTables } from '../../data/prices';
 import { thumb } from '../../data/images';
-import { areaPhotos as areaPhotosFor, areaCategoryKey } from '../../data/gallery';
+import { areaPhotos as areaPhotosFor, areaCategoryKey, areaDiagram } from '../../data/gallery';
 import { localizePath, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/ui';
 
@@ -45,6 +45,7 @@ const jsonLd = {
 // Fotoğraflar portfolyodaki bölge kategorisinden (yoksa bölge içeriğindeki liste).
 const areaPhotoList: string[] = kind === 'area' ? areaPhotosFor((entry.data as any).translationKey, (entry.data as any).photos ?? []) : [];
 const areaCategory = kind === 'area' ? areaCategoryKey((entry.data as any).translationKey) : undefined;
+const areaDiagramSrc = kind === 'area' ? areaDiagram((entry.data as any).translationKey) : undefined;
 // Panelden silinebilir ya da kimliği değiştirilebilir — bulunamazsa sayfa çökmemeli.
 const priceTable = kind === 'area'
   ? piercingPriceTables(lang).find((tb) => tb.slug === (entry.data as any).priceSlug) ?? null
@@ -111,6 +112,12 @@ const painLabel = kind === 'area'
         <div class="prose" data-reveal>
           <Content />
         </div>
+
+        {areaDiagramSrc && (
+          <figure class="area-diagram" data-reveal>
+            <img src={areaDiagramSrc} alt={`${entry.data.title} — ${lang === 'en' ? 'placement points' : 'nokta şeması'}`} loading="lazy" />
+          </figure>
+        )}
 
         {gallerySansHero.length > 0 && (
           <div class="area-gallery" data-reveal>
@@ -189,6 +196,18 @@ const painLabel = kind === 'area'
     grid-template-columns: repeat(4, 1fr);
     gap: 0.6rem;
     margin: 2rem 0 1.2rem;
+  }
+
+  .area-diagram {
+    margin: 2rem 0 0;
+  }
+
+  .area-diagram img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-hairline);
+    background: var(--color-ink-950);
   }
 
   .more-work {

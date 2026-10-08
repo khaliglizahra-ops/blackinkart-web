@@ -1,5 +1,5 @@
 ---
-title: "Yanak (Cheek) Piercing"
+title: "Cheek Piercing"
 translationKey: "cheek"
 description: "Yanak (dimple) piercing uygulaması, iyileşme süresi, bakımı ve fiyatı."
 order: 10

@@ -62,13 +62,13 @@
     "/images/portfolyo/img_8297.jpeg"
   ],
   "studio": [
+    "/images/studio/studio-n07.jpg",
     "/images/studio/studio-n01.jpg",
     "/images/studio/studio-n02.jpg",
     "/images/studio/studio-n03.jpg",
     "/images/studio/studio-n04.jpg",
     "/images/studio/studio-n05.jpg",
-    "/images/studio/studio-n06.jpg",
-    "/images/studio/studio-n07.jpg"
+    "/images/studio/studio-n06.jpg"
   ],
   "categories": [
     {
@@ -930,7 +930,7 @@
     },
     {
       "key": "gobek",
-      "label": "Göbek",
+      "label": "Belly",
       "images": [
         "/images/piercing/gobek/gobek-n01.jpg",
         "/images/piercing/gobek/gobek-n02.jpg",
@@ -1017,7 +1017,7 @@
     },
     {
       "key": "meme-ucu",
-      "label": "Meme Ucu",
+      "label": "Nipple",
       "images": [
         "/images/piercing/meme-ucu/meme-ucu-n01.jpg",
         "/images/piercing/meme-ucu/meme-ucu-n02.jpg",
@@ -1076,7 +1076,7 @@
     },
     {
       "key": "yanak",
-      "label": "Yanak",
+      "label": "Cheek",
       "images": [
         "/images/piercing/yanak/yanak-01.jpg"
       ],

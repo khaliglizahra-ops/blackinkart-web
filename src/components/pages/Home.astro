@@ -20,7 +20,7 @@ const priceLocale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
 const artists = await getLocalizedCollection('sanatcilar', lang);
 const artist = artists[0];   // panelden silinebilir; aşağıda koşullu render ediliyor
 const teaserImages = topPortfolio.slice(0, 16);
-const studioTeaser = studioPhotos.slice(0, 3);
+const studioTeaser = studioPhotos.slice(0, 4);
 const faq = await getFaq(lang, 'general');
 ---
 

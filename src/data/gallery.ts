@@ -54,6 +54,22 @@ const AREA_TO_CATEGORY: Record<string, string> = {
   cheek: 'yanak',
 };
 
+/** Bölge sayfasındaki nokta şeması (adlı noktalar gösterilir). Yoksa bölüm gizlenir. */
+const DIAGRAMS: Record<string, string> = {
+  kulak: '/images/piercing/diagram/kulak.jpg',
+  burun: '/images/piercing/diagram/burun.jpg',
+  kas: '/images/piercing/diagram/kas.jpg',
+  gobek: '/images/piercing/diagram/gobek.jpg',
+  'meme-ucu': '/images/piercing/diagram/meme-ucu.jpg',
+  dil: '/images/piercing/diagram/dil.jpg',
+  dudak: '/images/piercing/diagram/dudak.jpg',
+};
+
+export function areaDiagram(translationKey: string | undefined): string | undefined {
+  const key = areaCategoryKey(translationKey);
+  return key ? DIAGRAMS[key] : undefined;
+}
+
 export function areaCategoryKey(translationKey: string | undefined): string | undefined {
   return translationKey ? AREA_TO_CATEGORY[translationKey] : undefined;
 }
