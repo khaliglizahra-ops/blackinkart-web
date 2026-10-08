@@ -29,7 +29,7 @@ export const ui = {
 
     // — Ortak eylemler —
     'cta.book': 'Randevu Al',
-    'cta.viewPortfolio': 'Portfolyoyu Gör',
+    'cta.viewPortfolio': 'Detaylı İncele',
     'cta.contact': 'İletişime Geç',
     'cta.whatsapp': "WhatsApp'tan Yaz",
     'cta.whatsappAria': 'WhatsApp üzerinden yazın',
@@ -148,8 +148,8 @@ export const ui = {
     'home.preview.p': 'Hazır tasarımlardan birini seçin ya da kendi tasarımınızı yükleyin; 3D vücut modelini döndürüp kol, omuz, sırt ya da bacak üzerine yerleştirin, boyutunu ve açısını ayarlayın.',
     'home.preview.cta': '3D Aracı Dene',
     'home.preview.alt': 'Kolunda dövme bulunan 3D vücut modeli — dövme önizleme aracı',
-    'home.portfolio.h': 'Son Çalışmalarımızdan',
-    'home.portfolio.all': 'Tüm Portfolyoyu Gör →',
+    'home.portfolio.h': 'Öne Çıkanlar',
+    'home.portfolio.all': 'Detaylı İncele →',
     'home.portfolio.alt': 'Black Ink Art dövme çalışması',
     'home.founder': 'Kurucu',
     'home.founder.cta': 'Hikayesini Oku',
@@ -365,7 +365,7 @@ export const ui = {
 
     // — Shared actions —
     'cta.book': 'Book Now',
-    'cta.viewPortfolio': 'View Portfolio',
+    'cta.viewPortfolio': 'Explore in Detail',
     'cta.contact': 'Get in Touch',
     'cta.whatsapp': 'Message on WhatsApp',
     'cta.whatsappAria': 'Message us on WhatsApp',
@@ -484,8 +484,8 @@ export const ui = {
     'home.preview.p': 'Pick one of our ready-made designs or upload your own. Rotate the 3D body model, place the design on an arm, shoulder, back or leg, and adjust its size and angle.',
     'home.preview.cta': 'Try the 3D Tool',
     'home.preview.alt': '3D body model with a tattoo on the arm — the tattoo preview tool',
-    'home.portfolio.h': 'From Our Recent Work',
-    'home.portfolio.all': 'See the full portfolio →',
+    'home.portfolio.h': 'Featured',
+    'home.portfolio.all': 'Explore in Detail →',
     'home.portfolio.alt': 'Black Ink Art tattoo work',
     'home.founder': 'Founder',
     'home.founder.cta': 'Read his story',
