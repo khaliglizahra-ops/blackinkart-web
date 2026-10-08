@@ -11,6 +11,7 @@ import GuideHero from '../../components/GuideHero.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
 import { site } from '../../data/site';
 import { thumb } from '../../data/images';
+import { areaPhotos } from '../../data/gallery';
 import Faq from '../Faq.astro';
 import { getFaq, faqSchema } from '../../data/faq';
 
@@ -104,7 +105,7 @@ const faq = await getFaq(lang, 'piercing');
       <h2>{t('piercing.byArea')}</h2>
       <div class="area-grid">
         {areas.map((a) => {
-          const photo = a.data.photos?.[0];
+          const photo = areaPhotos((a.data as any).translationKey, a.data.photos ?? [])[0];
           return (
             <a href={`${L('/piercing')}/${cleanSlug(a.slug)}`} class="area-card" data-reveal>
               <div class="area-thumb">

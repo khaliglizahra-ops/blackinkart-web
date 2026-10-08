@@ -36,3 +36,31 @@ export const piercingGalleries: GalleryCategory[] = cleanGalleries(portfolio.pie
 export const topPortfolio: string[] = cleanImages(portfolio.featured);
 
 export const studioPhotos: string[] = cleanImages(portfolio.studio);
+
+/**
+ * Piercing bölge sayfalarının (ve /piercing sayfasındaki kartların) fotoğrafları portfolyodaki
+ * bölge kategorisinden geliyor — portfolyo güncellenince bölge sayfaları da güncellenir.
+ * Anahtar: bölge içeriğinin `translationKey`i → portfolyo kategori kimliği.
+ */
+const AREA_TO_CATEGORY: Record<string, string> = {
+  ear: 'kulak',
+  nose: 'burun',
+  lip: 'dudak',
+  tongue: 'dil',
+  eyebrow: 'kas',
+  navel: 'gobek',
+  nipple: 'meme-ucu',
+  dermal: 'dermal',
+  cheek: 'yanak',
+};
+
+export function areaCategoryKey(translationKey: string | undefined): string | undefined {
+  return translationKey ? AREA_TO_CATEGORY[translationKey] : undefined;
+}
+
+/** Bölgenin portfolyodaki fotoğrafları; kategori yoksa `fallback` (bölge içeriğindeki liste). */
+export function areaPhotos(translationKey: string | undefined, fallback: string[] = []): string[] {
+  const key = areaCategoryKey(translationKey);
+  const found = piercingGalleries.find((g) => g.key === key);
+  return found && found.images.length ? found.images : fallback;
+}

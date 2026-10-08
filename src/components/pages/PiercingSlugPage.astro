@@ -9,6 +9,7 @@ import HealingChart from '../HealingChart.astro';
 import { site } from '../../data/site';
 import { piercingPriceTables } from '../../data/prices';
 import { thumb } from '../../data/images';
+import { areaPhotos as areaPhotosFor, areaCategoryKey } from '../../data/gallery';
 import { localizePath, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/ui';
 
@@ -41,13 +42,19 @@ const jsonLd = {
   publisher: { '@type': 'Organization', name: site.name },
 };
 
-const areaPhotos = kind === 'area' ? ((entry.data as any).photos ?? []) : [];
+// Fotoğraflar portfolyodaki bölge kategorisinden (yoksa bölge içeriğindeki liste).
+const areaPhotoList: string[] = kind === 'area' ? areaPhotosFor((entry.data as any).translationKey, (entry.data as any).photos ?? []) : [];
+const areaCategory = kind === 'area' ? areaCategoryKey((entry.data as any).translationKey) : undefined;
 // Panelden silinebilir ya da kimliği değiştirilebilir — bulunamazsa sayfa çökmemeli.
 const priceTable = kind === 'area'
   ? piercingPriceTables(lang).find((tb) => tb.slug === (entry.data as any).priceSlug) ?? null
   : null;
-const areaHeroImage = areaPhotos[0];
-const gallerySansHero = areaPhotos.slice(1);
+const areaHeroImage = areaPhotoList[0];
+// Izgara 4 sütun: son satır eksik kalmasın diye 4'ün katı (en çok 12) gösteriliyor.
+const GALLERY_MAX = 12;
+const galleryCount = Math.min(GALLERY_MAX, Math.floor((areaPhotoList.length - 1) / 4) * 4);
+const gallerySansHero = galleryCount > 0 ? areaPhotoList.slice(1, 1 + galleryCount) : [];
+const moreWorkHref = areaCategory ? `${localizePath('/portfolyo', lang)}?grup=piercing&kategori=${areaCategory}` : null;
 
 // painLevel şemada Türkçe sabit; ekranda dile göre karşılığı gösteriliyor.
 const PAIN_KEYS = {
@@ -113,6 +120,12 @@ const painLabel = kind === 'area'
           </div>
         )}
 
+        {moreWorkHref && (
+          <p class="more-work" data-reveal>
+            <a class="btn btn-outline" href={moreWorkHref}>{t('area.moreWork')}</a>
+          </p>
+        )}
+
         <h2>{t('area.prices')}</h2>
         {priceTable ? (
           <PriceTable table={priceTable} compact />
@@ -173,9 +186,19 @@ const painLabel = kind === 'area'
 
   .area-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 0.6rem;
-    margin: 2rem 0 2.5rem;
+    margin: 2rem 0 1.2rem;
+  }
+
+  .more-work {
+    margin: 0 0 2.5rem;
+  }
+
+  @media (max-width: 520px) {
+    .area-gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   .area-gallery img {

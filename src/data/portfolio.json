@@ -1072,6 +1072,14 @@
         "/images/piercing/dermal/dermal-n16.jpg"
       ],
       "labelEn": "Dermal"
+    },
+    {
+      "key": "yanak",
+      "label": "Yanak",
+      "images": [
+        "/images/piercing/yanak/yanak-01.jpg"
+      ],
+      "labelEn": "Cheek"
     }
   ]
 }

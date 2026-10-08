@@ -7,7 +7,8 @@ updatedAt: "2026-02-01"
 priceSlug: "diger"
 healingTime: "4 – 8 ay"
 painLevel: "Orta"
-photos: []
+photos:
+  - "/images/piercing/yanak/yanak-01.jpg"
 ---
 
 Yanak (dimple) piercingi, yüze gamze etkisi veren, ağız içinden dışa doğru uygulanan bir piercing türüdür. Ağız içi mukoza ile dış yanak dokusunu bir arada delen bir teknik olduğundan, diğer yüzeysel piercinglere göre daha uzun bir iyileşme süreci gerektirir.
