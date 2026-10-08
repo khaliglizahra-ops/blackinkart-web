@@ -31,16 +31,10 @@ d) Carefully transfer the design to the skin using transfer solution and gel.
 
 e) Let the transfer dry completely, otherwise it may spread on contact.
 
-4. Preparing the setup table: first the setup table is sterilised, and the area where the materials will be used is covered with stretch film or single-use pads.
+4. Preparing the setup table: first the setup table is sterilised, and the area where the materials will be used is covered with stretch film or single-use pads. The machine equipment is set up and adjusted. Single-use needles suited to the design are prepared, and as much ink as is needed is placed in single-use ink caps (a cap holder can make this easier). This is also the stage where the petroleum jelly is prepared, which lets the needle move in and out of the skin more easily and minimises damage to the tissue, along with the solution used to clean the skin during the work. (Because putting a hand into the petroleum jelly could spread infectious diseases, it must be taken out with a single-use wooden spatula.) Finally come the indispensable single-use sterile gloves.
 
-5. Setting up the machine: if the needles used are not single-use, they are prepared by soldering, sterilised in an autoclave and packed without being touched by hand, ready for use.
+5. Setting up the machine: if the needles used are not single-use, needles prepared by soldering are sterilised in an autoclave and packed without being touched by hand, and must be opened in front of the client as single-use items. The needle suited to the work is chosen and fitted to the machine. The machine is connected to the power adapter with clip cord cables, and the voltage and amperage appropriate for the tattoo are set with the pedal. The ink in the cap is drawn into the tip, and once work begins, the ink gathered at the tip is injected into the dermis. The tip must be compatible with the needle, otherwise problems such as ink spraying, not enough ink being delivered or skin damage can occur.
 
-6. Doing the tattoo: once everything is ready, the tattoo chair is shaped to suit the area being tattooed, a single-use cover is laid down, and the client is seated on the chair.
+6. Doing the tattoo: once everything is ready, the tattoo chair is shaped to suit the area being tattooed, a single-use cover is laid down, and the client is seated on the chair. The work is always applied from the bottom of the transferred design upwards, and keeping the skin taut during the work is very important for clean lines and for the skin to take the ink well. Care must be taken not to wipe off the transfer while stretching the skin. In general, the outline (contour) is done first, in case the tattoo is smudged, and once the stencil is removed the work continues with filling and shading. While working, ink smeared across the skin should be cleaned often with diluted antiseptic soap or solutions. Any part that will be worked without touching the needle should be softened with quickly dissolving petroleum jelly, which keeps the skin from deforming.
 
-7. Aftercare: the newly tattooed area is covered with surgical tape or plaster to make care easier. The area is kept moist and then left to dry, and a protective ointment is applied.
-
-Another option is an old technique: after cleaning the finished tattoo well, a healing cream (such as Bepanthol Plus or similar) is applied.
-
-### Pain levels by body area:
-
-![Pain levels by body area.](/images/dovme-rehber/image36.jpg)
+7. Aftercare: see our [tattoo aftercare guide](/en/tattoo/tattoo-aftercare) for both methods (surgical tape and cling film) in full.

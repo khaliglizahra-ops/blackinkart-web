@@ -1,27 +1,42 @@
 ---
 title: "Dövme Bakımı ve İyileşme Süreci"
 translationKey: "tattoo-aftercare"
-description: "Cerrahi bant ve streç film yöntemleriyle dövme bakımı, iyileşme süresi ve dikkat edilmesi gerekenler."
+description: "Cerrahi bant ve streç film yöntemleriyle dövme bakımı: ne kadar süre, hangi ürünler, nelerden kaçınılmalı."
 order: 5
-updatedAt: "2026-02-01"
+updatedAt: "2026-10-08"
 heroImage: "/images/portfolyo/minimaller/minimaller-05.jpg"
 ---
 
-Dövmenin görünümü kadar iyileşme süreci de bakımınıza bağlıdır. İnsan derisi ortalama 21 günde yenilenir, ancak kişiden kişiye değiştiği için bakımı **30 gün** boyunca sürdürmenizi öneririz. Aşağıdaki iki yöntemden birini uygulayabilirsiniz — ikisi de geçerli alternatiflerdir.
+Dövmenin görünümü kadar iyileşme süreci de bakımınıza bağlıdır. İnsan derisi ortalama 21 günde yenilenir; bu süre kişiden kişiye değişebildiği için riske atmamak adına bakım **30 gün** boyunca sürdürülmelidir. İki yöntemden biri uygulanabilir.
 
-## Yöntem 1: Cerrahi Bant
+### 1. Cerrahi bant ile bakım
 
-Yeni yapılan dövme üzerine uygulanan cerrahi bant, deriyi nemli tutarken hava almasını da sağlar. Bant **5-6 gün** boyunca çıkarılmadan tutulmalıdır. Bu sürenin ardından bant çıkarılır ve dövme, kurumaması için düzenli olarak nemlendirilmeye devam edilir.
+Yeni uygulanan dövmede cerrahi bantla bakım daha kolay hale gelebilir. Nemi alınıp kurutulan dövmenin üzerine uygulanan bant **en az 5-6 gün** kalmalıdır. Bu bant sayesinde deri su geçirmez, ama hava almaya devam eder ve hızlı iyileşir.
 
-## Yöntem 2: Streç Film
+5-6 gün sonra bant çıkarıldığında deri hiç kurumayacak şekilde düzenli olarak vazelin sürülerek nemli tutulmalıdır. Bu süreç dövmenin yapıldığı günden itibaren **1 ayı** tamamlamalıdır.
 
-Dövme iyice temizlendikten sonra onarıcı bakım kremi (ör. Bepanthol Plus) veya vazelin sürülüp streç filmle sarılır. Streç, ilk 2 gün her **2 saatte bir** değiştirilmeli; her değişimde deri temizlenip havalandırılmalı, sonra tekrar kremlenip sarılmalıdır. 2 günden sonra streçe gerek kalmaz.
+### 2. Onarıcı krem ve streç film ile bakım
 
-## Genel kurallar (her iki yöntem için)
+Çok eskiden beri sürdürülen bir tekniktir. Bitirilen dövme iyice temizlendikten sonra onarıcı bakım kremi (Bepanthol Plus veya dövme bakım kremi) ya da vazelin sürülerek streçlenir.
 
-- İlk hafta boyunca şebeke suyuyla doğrudan temastan kaçının; duşta bölgeye bolca vazelin sürüp mümkünse ılık/soğuk su kullanın.
-- Dövme asla kaşınmamalı, kabuk varsa koparılmamalıdır.
-- Deriyi tahriş edecek dar kıyafetlerden kaçının, giysilerinizi temiz tutun.
-- İyileşme boyunca cilt sürekli nemli kalmalı, kurumasına izin verilmemelidir.
+- Bepanthol Plus gibi onarıcı merhemler, içerdiği antibiyotik sayesinde deride oluşan tahribatın hızlı iyileşmesini sağlar ve enfeksiyondan korur. Bu yüzden **ilk 7-10 gün** mutlaka kullanılmalıdır.
+- Bakım sırasında sırasıyla onarıcı merhem sürülür, emilince vazelin, o da emilince tekrar onarıcı merhem sürülerek takviyeli kullanılabilir.
+- Streç film **en fazla 3 saat**, önerilen süre ise **2 saat** kalmalıdır. Daha uzun tutulduğunda bakteri üretebilir veya alerji yapabilir.
+- Bu nedenle ilk 2 gün streç **2 saatte bir** değiştirilir. Değişimler arasında deri temizlenip havalandırılır, sonra tekrar kremlenip streçlenir.
+- İlk 2 günden sonra streç filme gerek yoktur.
 
-Herhangi bir kızarıklık, aşırı şişlik veya akıntı fark ederseniz zaman kaybetmeden bize ulaşın.
+### Temizlik ve su teması
+
+- Bir hafta boyunca şebeke suyuyla temastan kaçının.
+- Duş alırken dövmenin olduğu bölgeye bolca vazelin sürüp streçleyin, su temasını en aza indirin; mümkünse ılık ya da soğuk su kullanın.
+- Streç değişirken önce kendi elinizi Protex Activex gibi bir antiseptik sabunla dezenfekte edin. Sonra dövmeyi hazır su ve antiseptik sabunla temizleyin.
+- Temiz bir peçeteyle ovmadan, bastırıp çekerek kurulayın. Deri kısa süre havalandıktan sonra tekrar kremleyin.
+
+### İyileşme süresince dikkat edilecekler
+
+- Deri sürekli krem ve merhemle nemlendirilmeli, kurumasına izin verilmemelidir.
+- Dövme kaşınmamalı, keselenmemelidir.
+- Kabuklanma olursa kabuk koparılmamalıdır.
+- Cildi tahriş edecek ve sürtecek dar giysilerden kaçının; giydiğiniz kıyafetler günlük temiz olmalıdır.
+
+Kızarıklık, aşırı şişlik veya akıntı fark ederseniz zaman kaybetmeden bize ulaşın.

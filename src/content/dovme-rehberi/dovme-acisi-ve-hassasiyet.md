@@ -1,18 +1,16 @@
 ---
-title: "Dövme Acısı: Bölgelere Göre Hassasiyet"
+title: "Dövmede Bölgeye Göre Acı Oranları"
 translationKey: "tattoo-pain-guide"
-description: "Dövme yaptırırken acı seviyesini etkileyen faktörler ve bölgeye göre genel hassasiyet beklentisi."
+description: "Dövme yaptırırken vücuttaki en az ve en çok acıyan bölgeleri gösteren acı haritası."
 order: 6
-updatedAt: "2026-02-01"
+updatedAt: "2026-10-08"
 heroImage: "/images/portfolyo/black-work/black-work-14.jpg"
 ---
 
-Dövme acısı kişiden kişiye, ağrı eşiğine ve o gün genel fiziksel/duygusal duruma göre büyük farklılık gösterir. Yine de genel bir eğilimden söz edilebilir:
+### Dövmede bölgeye göre acı oranları
 
-- **Daha az hassas bölgeler:** Baldır dışı, üst kol, ön kol, sırt üstü — kas ve yağ dokusunun kemiğe göre daha kalın olduğu alanlar.
-- **Orta hassasiyet:** Omuz, uyluk, baldır.
-- **Daha hassas bölgeler:** Kaburga, dirsek/diz içi, el, ayak, boyun ve kemiğe yakın, sinir uçlarının yoğun olduğu bölgeler.
+![Dövme yaptırırken vücuttaki en az acıyan yerlerin sarı renkle gösterildiği acı haritası (önden ve arkadan)](/images/dovme-rehber/image36.jpg)
 
-Acıyı etkileyen diğer etkenler arasında dövmenin büyüklüğü, seans süresi, kullanılan teknik (dolgu ve gölgelendirme genelde konturdan daha az acı verir) ve o günkü uyku/açlık durumunuz bulunur. Seans öncesi iyi uyumanız, tok ve susuz kalmamış olmanız süreci belirgin şekilde rahatlatır.
+Haritada dövme yaptırırken vücuttaki **en az acıyan yerler sarı renkle** gösterilmiştir. Renk sarıdan kırmızıya ve maviye doğru ilerledikçe acı ve hassasiyet artar.
 
-Randevu sırasında hangi bölgeyi düşündüğünüzü bizimle paylaşın; deneyimimize dayanarak sizi gerçekçi şekilde bilgilendirelim.
+Acı kişiden kişiye değişir. Dövme yaptırmayı düşündüğünüz bölgeyi randevu sırasında bizimle paylaşın, size sürece dair bilgi verelim.

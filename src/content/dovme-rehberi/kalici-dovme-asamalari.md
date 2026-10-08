@@ -23,11 +23,11 @@ Dövme uygulamasına başlarken aşamalar aşağıdaki gibidir;
 
 3.Desenin Vücuda Transferi: Bu işlemi yapmadan önce müşterinin vücudunun transfere hazır hale gelmesi gerekir.
 
-### a) Cildin sabun vs ile yıkanması
+a) Cildin sabun vs ile yıkanması
 
-### b) Tek kullanımlık jiletle derinin tüylerden arınması
+b) Tek kullanımlık jiletle derinin tüylerden arınması
 
-### c) Cildin antiseptik solüsyon vb ile dezenfekte edilmesi
+c) Cildin antiseptik solüsyon vb ile dezenfekte edilmesi
 
 d) Transfer solüsyon ve jelleri yardımıyla transferin titizlikle deriye aktarılması.
 
@@ -42,7 +42,3 @@ e) Yapılan transfer iyice kurumalıdır yoksa temas olduğunda transfer yayıla
 7.Dövmede Bakım: Yeni uygulanmaya başlanan, cerrahi bantlar bantlarla bakım daha kolay hale gelebilir nemi alınan ve kuruması sağlanan dövme üzerine uygulanan bant en az 5-6 gün kalmalıdır. Bu bant sayesinde deri su geçirmez ama deriye hava almasını sağlayacak hızlı bir şekilde iyileşmesini sağlar. 5-6 gün sonra çıkarıldıktan sonra deri hiç kurumayacak şekilde düzenli olarak vazelin sürülerek nemli tutulmalı bu süreç dövmenin yapıldığı gün itibariyle 1 ayı tamamlamalıdır. İyileşme süreci boyunca dövme kaşınmamalı varsa kabuk kaldırılmamalı cildi tahriş edici her şeyden kaçınılmalıdır.
 
 Diğer bir seçenekte çok eskiden beri sürdürülen bir tekniktir. Bitirmiş olduğunuz dövmeyi iyice temizledikten sonra onarıcı bakım kremi (Bhepanthol plus veya dövme bakım kremi olabilir) veya vazelin sürerek streçlenmelidir. Bhepanthol plus veya onarıcı merhemler antibiyotik içeriği sayesinde derideki tahribatı hızlı iyileşmesini sağlar enfekte olmaktan korur. Bu sebeple ilk 7-10 gün kesinlikle kullanılmalıdır. Bakım yaparken sırasıyla onarıcı merhem emince vazelin sonra emince tekrar onarıcı merhem şeklinde takviyeli kullanılabilir. Bu streç maksimum 3 saat durdurulmalıdır ki önerilen 2 saattir. Daha fazla tutulduğunda bakteri üretebilir veya alerji yapabilir. Bu sebeple ilk 2 gün 2 saatte bir streç değiştirilmeli değişim arasında deri temizlenip havalandırılmalı sonrasında tekrar kremlenip streç yapılmalıdır. İlk 2 günden sonra streçe ihtiyaç yoktur. Bir hafta boyunca şebeke suyuyla temastan kaçınılmalıdır. Duş alınacağı zaman dövmenin olduğu bölge bolca vazelin sürülüp streçlenip su teması minimize edilmeli ve mümkünse duş suyu soğuk ya da ılık olmalıdır. Streç değişimlerinde protex activex gibi antiseptik sabunlarla ilk önce elimiz dezenfekte edilmeli sonrasında da hazır su ve antiseptik sabunla dövme üzeri temizlenmeli temiz bir peçeteyle bas çek yoluyla kurulanmalıdır. Kısa bir süre deri havalandıktan sonra tekrar kremlenmelidir. İnsan derisi ortalama 21 günde değişir ki bu kişiden kişiye değişiklik gösterebilir. Bu süreç kişiye göre değişiklik gösterebildiği için riske atmamak adına 30 gün bakım yapılmalıdır. İyileşme süreci boyunca deri sürekli krem ve merhemle nemlendirmeli kurutulmamalıdır. Bu süreçte deri kaşınmamalı, keselenilmemeli, kabuklanmamalı kabuklaşırsa kabuğu koparılmamalı, deriyi tahriş edecek ve sürtecek dar giysilerden kaçınılmalı ve giyilen kıyafetler günlük temiz
-
-### Dövmede bölgeye göre acı oranları
-
-![Dövme örneği](/images/dovme-rehber/image36.jpg)
