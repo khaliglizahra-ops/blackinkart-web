@@ -54,20 +54,23 @@ const AREA_TO_CATEGORY: Record<string, string> = {
   cheek: 'yanak',
 };
 
-/** Bölge sayfasındaki nokta şeması (adlı noktalar gösterilir). Yoksa bölüm gizlenir. */
-const DIAGRAMS: Record<string, string> = {
-  kulak: '/images/piercing/diagram/kulak.jpg',
-  burun: '/images/piercing/diagram/burun.jpg',
-  kas: '/images/piercing/diagram/kas.jpg',
-  gobek: '/images/piercing/diagram/gobek.jpg',
-  'meme-ucu': '/images/piercing/diagram/meme-ucu.jpg',
-  dil: '/images/piercing/diagram/dil.jpg',
-  dudak: '/images/piercing/diagram/dudak.jpg',
+/** Bölge sayfasındaki nokta şemaları (translationKey → görseller; birden fazlaysa yan yana). Yoksa bölüm gizlenir. */
+const D = '/images/piercing/diagram/';
+const DIAGRAMS: Record<string, string[]> = {
+  ear: [D + 'kulak.jpg'],
+  nose: [D + 'burun.jpg'],
+  eyebrow: [D + 'yuz.jpg'],
+  cheek: [D + 'yuz.jpg'],
+  lip: [D + 'dudak.jpg'],
+  tongue: [D + 'dil.jpg'],
+  navel: [D + 'govde.jpg'],
+  nipple: [D + 'govde.jpg'],
+  dermal: [D + 'dermal.jpg', D + 'dermal-2.jpg'],
+  genital: [D + 'genital.jpg'],
 };
 
-export function areaDiagram(translationKey: string | undefined): string | undefined {
-  const key = areaCategoryKey(translationKey);
-  return key ? DIAGRAMS[key] : undefined;
+export function areaDiagrams(translationKey: string | undefined): string[] {
+  return (translationKey && DIAGRAMS[translationKey]) || [];
 }
 
 export function areaCategoryKey(translationKey: string | undefined): string | undefined {

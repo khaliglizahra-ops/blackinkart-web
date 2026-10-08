@@ -9,7 +9,7 @@ import HealingChart from '../HealingChart.astro';
 import { site } from '../../data/site';
 import { piercingPriceTables } from '../../data/prices';
 import { thumb } from '../../data/images';
-import { areaPhotos as areaPhotosFor, areaCategoryKey, areaDiagram } from '../../data/gallery';
+import { areaPhotos as areaPhotosFor, areaCategoryKey, areaDiagrams } from '../../data/gallery';
 import { localizePath, type Lang } from '../../i18n/config';
 import { useTranslations } from '../../i18n/ui';
 
@@ -45,7 +45,7 @@ const jsonLd = {
 // Fotoğraflar portfolyodaki bölge kategorisinden (yoksa bölge içeriğindeki liste).
 const areaPhotoList: string[] = kind === 'area' ? areaPhotosFor((entry.data as any).translationKey, (entry.data as any).photos ?? []) : [];
 const areaCategory = kind === 'area' ? areaCategoryKey((entry.data as any).translationKey) : undefined;
-const areaDiagramSrc = kind === 'area' ? areaDiagram((entry.data as any).translationKey) : undefined;
+const areaDiagramList: string[] = kind === 'area' ? areaDiagrams((entry.data as any).translationKey) : [];
 // Panelden silinebilir ya da kimliği değiştirilebilir — bulunamazsa sayfa çökmemeli.
 const priceTable = kind === 'area'
   ? piercingPriceTables(lang).find((tb) => tb.slug === (entry.data as any).priceSlug) ?? null
@@ -113,10 +113,14 @@ const painLabel = kind === 'area'
           <Content />
         </div>
 
-        {areaDiagramSrc && (
-          <figure class="area-diagram" data-reveal>
-            <img src={areaDiagramSrc} alt={`${entry.data.title} — ${lang === 'en' ? 'placement points' : 'nokta şeması'}`} loading="lazy" />
-          </figure>
+        {areaDiagramList.length > 0 && (
+          <div class:list={['area-diagrams', areaDiagramList.length > 1 && 'is-multi']} data-reveal>
+            {areaDiagramList.map((src) => (
+              <figure class="area-diagram">
+                <img src={src} alt={`${entry.data.title} — ${lang === 'en' ? 'placement points' : 'nokta şeması'}`} loading="lazy" />
+              </figure>
+            ))}
+          </div>
         )}
 
         {gallerySansHero.length > 0 && (
@@ -198,8 +202,25 @@ const painLabel = kind === 'area'
     margin: 2rem 0 1.2rem;
   }
 
-  .area-diagram {
+  .area-diagrams {
     margin: 2rem 0 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .area-diagrams.is-multi {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+  }
+
+  @media (max-width: 640px) {
+    .area-diagrams.is-multi {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .area-diagram {
+    margin: 0;
   }
 
   .area-diagram img {
