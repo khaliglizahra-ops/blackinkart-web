@@ -33,14 +33,11 @@ const keyframesCss = `@keyframes hero-slide-cycle{
 
 <style is:inline set:html={keyframesCss}></style>
 
-<noscript>
-  {/* JS yoksa data-bg'deki kareler hiç yüklenmez ve döngünün 54 saniyesi
-      siyah kalırdı. Bu durumda tek kareye düşüp animasyonu durduruyoruz. */}
-  <style is:inline>
-    .hero-bg-slide[data-bg] { display: none !important; }
-    .hero-bg-slide:first-child { animation: none !important; opacity: 1 !important; }
-  </style>
-</noscript>
+{/* JS yoksa data-bg'deki kareler hiç yüklenmez ve döngünün 54 saniyesi siyah kalırdı;
+    bu durumda tek kareye düşüp animasyonu durduruyoruz. DİKKAT: bu stil `set:html` ile
+    verilmeli — doğrudan <noscript><style> yazılınca Astro <style>'ı noscript'in dışına
+    çıkarıp HERKES için uyguluyor; ilk kare sürekli açık kalıyor, diğerleri hiç görünmüyordu. */}
+<noscript set:html={`<style>.hero-bg-slide[data-bg]{display:none!important}.hero-bg-slide:first-child{animation:none!important;opacity:1!important}</style>`}></noscript>
 
 <section class="hero">
   <div class="hero-bg" aria-hidden="true" style={`--slide-duration:${slideDuration}s`}>
