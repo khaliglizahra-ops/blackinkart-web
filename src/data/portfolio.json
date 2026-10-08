@@ -62,17 +62,13 @@
     "/images/portfolyo/top60/top-n60.jpg"
   ],
   "studio": [
-    "/images/studio/studio-01.jpg",
-    "/images/studio/studio-02.jpg",
-    "/images/studio/studio-03.jpg",
-    "/images/studio/studio-04.jpg",
-    "/images/studio/studio-05.jpg",
-    "/images/studio/studio-06.jpg",
-    "/images/studio/studio-07.jpg",
-    "/images/studio/studio-08.jpg",
-    "/images/studio/studio-09.jpg",
-    "/images/studio/studio-10.jpg",
-    "/images/studio/studio-11.jpg"
+    "/images/studio/studio-n01.jpg",
+    "/images/studio/studio-n02.jpg",
+    "/images/studio/studio-n03.jpg",
+    "/images/studio/studio-n04.jpg",
+    "/images/studio/studio-n05.jpg",
+    "/images/studio/studio-n06.jpg",
+    "/images/studio/studio-n07.jpg"
   ],
   "categories": [
     {
