@@ -121,6 +121,15 @@ import { thumb } from '../../data/images';
     gap: 0.9rem;
   }
 
+  /* Telefonda tek sütun yerine yan yana iki fotoğraf. */
+  @media (max-width: 640px) {
+    .featured-grid,
+    .filtered-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+  }
+
   .tile {
     position: relative;
     overflow: hidden;
