@@ -7,10 +7,6 @@ updatedAt: "2026-02-01"
 heroImage: "/images/portfolyo/black-work/black-work-09.jpg"
 ---
 
-One aspect of getting tattooed that our customers ask about often is the religious perspective. We set out the generally accepted religious view here for information only. The decision, of course, belongs to each person's own belief and choice.
+Tattooing is stated in a hadith not to be permissible. The person who has had it done must repent and must not have it done again. A tattoo is a layer of pigment on top of the skin, which prevents water from reaching the body.
 
-According to Islamic sources, permanent tattooing is not held to be permissible on the basis of hadith. On this view, someone who has been tattooed is asked to repent and not repeat it. The reasoning rests on the idea that the body is held in trust, and that making a permanent alteration to it is therefore disapproved of.
-
-Whether a tattoo prevents *wudu* or *ghusl* is a separate question. Because the tattoo sits **beneath** the skin and does not form a waterproof layer on top of it, under religious rulings it does not obstruct either.
-
-This information is not our studio imposing a religious position — it is a transparent answer to a question we are asked frequently. What matters to us is that you make your decision freely and with the facts in front of you.
+The reason it is not permissible is that harming the body, which is a trust, is disliked, just like smoking cigarettes or piercing the body. Islam accepts creation as it is, and this is why tattooing is considered an interference with the body's natural form.

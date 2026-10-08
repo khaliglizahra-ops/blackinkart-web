@@ -7,16 +7,24 @@ updatedAt: "2026-02-01"
 heroImage: "/images/portfolyo/top60/top-n03.jpg"
 ---
 
-A tattoo is a permanent design created by using a needle to place coloured pigment into the **dermis**, the deeper layer of the skin. The epidermis — the outer layer — renews itself over time, but pigment that reaches the dermis stays put. That is why a tattoo is permanent.
+Tattoos are the application of coloured pigments and inks into the dermis layer of the skin to create a permanent motif.
 
-## A short history
+Over the last 20 years, tattooing has become very popular among young people in developed countries. People aged 18–20 are among the most common clients.
 
-Tattoos have been found on Ancient Egyptian mummies dating back to 2000 BC. Many peoples, including the Britons, the Gauls and the Thracians, used them as marks of status, belief or protection. The word "tattoo" comes from the Tahitian *tautau*, and re-entered Europe in the 18th century through Pacific voyages. Today tattooing is widespread across the world as a form of personal expression and artistic choice.
+![Tattooing today is a form of personal decoration and fashion. But the first appearance of tattoos in human history was not so simple.](/images/dovme-rehber/image1.jpg)
 
-## How it is done
+Today tattooing is described as personal decoration and fashion. But the first appearance of tattoos in human history was not so simple.
 
-Modern tattoo machines place pigment into the dermis safely and precisely, using a needle grouping that moves at high speed. Compared with historical techniques — bone needles, tapping mallets — this hurts less and greatly reduces the risk of infection, provided the hygiene conditions are right.
+### PURPOSE:
 
-At Black Ink Art every tattoo is done with single-use needles and sterile equipment, in line with [our hygiene and safety standards](/en/hygiene-and-safety).
+Indians, Japanese, Native Americans and some African tribes made tattoos as decoration, but in many societies tattoos were used as protection against disease and evil spirits, or as a sign of status and belonging.
 
-If you are thinking about getting tattooed, our other guides cover styles, techniques, the stages of the process and aftercare in detail.
+### HISTORY:
+
+Tattooing is very old. Tattoos were found on mummies from ancient Egypt around 2000 BC. Besides the Egyptians, the Britons, the Gauls and many other peoples also tattooed their bodies.
+
+### HOW IT IS DONE:
+
+Several methods are used. In one type of tattoo, a pointed bone, horn or steel needle is gently pushed into the skin and the holes are filled with pigment.
+
+Modern tattooing hurts less than these older methods and uses pigments that are less harmful to health.
