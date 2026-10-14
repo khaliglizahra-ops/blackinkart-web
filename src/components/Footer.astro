@@ -61,6 +61,17 @@ const legalNav = getLegalNav(lang);
     </div>
   </div>
 
+  <div class="container">
+    <a class="footer-shop" href={site.jewelryShopUrl} target="_blank" rel="noopener" aria-label={t('footer.shopBand')}>
+      <img src="/brand/piercingland-logo-600.png" alt="Piercingland" width="900" height="709" loading="lazy" />
+      <span class="shop-text">
+        <strong>Piercingland</strong>
+        <span>{t('footer.shopBand')}</span>
+      </span>
+      <span class="shop-go" aria-hidden="true">↗</span>
+    </a>
+  </div>
+
   <div class="container bottom">
     <p>© {year} {site.name}. {t('footer.rights')}</p>
     <p class="made-by">
@@ -82,6 +93,50 @@ const legalNav = getLegalNav(lang);
     grid-template-columns: 1.6fr 1fr 1fr 1fr;
     gap: 2.5rem;
     padding-bottom: 3rem;
+  }
+
+  .footer-shop {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    background: #000;
+    color: var(--color-ivory);
+    text-decoration: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .footer-shop:hover,
+  .footer-shop:focus-visible {
+    border-color: var(--color-gold);
+  }
+
+  .footer-shop img {
+    width: 88px;
+    height: auto;
+    flex: none;
+  }
+
+  .shop-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.9rem;
+    color: var(--color-ivory-faint);
+  }
+
+  .shop-text strong {
+    font-size: 1.05rem;
+    color: var(--color-ivory);
+  }
+
+  .shop-go {
+    margin-left: auto;
+    font-size: 1.4rem;
+    color: var(--color-gold);
   }
 
   .footer-logo {

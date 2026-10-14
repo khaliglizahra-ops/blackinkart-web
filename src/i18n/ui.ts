@@ -61,7 +61,8 @@ export const ui = {
     'footer.explore': 'Keşfet',
     'footer.contact': 'İletişim',
     'footer.other': 'Diğer',
-    'footer.jewelryShop': 'Piercing Takı Mağazası ↗',
+    'footer.jewelryShop': 'Piercingland ↗',
+    'footer.shopBand': 'Piercing alışverişi için mağazamıza geçin',
     'footer.rights': 'Tüm hakları saklıdır.',
     'footer.ageNote':
       '18 yaş altına yalnızca veli veya yasal vasi eşliğinde ve onayıyla uygulama yapılır.',
@@ -398,7 +399,8 @@ export const ui = {
     'footer.explore': 'Explore',
     'footer.contact': 'Contact',
     'footer.other': 'More',
-    'footer.jewelryShop': 'Piercing Jewellery Shop ↗',
+    'footer.jewelryShop': 'Piercingland ↗',
+    'footer.shopBand': 'Shop piercing jewellery in our store',
     'footer.rights': 'All rights reserved.',
     'footer.ageNote':
       'Under-18s are worked on only when accompanied by a parent or legal guardian, and with their consent.',
