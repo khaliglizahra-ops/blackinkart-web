@@ -37,8 +37,8 @@ export const ui = {
     'cta.readMore': 'Devamını Oku →',
     'cta.seePrices': 'Fiyatları Gör',
     'cta.comparePlacements': 'İyileşme Süresi',
-    'cta.viewJewelry': 'Piercingleri İncele ↗',
-    'cta.viewJewelryLong': 'Piercingleri İncele ↗',
+    'cta.viewJewelry': 'Piercing Alışverişi ↗',
+    'cta.viewJewelryLong': 'Piercing Alışverişi İçin Mağazaya Git ↗',
 
     // — Dil değiştirici —
     'lang.switch': 'Dil seçin',
@@ -159,7 +159,7 @@ export const ui = {
     'home.studio.alt': 'Black Ink Art stüdyo',
     'home.studio.cta': 'Hijyen Standartlarımız',
     'home.jewelry.p1': "Stüdyomuzda taktığımız piercing takıları kendi markamız Piercingland'a ait. Cerrahi çelik, titanyum ve 14 ayar altın seçenekleriyle helixten septuma, dilden göbeğe kadar geniş bir koleksiyon üretiyoruz.",
-    'home.jewelry.p2': 'Takınızı uygulamadan önce seçmek ya da mevcut piercinginiz için yeni bir model bakmak isterseniz koleksiyonun tamamı mağazamızda.',
+    'home.jewelry.p2': 'Piercing alışverişi için Piercingland mağazamıza geçebilirsiniz. Aşağıdan birkaç modele göz atın, beğendiğinizi doğrudan sipariş edin.',
     'home.final.h': 'Randevunuzu Bugün Alın',
     'home.final.p': "Ankara Çankaya Aşkabat Caddesi'ndeki stüdyomuzda hayalinizdeki tasarımı konuşalım.",
     'home.pageTitle': 'Ankara Çankaya Dövme ve Piercing Stüdyosu',
@@ -218,12 +218,12 @@ export const ui = {
 
 
     // — Piercingland —
-    'jewelry.eyebrow': 'Kendi Markamız',
-    'jewelry.title': 'Takınızı Önceden Seçin',
+    'jewelry.eyebrow': 'Online Alışveriş',
+    'jewelry.title': 'Piercing Alışverişi İçin Piercingland',
     'jewelry.body1':
       'Uyguladığımız piercing takıları kendi markamız Piercingland’a ait. Cerrahi çelik, titanyum ve 14 ayar altın seçenekleriyle helixten septuma, dilden göbeğe kadar geniş bir koleksiyon üretiyoruz.',
     'jewelry.body2':
-      "Piercingland'ın kendi sitesi üzerinden online sipariş verebilir, ya da stüdyoya gelmeden modelleri inceleyip seçiminizi yapabilirsiniz.",
+      "Piercing alışverişi için Piercingland mağazamıza geçebilirsiniz. Aşağıdan birkaç modele göz atın, beğendiğinizi doğrudan sipariş edin ya da stüdyoya gelmeden seçiminizi yapıp bize hangisini taktırmak istediğinizi söyleyin.",
     'jewelry.alt': 'Piercingland — piercing takı markamız',
 
     // — Piercing merkezi —
@@ -374,8 +374,8 @@ export const ui = {
     'cta.readMore': 'Read more →',
     'cta.seePrices': 'See Prices',
     'cta.comparePlacements': 'Compare Placements',
-    'cta.viewJewelry': 'Browse Jewellery ↗',
-    'cta.viewJewelryLong': 'Browse Piercing Jewellery ↗',
+    'cta.viewJewelry': 'Shop Piercings ↗',
+    'cta.viewJewelryLong': 'Go to the Shop for Piercing Jewellery ↗',
 
     // — Language switcher —
     'lang.switch': 'Choose language',
@@ -496,7 +496,7 @@ export const ui = {
     'home.studio.alt': 'Black Ink Art studio',
     'home.studio.cta': 'Our Hygiene Standards',
     'home.jewelry.p1': 'The piercing jewellery we fit in the studio is our own brand, Piercingland. We produce a wide collection in surgical steel, titanium and gold — from helix to septum, tongue to navel.',
-    'home.jewelry.p2': 'Whether you want to choose your jewellery before your appointment or find a new piece for a piercing you already have, the full collection is in our shop.',
+    'home.jewelry.p2': 'For piercing shopping, head over to our Piercingland shop. Browse a few designs below and order the one you like directly.',
     'home.final.h': 'Book Your Appointment Today',
     'home.final.p': "Let's talk through the design you have in mind at our studio on Aşkabat Caddesi, Çankaya, Ankara.",
     'home.pageTitle': 'Tattoo & Piercing Studio in Ankara Çankaya',
@@ -555,12 +555,12 @@ export const ui = {
 
 
     // — Piercingland —
-    'jewelry.eyebrow': 'Our Own Brand',
-    'jewelry.title': 'Choose Your Jewellery in Advance',
+    'jewelry.eyebrow': 'Online Shop',
+    'jewelry.title': 'Shop Piercing Jewellery at Piercingland',
     'jewelry.body1':
       'The piercing jewellery we fit is our own brand, Piercingland. We produce a wide collection in surgical steel, titanium and gold — from helix to septum, tongue to navel.',
     'jewelry.body2':
-      'Browse the designs before your appointment, make your choice, and simply tell us which piece you would like fitted.',
+      'For piercing shopping, head over to our Piercingland shop. Browse a few designs below, order the one you like directly, or choose before your appointment and tell us which piece you would like fitted.',
     'jewelry.alt': 'Piercingland — our piercing jewellery brand',
 
     // — Piercing hub —

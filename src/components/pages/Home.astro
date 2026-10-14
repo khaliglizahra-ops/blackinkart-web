@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import PreviewToolTeaser from '../PreviewToolTeaser.astro';
 import { site } from '../../data/site';
+import ShopPicks from '../ShopPicks.astro';
 import { topPortfolio, studioPhotos } from '../../data/gallery';
 import { tattooPricing } from '../../data/prices';
 import { thumb } from '../../data/images';
@@ -151,6 +152,7 @@ const faq = await getFaq(lang, 'general');
         </a>
       </div>
     </div>
+    <ShopPicks />
   </section>
 
   <Faq items={faq} heading={t('faq.title')} id="faq-general" />

@@ -10,6 +10,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import GuideHero from '../../components/GuideHero.astro';
 import ArtBackground from '../../components/ArtBackground.astro';
 import { site } from '../../data/site';
+import ShopPicks from '../ShopPicks.astro';
 import { thumb } from '../../data/images';
 import { areaPhotos } from '../../data/gallery';
 import Faq from '../Faq.astro';
@@ -73,6 +74,7 @@ const faq = await getFaq(lang, 'piercing');
         </a>
       </div>
     </div>
+    <ShopPicks />
   </section>
 
   <section class="section-tight">

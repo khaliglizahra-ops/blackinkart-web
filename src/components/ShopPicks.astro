@@ -1,0 +1,97 @@
+---
+import { langFromPath } from '../i18n/config';
+import { site } from '../data/site';
+
+// Piercingland mağazasından seçilmiş birkaç model. Görseller CSP (img-src 'self')
+// yüzünden kendi sitemizden servis edilir; bağlantılar mağazadaki ürün sayfalarına gider.
+const lang = langFromPath(Astro.url.pathname);
+const base = site.jewelryShopUrl.replace(/\/$/, '');
+const picks = [
+  { id: 'ti001', slug: 'titanyum-tragus-piercing-ti001', tr: 'Kavisli Yaprak', en: 'Curved Leaf' },
+  { id: 'ti015', slug: 'titanyum-tragus-piercing-ti015', tr: 'Üç Çiçek', en: 'Triple Flower' },
+  { id: 'ti023', slug: 'titanyum-tragus-piercing-ti023', tr: 'Arı', en: 'Bee' },
+  { id: 'ti032', slug: 'titanyum-tragus-piercing-ti032', tr: 'Kelebek', en: 'Butterfly' },
+];
+const href = (slug: string) => (lang === 'en' ? `${base}/en/products/${slug}` : `${base}/urunler/${slug}`);
+const label = lang === 'en' ? 'Titanium labret' : 'Titanyum piercing';
+---
+
+<div class="shop-picks container">
+  <ul class="picks-grid">
+    {picks.map((p) => (
+      <li>
+        <a href={href(p.slug)} target="_blank" rel="noopener" class="pick">
+          <img src={`/images/piercingland/${p.id}.webp`} alt={`${lang === 'en' ? p.en : p.tr} — ${label}`} width="400" height="400" loading="lazy" />
+          <span class="pick-name">{lang === 'en' ? p.en : p.tr}</span>
+          <span class="pick-sub">{label} ↗</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .shop-picks {
+    margin-top: 1.2rem;
+  }
+
+  .picks-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+  }
+
+  @media (max-width: 640px) {
+    .picks-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+  }
+
+  .pick {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: #fff;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .pick:hover,
+  .pick:focus-visible {
+    border-color: var(--color-gold);
+    transform: translateY(-2px);
+  }
+
+  .pick img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .pick-name,
+  .pick-sub {
+    display: block;
+    padding: 0 0.8rem;
+    background: var(--color-ink-900, #111);
+  }
+
+  .pick-name {
+    padding-top: 0.7rem;
+    font-weight: 700;
+    color: var(--color-ivory, #f2ede1);
+  }
+
+  .pick-sub {
+    padding-bottom: 0.8rem;
+    font-size: 0.82rem;
+    color: var(--color-gold);
+  }
+</style>
