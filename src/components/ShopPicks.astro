@@ -21,7 +21,7 @@ const label = lang === 'en' ? 'Titanium labret' : 'Titanyum piercing';
     {picks.map((p) => (
       <li>
         <a href={href(p.slug)} target="_blank" rel="noopener" class="pick">
-          <img src={`/images/piercingland/${p.id}.webp`} alt={`${lang === 'en' ? p.en : p.tr} — ${label}`} width="400" height="400" loading="lazy" />
+          <img src={`/images/piercingland/${p.id}.webp`} alt={`${lang === 'en' ? p.en : p.tr}, ${label.toLowerCase()}`} width="400" height="400" loading="lazy" />
           <span class="pick-name">{lang === 'en' ? p.en : p.tr}</span>
           <span class="pick-sub">{label} ↗</span>
         </a>

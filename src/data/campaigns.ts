@@ -10,6 +10,18 @@ export type Campaign = {
   price: number;
   /** Tek tek yaptırılsaydı toplam (adet × birim fiyat); kampanya fiyatından büyükse üstü çizili gösterilir. */
   normalTotal: number | null;
+  images: string[];
+};
+
+// Kartlarda gösterilen gerçek fotoğraflar (anahtara göre). Panelden eklenen yeni kampanyada görsel olmaz.
+const IMAGES: Record<string, string[]> = {
+  minimal: [
+    '/images/portfolyo/d45c6c54-eb67-4a38-a198-6eab66d06a6b.jpg',
+    '/images/portfolyo/bfd639d1-6a46-40d7-92ca-5b22f6d3d971.jpg',
+    '/images/portfolyo/cb7a810f-6780-41fc-8f47-89da33299f30.jpg',
+  ],
+  steel: ['/images/piercing/kulak/kulak-n03.jpg'],
+  titanium: ['/images/piercingland/ti015.webp'],
 };
 
 export function campaigns(lang: Lang): Campaign[] {
@@ -25,6 +37,7 @@ export function campaigns(lang: Lang): Campaign[] {
         count: c.count,
         price: c.price,
         normalTotal: total > c.price ? total : null,
+        images: IMAGES[c.key] ?? [],
       };
     });
 }
