@@ -13,8 +13,8 @@
     },
     {
       "key": "steel",
-      "title": "Çelikle 3 piercing",
-      "titleEn": "Three steel-jewellery piercings",
+      "title": "Çelikle 3 piercing delim",
+      "titleEn": "Three piercings in steel",
       "count": 3,
       "unitPrice": 700,
       "price": 1800,
@@ -23,8 +23,8 @@
     },
     {
       "key": "titanium",
-      "title": "Titanyumla 3 piercing",
-      "titleEn": "Three titanium-jewellery piercings",
+      "title": "Titanyumla 3 piercing delim",
+      "titleEn": "Three piercings in titanium",
       "count": 3,
       "unitPrice": 900,
       "price": 2400,
