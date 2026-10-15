@@ -8,8 +8,8 @@
       "count": 3,
       "unitPrice": 2500,
       "price": 5000,
-      "text": "5 cm'e kadar, çizgisel, detaysız.",
-      "textEn": "Up to 5 cm, line work, no detail."
+      "text": "Tek kişi üzerinde 3 dövme. 5 cm'e kadar, çizgisel, detaysız.",
+      "textEn": "Three tattoos on a single person. Up to 5 cm, line work, no detail."
     },
     {
       "key": "steel",
@@ -18,8 +18,8 @@
       "count": 3,
       "unitPrice": 700,
       "price": 1800,
-      "text": "700 TL'lik çelik piercinglerden, bir kişiye 3 tane.",
-      "textEn": "From the 700 TRY steel piercings, three on one person."
+      "text": "700 TL'lik çelik piercinglerden, tek kişi üzerinde 3 tane.",
+      "textEn": "From the 700 TRY steel piercings, three on a single person."
     },
     {
       "key": "titanium",
@@ -28,8 +28,8 @@
       "count": 3,
       "unitPrice": 900,
       "price": 2400,
-      "text": "900 TL'lik titanyum piercinglerden, bir kişiye 3 tane.",
-      "textEn": "From the 900 TRY titanium piercings, three on one person."
+      "text": "900 TL'lik titanyum piercinglerden, tek kişi üzerinde 3 tane.",
+      "textEn": "From the 900 TRY titanium piercings, three on a single person."
     }
   ]
 }
