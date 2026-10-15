@@ -281,6 +281,29 @@ collections:
                   - { name: titanium, label: Titanyum (TL), widget: number, value_type: int, required: false, min: 0 }
                   - { name: note, label: Fiyat yerine gösterilecek not, widget: string, required: false, hint: 'Örn. "Fiyat için iletişime geçin". Doldurulursa fiyatların yerine bu yazı görünür.' }
 
+      - name: kampanyalar
+        label: Kampanyalar (ana sayfa)
+        file: src/data/campaigns.json
+        description: Ana sayfadaki kampanya kartları. Sadece rakam yazın; "TL" otomatik eklenir. Kapatmak için "Kampanyaları göster" seçeneğini kapatın.
+        fields:
+          - { name: enabled, label: Kampanyaları göster, widget: boolean, default: true }
+          - name: items
+            label: Kampanyalar
+            label_singular: Kampanya
+            widget: list
+            collapsed: false
+            minimize_collapsed: false
+            summary: '{{fields.title}}'
+            fields:
+              - { name: key, label: Kimlik, widget: string, hint: 'Değiştirmeyin (minimal, steel, titanium gibi).' }
+              - { name: title, label: Başlık, widget: string }
+              - { name: titleEn, label: Başlık (İngilizce), widget: string, required: false }
+              - { name: count, label: Adet, widget: number, value_type: int, min: 1 }
+              - { name: unitPrice, label: Tekli birim fiyat (TL), widget: number, value_type: int, min: 0, hint: 'Üstü çizili "normal fiyat" için kullanılır (adet × birim fiyat).' }
+              - { name: price, label: Kampanya toplam fiyatı (TL), widget: number, value_type: int, min: 0 }
+              - { name: text, label: Açıklama, widget: text }
+              - { name: textEn, label: Açıklama (İngilizce), widget: text, required: false }
+
   # ---------------------------------------------------------- PIERCING BÖLGELERİ
   - name: piercing-bolgeleri
     label: Piercing Bölgeleri

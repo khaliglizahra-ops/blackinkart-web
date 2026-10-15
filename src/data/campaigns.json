@@ -1,0 +1,35 @@
+{
+  "enabled": true,
+  "items": [
+    {
+      "key": "minimal",
+      "title": "3 Minimal Dövme",
+      "titleEn": "3 Minimal Tattoos",
+      "count": 3,
+      "unitPrice": 2500,
+      "price": 5000,
+      "text": "5 cm’e kadar çizgisel, detaysız minimal dövmeler. Tek kişide 3 adet.",
+      "textEn": "Simple line-work minimal tattoos up to 5 cm. Three on one person."
+    },
+    {
+      "key": "steel",
+      "title": "3 Çelik Piercing",
+      "titleEn": "3 Steel Piercings",
+      "count": 3,
+      "unitPrice": 700,
+      "price": 1800,
+      "text": "700 TL’lik cerrahi çelik piercingden tek kişide 3 adet.",
+      "textEn": "Three surgical steel piercings from the 700 TRY range, on one person."
+    },
+    {
+      "key": "titanium",
+      "title": "3 Titanyum Piercing",
+      "titleEn": "3 Titanium Piercings",
+      "count": 3,
+      "unitPrice": 900,
+      "price": 2400,
+      "text": "900 TL’lik titanyum piercingden tek kişide 3 adet.",
+      "textEn": "Three titanium piercings from the 900 TRY range, on one person."
+    }
+  ]
+}

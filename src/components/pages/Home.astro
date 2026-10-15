@@ -4,6 +4,7 @@ import Hero from '../../components/Hero.astro';
 import PreviewToolTeaser from '../PreviewToolTeaser.astro';
 import { site } from '../../data/site';
 import ShopPicks from '../ShopPicks.astro';
+import Campaigns from '../Campaigns.astro';
 import { topPortfolio, studioPhotos } from '../../data/gallery';
 import { tattooPricing } from '../../data/prices';
 import { thumb } from '../../data/images';
@@ -52,6 +53,8 @@ const faq = await getFaq(lang, 'general');
       </div>
     </div>
   </section>
+
+  <Campaigns />
 
   <section class="section services">
     <div class="container">

@@ -1,0 +1,109 @@
+---
+import { site } from '../data/site';
+import { campaigns } from '../data/campaigns';
+import { kdvNote } from '../data/prices';
+import { langFromPath, localizePath, LANG_LABELS } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+const lang = langFromPath(Astro.url.pathname);
+const t = useTranslations(lang);
+const locale = LANG_LABELS[lang].htmlLang === 'en' ? 'en-GB' : 'tr-TR';
+const items = campaigns(lang);
+const fmt = (n: number) => `${n.toLocaleString(locale)} TL`;
+const waHref = (title: string) =>
+  `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(t('campaign.waMsg').replace('{title}', title))}`;
+---
+
+{items.length > 0 && (
+  <section class="section campaigns" id="kampanyalar">
+    <div class="container">
+      <p class="eyebrow">{t('campaign.eyebrow')}</p>
+      <h2>{t('campaign.h')}</h2>
+      <p class="sub">{t('campaign.sub')}</p>
+      <div class="campaign-grid">
+        {items.map((c) => (
+          <article class="campaign surface" data-reveal>
+            <h3>{c.title}</h3>
+            <p class="price">{fmt(c.price)}</p>
+            {c.normalTotal && (
+              <p class="was">
+                {t('campaign.normal')}: <s>{fmt(c.normalTotal)}</s> · <strong>{fmt(c.normalTotal - c.price)}</strong>{' '}{t('campaign.save')}
+              </p>
+            )}
+            <p class="text">{c.text}</p>
+            <div class="actions">
+              <a href={localizePath('/randevu', lang)} class="btn btn-primary">{t('campaign.book')}</a>
+              <a href={waHref(c.title)} target="_blank" rel="noopener" class="btn btn-outline">{t('campaign.wa')}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="kdv">{kdvNote(lang)}</p>
+    </div>
+  </section>
+)}
+
+<style>
+  .sub {
+    max-width: 56ch;
+    margin-bottom: 1.8rem;
+  }
+
+  .campaign-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 860px) {
+    .campaign-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .campaign {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    border-top: 2px solid var(--color-gold);
+  }
+
+  .campaign h3 {
+    margin-bottom: 0.3rem;
+  }
+
+  .price {
+    font-size: clamp(1.9rem, 4vw, 2.4rem);
+    font-weight: 800;
+    color: var(--color-gold);
+    line-height: 1.1;
+    margin: 0 0 0.4rem;
+  }
+
+  .was {
+    font-size: 0.85rem;
+    color: var(--color-ivory-faint);
+    margin: 0 0 0.8rem;
+  }
+
+  .was strong {
+    color: var(--color-ivory);
+  }
+
+  .text {
+    flex: 1;
+    margin: 0 0 1.2rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .kdv {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--color-ivory-faint);
+  }
+</style>
