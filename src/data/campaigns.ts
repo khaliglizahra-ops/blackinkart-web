@@ -21,7 +21,7 @@ const IMAGES: Record<string, string[]> = {
     '/images/portfolyo/cb7a810f-6780-41fc-8f47-89da33299f30.jpg',
   ],
   steel: ['/images/piercing/kulak/kulak-n03.jpg'],
-  titanium: ['/images/piercingland/ti015.webp'],
+  titanium: ['/images/piercing/kulak/kulak-n02.jpg'],
 };
 
 export function campaigns(lang: Lang): Campaign[] {

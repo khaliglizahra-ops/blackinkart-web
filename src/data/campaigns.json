@@ -13,23 +13,23 @@
     },
     {
       "key": "steel",
-      "title": "3 çelik piercing",
-      "titleEn": "3 steel piercings",
+      "title": "Çelik takıyla 3 delim",
+      "titleEn": "Three piercings in steel",
       "count": 3,
       "unitPrice": 700,
       "price": 1800,
-      "text": "700 TL'lik cerrahi çelik takılardan.",
-      "textEn": "From the 700 TRY surgical steel range."
+      "text": "700 TL'lik çelik delimlerden, bir kişiye 3 tane.",
+      "textEn": "From the 700 TRY steel piercings, three on one person."
     },
     {
       "key": "titanium",
-      "title": "3 titanyum piercing",
-      "titleEn": "3 titanium piercings",
+      "title": "Titanyum takıyla 3 delim",
+      "titleEn": "Three piercings in titanium",
       "count": 3,
       "unitPrice": 900,
       "price": 2400,
-      "text": "900 TL'lik titanyum takılardan.",
-      "textEn": "From the 900 TRY titanium range."
+      "text": "900 TL'lik titanyum delimlerden, bir kişiye 3 tane.",
+      "textEn": "From the 900 TRY titanium piercings, three on one person."
     }
   ]
 }
