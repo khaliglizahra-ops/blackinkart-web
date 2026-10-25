@@ -192,6 +192,13 @@ if ($route === 'kurulum' || $route === 'kurulum/') {
     exit;
 }
 
+// Ziyaretçi sayacı: herkese açık, panel kurulumundan bağımsız (bkz. visits.php).
+if ($route === 'visit' && $method === 'POST') {
+    require __DIR__ . '/visits.php';
+    record_visit($DATA_DIR);
+    exit;
+}
+
 $cfg = load_config($CONFIG_FILE);
 if (!$cfg) {
     json_out(503, ['code' => 503, 'msg' => 'Panel henüz kurulmadı: /api/kurulum adresini açın.', 'error_description' => 'Panel henüz kurulmadı: /api/kurulum adresini açın.']);
@@ -241,6 +248,14 @@ if ($route === 'identity/user') {
 if ($route === 'identity/logout') {
     http_response_code(204);
     exit;
+}
+
+// ----- Ziyaretçi istatistikleri (yalnızca panele girmiş kullanıcı)
+
+if ($route === 'stats' && $method === 'GET') {
+    require_user($cfg);
+    require __DIR__ . '/visits.php';
+    json_out(200, visit_stats($DATA_DIR, (int) ($_GET['days'] ?? 30)));
 }
 
 // ----- Git Gateway

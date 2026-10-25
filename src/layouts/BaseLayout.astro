@@ -86,6 +86,9 @@ const csp = [
     <WhatsAppButton />
     <Lightbox />
     <script>
+      import '../lib/visit-count.js';
+    </script>
+    <script>
       function initReveal() {
         const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
         if (!('IntersectionObserver' in window)) {

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Ziyaretçiler · Black Ink Art Yönetim</title>
+    <link rel="icon" type="image/png" href="/brand/favicon-32.png" />
+    <style>
+      :root {
+        --gold: #f2a900;
+        --ink: #0a0a0a;
+        --card: #141210;
+        --line: #2c2822;
+        --text: #efe9df;
+        --faint: #b3aca1;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--ink);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.45;
+      }
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 1.2rem 1rem 3rem; }
+      header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.2rem; margin-bottom: 1.4rem; }
+      header a.back { color: var(--gold); text-decoration: none; font-size: 0.95rem; }
+      header a.back:hover { text-decoration: underline; }
+      h1 { font-size: 1.5rem; margin: 0; font-weight: 700; }
+      .range { margin-left: auto; display: flex; gap: 0.4rem; }
+      .range button {
+        background: transparent; color: var(--text); border: 1px solid var(--line);
+        padding: 0.4rem 0.9rem; border-radius: 6px; cursor: pointer; font: inherit; font-size: 0.9rem;
+      }
+      .range button[aria-pressed='true'] { background: var(--gold); color: var(--ink); border-color: var(--gold); font-weight: 700; }
+      .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1rem; }
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 1rem 1.1rem; }
+      .kpi .label { color: var(--faint); font-size: 0.82rem; margin: 0 0 0.2rem; }
+      .kpi .big { font-size: 2rem; font-weight: 800; color: var(--gold); margin: 0; line-height: 1.1; }
+      .kpi .small { color: var(--faint); font-size: 0.82rem; margin: 0.25rem 0 0; }
+      h2 { font-size: 1rem; margin: 0 0 0.8rem; }
+      .chart { margin-bottom: 1rem; }
+      .chart svg { width: 100%; height: auto; display: block; }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+      table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+      td { padding: 0.35rem 0; border-top: 1px solid var(--line); }
+      tr:first-child td { border-top: 0; }
+      td.n { text-align: right; font-variant-numeric: tabular-nums; color: var(--gold); width: 4.5rem; }
+      td.p { word-break: break-all; }
+      .bar { height: 5px; background: var(--line); border-radius: 3px; margin-top: 4px; }
+      .bar span { display: block; height: 100%; background: var(--gold); border-radius: 3px; }
+      .note { color: var(--faint); font-size: 0.82rem; margin-top: 1rem; }
+      .msg { padding: 2rem 1rem; text-align: center; color: var(--faint); }
+      .msg.err { color: #ff8a80; }
+      @media (max-width: 760px) {
+        .kpis { grid-template-columns: repeat(2, 1fr); }
+        .grid2 { grid-template-columns: 1fr; }
+        .range { margin-left: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="back" href="/admin/">← Panele dön</a>
+        <h1>Ziyaretçiler</h1>
+        <div class="range" role="group" aria-label="Zaman aralığı">
+          <button type="button" data-days="7" aria-pressed="false">7 gün</button>
+          <button type="button" data-days="30" aria-pressed="true">30 gün</button>
+          <button type="button" data-days="90" aria-pressed="false">90 gün</button>
+        </div>
+      </header>
+      <div id="out"><p class="msg">Yükleniyor…</p></div>
+      <p class="note">
+        Bu sayaç çerez kullanmaz ve kişisel veri saklamaz. Sitenin kendi sayacıdır; çerez onayı verip
+        vermediğine bakmadan herkesi sayar. "Ziyaretçi", aynı gün içinde sayfaları gezen bir kişidir
+        (ertesi gün yeniden sayılır). Botlar sayılmaz. Gün, Türkiye saatine göredir.
+      </p>
+    </div>
+
+    <script>
+      (function () {
+        var out = document.getElementById('out');
+        var days = 30;
+
+        function el(tag, cls, text) {
+          var e = document.createElement(tag);
+          if (cls) e.className = cls;
+          if (text !== undefined) e.textContent = text;
+          return e;
+        }
+        function fmt(n) { return Number(n || 0).toLocaleString('tr-TR'); }
+        function say(text, err) {
+          out.innerHTML = '';
+          out.appendChild(el('p', 'msg' + (err ? ' err' : ''), text));
+        }
+
+        // Panelde giriş yapılmışsa Decap/Netlify kimlik kaydı localStorage'da durur.
+        function savedUser() {
+          var keys = ['gotrue.user', 'netlify-cms-user', 'decap-cms-user'];
+          for (var i = 0; i < keys.length; i++) {
+            try {
+              var raw = localStorage.getItem(keys[i]);
+              if (raw) { var u = JSON.parse(raw); if (u) return u; }
+            } catch (e) {}
+          }
+          return null;
+        }
+
+        async function getToken() {
+          var u = savedUser();
+          if (!u) return null;
+          var t = u.token || u;
+          var exp = t.expires_at ? Number(t.expires_at) : 0;
+          if (t.access_token && (!exp || exp > Date.now() + 30000)) return t.access_token;
+          if (!t.refresh_token) return null;
+          var r = await fetch('/api/identity/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'grant_type=refresh_token&refresh_token=' + encodeURIComponent(t.refresh_token),
+          });
+          if (!r.ok) return null;
+          var j = await r.json();
+          return j.access_token || null;
+        }
+
+        function dayLabel(iso) {
+          var p = iso.split('-');
+          return p[2] + '.' + p[1];
+        }
+
+        function kpi(label, big, small) {
+          var d = el('div', 'card kpi');
+          d.appendChild(el('p', 'label', label));
+          d.appendChild(el('p', 'big', fmt(big)));
+          d.appendChild(el('p', 'small', small));
+          return d;
+        }
+
+        function sum(series, n, key) {
+          var s = 0;
+          for (var i = Math.max(0, series.length - n); i < series.length; i++) s += series[i][key];
+          return s;
+        }
+
+        function chart(series) {
+          var W = 1000, H = 220, padL = 36, padB = 28, padT = 10;
+          var max = 1;
+          series.forEach(function (d) { if (d.visitors > max) max = d.visitors; if (d.views > max) max = d.views; });
+          var NS = 'http://www.w3.org/2000/svg';
+          var svg = document.createElementNS(NS, 'svg');
+          svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+          svg.setAttribute('role', 'img');
+          svg.setAttribute('aria-label', 'Günlük ziyaretçi ve görüntüleme grafiği');
+          function add(tag, attrs, text) {
+            var n = document.createElementNS(NS, tag);
+            for (var k in attrs) n.setAttribute(k, attrs[k]);
+            if (text !== undefined) n.textContent = text;
+            svg.appendChild(n);
+            return n;
+          }
+          var plotW = W - padL - 4, plotH = H - padB - padT;
+          [0, 0.5, 1].forEach(function (f) {
+            var y = padT + plotH - plotH * f;
+            add('line', { x1: padL, x2: W - 4, y1: y, y2: y, stroke: '#2c2822', 'stroke-width': 1 });
+            add('text', { x: padL - 6, y: y + 4, 'text-anchor': 'end', fill: '#b3aca1', 'font-size': 12 }, String(Math.round(max * f)));
+          });
+          var slot = plotW / series.length;
+          var bw = Math.max(2, slot * 0.62);
+          series.forEach(function (d, i) {
+            var x = padL + slot * i + (slot - bw) / 2;
+            var vh = plotH * (d.views / max);
+            var uh = plotH * (d.visitors / max);
+            var g = add('g', {});
+            var t = document.createElementNS(NS, 'title');
+            t.textContent = dayLabel(d.date) + ': ' + d.visitors + ' ziyaretçi, ' + d.views + ' görüntüleme';
+            g.appendChild(t);
+            var r1 = document.createElementNS(NS, 'rect');
+            r1.setAttribute('x', x); r1.setAttribute('width', bw);
+            r1.setAttribute('y', padT + plotH - vh); r1.setAttribute('height', vh);
+            r1.setAttribute('fill', '#4a3f1d');
+            g.appendChild(r1);
+            var r2 = document.createElementNS(NS, 'rect');
+            r2.setAttribute('x', x); r2.setAttribute('width', bw);
+            r2.setAttribute('y', padT + plotH - uh); r2.setAttribute('height', uh);
+            r2.setAttribute('fill', '#f2a900');
+            g.appendChild(r2);
+          });
+          var every = series.length > 40 ? 10 : series.length > 14 ? 5 : 1;
+          series.forEach(function (d, i) {
+            if (i % every !== 0 && i !== series.length - 1) return;
+            add('text', { x: padL + slot * i + slot / 2, y: H - 8, 'text-anchor': 'middle', fill: '#b3aca1', 'font-size': 12 }, dayLabel(d.date));
+          });
+          return svg;
+        }
+
+        function list(title, obj, labels) {
+          var card = el('div', 'card');
+          card.appendChild(el('h2', '', title));
+          var entries = Object.keys(obj || {}).map(function (k) { return [k, obj[k]]; });
+          entries.sort(function (a, b) { return b[1] - a[1]; });
+          if (!entries.length) { card.appendChild(el('p', 'msg', 'Henüz veri yok.')); return card; }
+          var max = entries[0][1] || 1;
+          var table = el('table');
+          entries.forEach(function (e) {
+            var tr = el('tr');
+            var td = el('td', 'p');
+            td.appendChild(document.createTextNode((labels && labels[e[0]]) || e[0]));
+            var bar = el('div', 'bar'); var s = el('span'); s.style.width = Math.round((e[1] / max) * 100) + '%'; bar.appendChild(s);
+            td.appendChild(bar);
+            tr.appendChild(td);
+            tr.appendChild(el('td', 'n', fmt(e[1])));
+            table.appendChild(tr);
+          });
+          card.appendChild(table);
+          return card;
+        }
+
+        function render(d) {
+          out.innerHTML = '';
+          var s = d.series;
+          var today = d.today || { visitors: 0, views: 0 };
+          var y = d.yesterday || { visitors: 0, views: 0 };
+          var k = el('div', 'kpis');
+          k.appendChild(kpi('Bugün', today.visitors, today.views + ' sayfa görüntüleme'));
+          k.appendChild(kpi('Dün', y.visitors, y.views + ' sayfa görüntüleme'));
+          k.appendChild(kpi('Son 7 gün', sum(s, 7, 'visitors'), sum(s, 7, 'views') + ' sayfa görüntüleme'));
+          k.appendChild(kpi('Son ' + d.days + ' gün', d.totals.visitors, d.totals.views + ' sayfa görüntüleme'));
+          out.appendChild(k);
+
+          var c = el('div', 'card chart');
+          c.appendChild(el('h2', '', 'Günlük ziyaretçi (altın) ve görüntüleme (koyu)'));
+          c.appendChild(chart(s));
+          out.appendChild(c);
+
+          var g1 = el('div', 'grid2');
+          g1.appendChild(list('En çok bakılan sayfalar', d.pages));
+          g1.appendChild(list('Ziyaretçiler nereden geliyor', d.sources));
+          out.appendChild(g1);
+
+          var hourObj = {};
+          (d.hours || []).forEach(function (n, i) { if (n) hourObj[(i < 10 ? '0' : '') + i + ':00'] = n; });
+          var g2 = el('div', 'grid2');
+          g2.style.marginTop = '1rem';
+          g2.appendChild(list('Cihaz', d.devices, { mobile: 'Telefon', tablet: 'Tablet', desktop: 'Bilgisayar' }));
+          g2.appendChild(list('Hangi saatlerde (görüntüleme)', hourObj));
+          out.appendChild(g2);
+        }
+
+        async function load() {
+          say('Yükleniyor…');
+          try {
+            var token = await getToken();
+            if (!token) { say('Önce panele giriş yapın, sonra bu sayfayı yenileyin.', true); return; }
+            var r = await fetch('/api/stats?days=' + days, { headers: { Authorization: 'Bearer ' + token } });
+            if (r.status === 401) { say('Oturum süresi dolmuş. Panele yeniden girin.', true); return; }
+            if (!r.ok) { say('Veriler alınamadı (hata ' + r.status + ').', true); return; }
+            render(await r.json());
+          } catch (e) {
+            say('Veriler alınamadı. İnternet bağlantınızı kontrol edin.', true);
+          }
+        }
+
+        document.querySelectorAll('.range button').forEach(function (b) {
+          b.addEventListener('click', function () {
+            days = Number(b.getAttribute('data-days'));
+            document.querySelectorAll('.range button').forEach(function (x) {
+              x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+            });
+            load();
+          });
+        });
+        load();
+      })();
+    </script>
+  </body>
+</html>
