@@ -25,7 +25,12 @@ function validated(name: string, pattern: RegExp): string {
   return value;
 }
 
-const gaId = validated('GA_MEASUREMENT_ID', GA_PATTERN);
+// Sitenin Google Analytics mülkü (canlı sayfalarda bulunan kimlik). Ortam değişkeni verilmezse bu kimlik
+// kullanılır ki yayın bir değişkene bağlı kalıp analitiği sessizce kaybetmesin. Kapatmak için
+// GA_MEASUREMENT_ID=off yazın. Yükleme yine yalnızca çerez onayından sonra olur.
+const DEFAULT_GA_ID = 'G-836P8JNPN3';
+const rawGa = readEnv('GA_MEASUREMENT_ID');
+const gaId = rawGa.toLowerCase() === 'off' ? '' : rawGa === '' ? DEFAULT_GA_ID : validated('GA_MEASUREMENT_ID', GA_PATTERN);
 const gtmId = validated('GTM_ID', GTM_PATTERN);
 
 export const analytics = {
