@@ -25,7 +25,7 @@ function walk(dir, out = []) {
     if (e.isDirectory()) {
       if (dir === DIST && SKIP_DIRS.has(e.name)) continue;
       walk(full, out);
-    } else if (e.name.endsWith('.html')) out.push(full);
+    } else if (e.name.endsWith('.html') && !/^google[0-9a-f]+\.html$/.test(e.name)) out.push(full); // Search Console doğrulama dosyası sayfa değil
   }
   return out;
 }
