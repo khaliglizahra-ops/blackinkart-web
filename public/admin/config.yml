@@ -170,7 +170,7 @@ collections:
             summary: '{{fields.day}} — {{fields.hours}}'
             fields:
               - { name: day, label: Gün(ler), widget: string, hint: 'Örn. "Pazartesi – Cumartesi" veya "Pazar"' }
-              - { name: hours, label: Saatler, widget: string, hint: 'Örn. "10:00 – 21:00" ya da "Kapalı"' }
+              - { name: hours, label: Saatler, widget: string, hint: 'Örn. "09:00 – 21:00" ya da "Kapalı"' }
           - name: phone
             label: Telefon
             widget: string
