@@ -8,7 +8,7 @@
  * böylece şema sayfada görünmeyen bir şey söylemiyor.
  */
 import { site } from './site';
-import { tattooPricing, tattooNotes, kdvNote } from './prices';
+import { tattooPricing, tattooNotes, kdvNote, multiPiercingNote, piercingPriceTables } from './prices';
 import { localizePath, type Lang } from '../i18n/config';
 import { alternateFor } from '../i18n/routes';
 
@@ -19,7 +19,7 @@ export type FaqItem = {
   link?: { href: string; label: string; external?: boolean };
 };
 
-export type FaqTopic = 'general' | 'tattoo' | 'piercing';
+export type FaqTopic = 'general' | 'tattoo' | 'piercing' | 'tattooPrices' | 'piercingPrices';
 
 const fmt = (n: number, lang: Lang) => n.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
 
@@ -28,6 +28,53 @@ export async function getFaq(lang: Lang, topic: FaqTopic): Promise<FaqItem[]> {
   const loc = (trPath: string) => localizePath(trPath, lang);
   // Rehber yazılarının slug'ı dile göre değişiyor; eşleşmeyi `translationKey` kuruyor.
   const guide = (trPath: string) => alternateFor(trPath, lang);
+
+  // Fiyat sayfalarının soruları: Google'da sorulan "kaç TL" sorularına, panelden gelen rakamlarla cevap.
+  // Not panelden silinirse o soru da düşer (uydurma cevap yok).
+  if (topic === 'tattooPrices') {
+    const notes = tattooNotes(lang);
+    const find = (re: RegExp) => notes.find((n) => re.test(n));
+    const small = find(/5\s*cm/i);
+    const three = find(/\b3\b|three/i);
+    const big = notes[notes.length - 1];
+    const out: FaqItem[] = [];
+    if (small) out.push({
+      q: L('5 cm dövme kaç TL?', 'How much is a 5 cm tattoo?'),
+      a: L(`${small} Makine açılış fiyatı ${fmt(tattooPricing.openingPrice, lang)} TL.`, `${small} The machine set-up price is ${fmt(tattooPricing.openingPrice, lang)} TRY.`),
+    });
+    if (three) out.push({ q: L('3 minimal dövme kaç TL?', 'How much are three minimal tattoos?'), a: three });
+    if (big && big !== small && big !== three) out.push({ q: L('Büyük ve detaylı dövmelerin fiyatı nasıl belirlenir?', 'How are large and detailed tattoos priced?'), a: big });
+    out.push({ q: L('Fiyatlara KDV dahil mi?', 'Is VAT included in the prices?'), a: kdvNote(lang) });
+    return out;
+  }
+  if (topic === 'piercingPrices') {
+    const rows = piercingPriceTables(lang).flatMap((tb) => tb.rows);
+    const nums = (k: 'steel' | 'titanium') => rows.map((r) => r[k]).filter((v): v is number => typeof v === 'number' && v > 0);
+    const out: FaqItem[] = [];
+    const steel = nums('steel');
+    const ti = nums('titanium');
+    if (steel.length && ti.length) out.push({
+      q: L('Piercing deldirmek kaç TL?', 'How much does a piercing cost?'),
+      a: L(
+        `Cerrahi çelikle ${fmt(Math.min(...steel), lang)} TL'den, titanyumla ${fmt(Math.min(...ti), lang)} TL'den başlıyor. Fiyat bölgeye ve takının malzemesine göre değişir; her uygulamanın fiyatı yukarıdaki tablolarda.`,
+        `From ${fmt(Math.min(...steel), lang)} TRY with surgical steel and from ${fmt(Math.min(...ti), lang)} TRY with titanium. The price depends on the placement and the jewellery material; every procedure is listed in the tables above.`
+      ),
+    });
+    const row = (re: RegExp) => rows.find((r) => re.test(r.name) && !r.note && r.steel);
+    const line = (r: any) => L(
+      `Cerrahi çelik ${fmt(r.steel, lang)} TL, taşlı ve halka ${fmt(r.stoneRing, lang)} TL, titanyum ${fmt(r.titanium, lang)} TL.`,
+      `Surgical steel ${fmt(r.steel, lang)} TRY, gemmed and ring ${fmt(r.stoneRing, lang)} TRY, titanium ${fmt(r.titanium, lang)} TRY.`
+    );
+    const lobe = row(/^lobe/i);
+    if (lobe?.stoneRing && lobe?.titanium) out.push({ q: L('Kulak deldirmek (kulak memesi) kaç TL?', 'How much is an earlobe piercing?'), a: line(lobe) });
+    const nostril = row(/^nostril/i);
+    if (nostril?.stoneRing && nostril?.titanium) out.push({ q: L('Burun piercing kaç TL?', 'How much is a nose (nostril) piercing?'), a: line(nostril) });
+    const belly = row(/belly/i);
+    if (belly?.stoneRing && belly?.titanium) out.push({ q: L('Göbek piercing kaç TL?', 'How much is a belly piercing?'), a: line(belly) });
+    out.push({ q: L('Birden fazla piercing yaptırırsam fiyat değişir mi?', 'Is there a price for several piercings?'), a: multiPiercingNote(lang) });
+    out.push({ q: L('Fiyatlara KDV dahil mi?', 'Is VAT included in the prices?'), a: kdvNote(lang) });
+    return out;
+  }
 
   const hours = site.hours
     .map((h: any) => `${lang === 'en' && h.dayEn ? h.dayEn : h.day}: ${lang === 'en' && h.hoursEn ? h.hoursEn : h.hours}`)

@@ -6,13 +6,17 @@ const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const L = (p: string) => localizePath(p, lang);
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Faq from '../Faq.astro';
+import { getFaq, faqSchema } from '../../data/faq';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { tattooPricing, tattooNotes, kdvNote } from '../../data/prices';
+const faq = await getFaq(lang, 'tattooPrices');
 ---
 
 <BaseLayout
   title={t('tprice.pageTitle')}
   description={t('tprice.pageDesc')}
+  jsonLd={faqSchema(faq)}
   path={L('/dovme/fiyatlar')}
 >
   <section class="section-tight">
@@ -45,6 +49,7 @@ import { tattooPricing, tattooNotes, kdvNote } from '../../data/prices';
       </div>
     </div>
   </section>
+  <Faq items={faq} heading={t('faq.title')} id="faq-tattoo-prices" />
 </BaseLayout>
 
 <style>
