@@ -29,9 +29,9 @@
   "hours": [
     {
       "day": "Pazartesi – Cumartesi",
-      "hours": "11:00 – 20:00",
+      "hours": "10:00 – 21:00",
       "dayEn": "Monday – Saturday",
-      "hoursEn": "11:00 – 20:00"
+      "hoursEn": "10:00 – 21:00"
     },
     {
       "day": "Pazar",
