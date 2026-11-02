@@ -1,5 +1,6 @@
 ---
 title: "Kulak Piercingleri"
+seoTitle: "Kulak Piercing Ankara: Çeşitleri ve Fiyatları"
 translationKey: "ear"
 description: "Lobe, tragus, helix, conch, daith ve industrial dahil tüm kulak piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 1

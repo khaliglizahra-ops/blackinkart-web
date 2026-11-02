@@ -44,6 +44,8 @@ const piercingBolgeleri = defineCollection({
   schema: z.object({
     translationKey,
     title: z.string(),
+    /** Yalnızca Google'daki sayfa başlığı (<title>); boşsa `title` kullanılır. Sayfadaki başlık değişmez. */
+    seoTitle: z.string().optional(),
     description: z.string(),
     order: z.number(),
     updatedAt: dateString,

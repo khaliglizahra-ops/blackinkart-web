@@ -1,5 +1,6 @@
 ---
 title: "Burun Piercingleri"
+seoTitle: "Burun Piercing Ankara: Nostril, Septum ve Fiyatlar"
 translationKey: "nose"
 description: "Nostril, septum, high nostril ve nasallang dahil burun piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 2

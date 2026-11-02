@@ -1,5 +1,6 @@
 ---
 title: "Dermal Piercing"
+seoTitle: "Dermal Piercing Ankara: Uygulama ve Fiyat"
 translationKey: "dermal"
 description: "Dermal (microdermal) piercing uygulaması, iyileşme süresi, bakımı ve fiyatı."
 order: 8

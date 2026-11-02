@@ -1,5 +1,6 @@
 ---
 title: "Dil Piercingleri"
+seoTitle: "Dil Piercing Ankara: Çeşitleri ve Fiyatları"
 translationKey: "tongue"
 description: "Tongue, smiley, venom ve Marley dahil dil ve ağız içi piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 4

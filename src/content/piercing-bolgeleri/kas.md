@@ -1,5 +1,6 @@
 ---
 title: "Kaş Piercingleri"
+seoTitle: "Kaş Piercing Ankara: Uygulama ve Fiyat"
 translationKey: "eyebrow"
 description: "Kaş (eyebrow) piercing çeşitleri, iyileşme süresi, bakımı ve fiyatları — Ankara Çankaya'daki Black Ink Art stüdyosundan."
 order: 5

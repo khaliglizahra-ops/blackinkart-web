@@ -1,5 +1,6 @@
 ---
 title: "Nipple Piercing"
+seoTitle: "Meme Ucu (Nipple) Piercing Ankara: Bakım ve Fiyat"
 translationKey: "nipple"
 description: "Meme ucu (nipple) piercing uygulaması, iyileşme süresi, bakımı ve fiyatı — Ankara Çankaya'daki Black Ink Art stüdyosundan."
 order: 7

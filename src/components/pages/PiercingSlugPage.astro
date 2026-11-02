@@ -70,7 +70,7 @@ const painLabel = kind === 'area'
 ---
 
 <BaseLayout
-  title={entry.data.title}
+  title={(entry.data as any).seoTitle || entry.data.title}
   description={entry.data.description}
   path={`${base}/${slug}`}
   jsonLd={jsonLd}

@@ -1,5 +1,6 @@
 ---
 title: "Cheek Piercing"
+seoTitle: "Yanak (Cheek) Piercing Ankara: Uygulama ve Fiyat"
 translationKey: "cheek"
 description: "Yanak (dimple) piercing uygulaması, iyileşme süresi, bakımı ve fiyatı."
 order: 10

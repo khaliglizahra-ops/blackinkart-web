@@ -1,5 +1,6 @@
 ---
 title: "Dudak Piercingleri"
+seoTitle: "Dudak Piercing Ankara: Labret, Medusa ve Fiyatlar"
 translationKey: "lip"
 description: "Labret, Medusa, Monroe ve bites serisi dahil dudak piercing çeşitleri, iyileşme süresi ve fiyatları."
 order: 3

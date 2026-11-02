@@ -1,5 +1,6 @@
 ---
 title: "Belly Piercing"
+seoTitle: "Göbek (Belly) Piercing Ankara: Bakım ve Fiyat"
 translationKey: "navel"
 description: "Göbek piercing uygulaması, iyileşme süresi, bakımı ve fiyatı — Ankara Çankaya'daki Black Ink Art stüdyosundan."
 order: 6

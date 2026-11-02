@@ -1,5 +1,6 @@
 ---
 title: "Genital Piercing"
+seoTitle: "Genital Piercing Ankara: Bilgi ve Fiyat"
 translationKey: "genital"
 description: "Genital piercing uygulaması, iyileşme süresi ve fiyatı hakkında bilgi."
 order: 9
