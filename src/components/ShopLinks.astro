@@ -1,0 +1,87 @@
+---
+import { langFromPath } from '../i18n/config';
+import { site } from '../data/site';
+
+// Piercingland'daki parça sayfalarına, parçanın adını taşıyan bağlantılar. Metin: taslak
+// "blackinkart-piercingland-link-metni-taslak.md" (Hüseyin onayladı, 1 Kasım 2026).
+const lang = langFromPath(Astro.url.pathname);
+const en = lang === 'en';
+const base = site.jewelryShopUrl.replace(/\/$/, '') + (en ? '/en/category' : '/kategori');
+const links = [
+  { path: 'titanyum-piercingler', tr: 'Titanyum piercing', en: 'Titanium piercings', trNote: 'implant sınıfı titanyum, tüm bölgeler', enNote: 'implant-grade titanium, every placement' },
+  { path: 'cerrahi-celik-piercingler', tr: 'Cerrahi çelik piercing', en: 'Surgical steel piercings', trNote: '316L, iyileşmiş delikler için', enNote: '316L, for healed piercings' },
+  { path: 'halka-piercing/titanyum', tr: 'Titanyum halka piercing', en: 'Titanium ring piercings', trNote: 'clicker, segment ve at nalı', enNote: 'clicker, segment and horseshoe' },
+  { path: 'nipple-piercing/titanyum', tr: 'Titanyum nipple piercing', en: 'Titanium nipple piercings', trNote: 'düz bar', enNote: 'straight bars' },
+  { path: 'dermal-piercing/titanyum', tr: 'Titanyum dermal piercing', en: 'Titanium dermal piercings', trNote: 'zirkon taşlı üst parçalar', enNote: 'zirconia tops' },
+  { path: 'kas-snug-rook-piercing/titanyum', tr: 'Titanyum kaş piercing', en: 'Titanium eyebrow piercings', trNote: 'kavisli bar', enNote: 'curved bar' },
+  { path: 'kulak-piercing/industrial/titanyum', tr: 'Titanyum industrial piercing', en: 'Titanium industrial piercings', trNote: '37 mm bar', enNote: '37 mm bar' },
+  { path: 'surface-piercing/titanyum', tr: 'Titanyum surface piercing', en: 'Titanium surface piercings', trNote: 'surface bar', enNote: 'surface bars' },
+];
+---
+
+<div class="shop-links container">
+  <h3>{en ? 'Choose by piece' : 'Parçaya göre seçin'}</h3>
+  <p>
+    {en
+      ? 'If you already know what you are looking for, go straight to that page. For a new piercing we recommend titanium. You can have the piece you choose fitted at the studio.'
+      : 'Aradığınız parça belliyse doğrudan o sayfaya geçin. Yeni delinmiş bir piercing için titanyumu öneriyoruz. Seçtiğiniz parçayı stüdyoda taktırabilirsiniz.'}
+  </p>
+  <ul>
+    {links.map((l) => (
+      <li>
+        <a href={`${base}/${l.path}`} target="_blank" rel="noopener">{en ? l.en : l.tr}</a>
+        <span>{en ? l.enNote : l.trNote}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .shop-links {
+    margin-top: 1.6rem;
+  }
+
+  .shop-links h3 {
+    margin: 0 0 0.4rem;
+  }
+
+  .shop-links p {
+    margin: 0 0 0.8rem;
+    max-width: 62ch;
+  }
+
+  .shop-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem 1.4rem;
+  }
+
+  @media (max-width: 640px) {
+    .shop-links ul {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .shop-links li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .shop-links a {
+    font-weight: 700;
+    color: var(--color-gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .shop-links span {
+    font-size: 0.84rem;
+    opacity: 0.75;
+  }
+</style>
