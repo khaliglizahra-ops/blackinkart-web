@@ -9,6 +9,20 @@ const lang = langFromPath(Astro.url.pathname);
 const t = useTranslations(lang);
 const nav = getNav(lang);
 const legalNav = getLegalNav(lang);
+// Çok aranan sayfalara her sayfadan bağlantı (Google'ın bunları önemli sayfa olarak görmesi için).
+const popular = lang === 'en'
+  ? [
+      { href: '/en/tattoo/prices', label: 'Tattoo Prices' },
+      { href: '/en/piercing/prices', label: 'Piercing Prices' },
+      { href: '/en/piercing/ear', label: 'Ear Piercing' },
+      { href: '/en/piercing/nose', label: 'Nose Piercing' },
+    ]
+  : [
+      { href: '/dovme/fiyatlar', label: 'Dövme Fiyatları' },
+      { href: '/piercing/fiyatlar', label: 'Piercing Fiyatları' },
+      { href: '/piercing/kulak', label: 'Kulak Piercing' },
+      { href: '/piercing/burun', label: 'Burun Piercing' },
+    ];
 ---
 
 <footer class="site-footer">
@@ -38,6 +52,7 @@ const legalNav = getLegalNav(lang);
       <h2>{t('footer.explore')}</h2>
       <ul>
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        {popular.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </div>
 
