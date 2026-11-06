@@ -362,6 +362,7 @@ collections:
     fields:
       - { name: translationKey, label: İngilizce eşleşme anahtarı (değiştirmeyin), widget: string, required: false, hint: 'Bu sayfayı İngilizce karşılığına bağlar. Dil değiştirici bunu kullanıyor.' }
       - { name: title, label: Başlık, widget: string }
+      - { name: seoTitle, label: Google başlığı, widget: string, required: false, hint: 'Yalnızca Google sonuçlarında görünen başlık. Boş bırakılırsa Başlık kullanılır.' }
       - { name: description, label: Arama motoru açıklaması, widget: text, hint: 'Google sonuçlarında başlığın altında görünen 1-2 cümle.' }
       - { name: order, label: Sıra, widget: number, value_type: int, min: 1, hint: 'Küçük sayı üstte görünür.' }
       - { name: heroImage, label: Üst görsel (fotoğraf), widget: image, required: false, hint: 'Boş bırakırsanız aşağıdaki desen kullanılır.' }

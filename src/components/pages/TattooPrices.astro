@@ -10,12 +10,21 @@ import Faq from '../Faq.astro';
 import { getFaq, faqSchema } from '../../data/faq';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { tattooPricing, tattooNotes, kdvNote } from '../../data/prices';
+import { campaigns } from '../../data/campaigns';
 const faq = await getFaq(lang, 'tattooPrices');
+// Google başlığı ve açıklaması: yıl ve rakamlar her derlemede güncel veriden gelir.
+const year = new Date().getFullYear();
+const fmtN = (n: number) => n.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
+const threeMinimal = campaigns(lang).find((c) => c.key === 'minimal');
+const seoTitle = lang === 'en' ? `Tattoo Prices in Ankara ${year}` : `Ankara Dövme Fiyatları ${year}`;
+const seoDesc = lang === 'en'
+  ? `Tattoo prices in Bahçelievler, Ankara: minimal tattoos up to 5 cm ${fmtN(tattooPricing.openingPrice)} TRY${threeMinimal ? `, three minimal tattoos ${fmtN(threeMinimal.price)} TRY` : ''}. Send a photo for an exact price on large pieces. VAT not included.`
+  : `Ankara Bahçelievler'de dövme fiyatları: 5 cm'e kadar minimal dövme ${fmtN(tattooPricing.openingPrice)} TL${threeMinimal ? `, 3 minimal dövme ${fmtN(threeMinimal.price)} TL` : ''}. Büyük dövmede net fiyat için fotoğraf gönderin. KDV hariç.`;
 ---
 
 <BaseLayout
-  title={t('tprice.pageTitle')}
-  description={t('tprice.pageDesc')}
+  title={seoTitle}
+  description={seoDesc}
   jsonLd={faqSchema(faq)}
   path={L('/dovme/fiyatlar')}
 >

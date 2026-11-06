@@ -43,7 +43,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description} path={path} jsonLd={jsonLd}>
+<BaseLayout title={(entry.data as any).seoTitle || entry.data.title} description={entry.data.description} path={path} jsonLd={jsonLd}>
   <GuideArticle
     hubLabel={hubLabel}
     hubHref={base}

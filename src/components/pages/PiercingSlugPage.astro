@@ -50,6 +50,16 @@ const areaDiagramList: string[] = kind === 'area' ? areaDiagrams((entry.data as 
 const priceTable = kind === 'area'
   ? piercingPriceTables(lang).find((tb) => tb.slug === (entry.data as any).priceSlug) ?? null
   : null;
+// Google açıklamasına bölgenin başlangıç fiyatı (fiyat tablosundan, her derlemede güncel).
+// "Diğer" tablosunda birden çok bölge var; doğru satır anahtardan seçiliyor.
+const DIGER_ROW: Record<string, RegExp> = { eyebrow: /eyebrow/i, cheek: /^cheek/i, nipple: /^nipple/i, navel: /belly/i, dermal: /^dermal/i, genital: /^genital/i };
+const areaKey: string = kind === 'area' ? (entry.data as any).translationKey ?? '' : '';
+const priceRows = priceTable ? (DIGER_ROW[areaKey] ? priceTable.rows.filter((r) => DIGER_ROW[areaKey].test(r.name)) : priceTable.rows) : [];
+const steelPrices = priceRows.map((r) => r.steel).filter((v): v is number => typeof v === 'number' && v > 0);
+const fromPrice = steelPrices.length ? Math.min(...steelPrices).toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR') : null;
+const seoDescription = fromPrice
+  ? `${entry.data.description} ${lang === 'en' ? `From ${fromPrice} TRY with steel, VAT not included.` : `Çelikle ${fromPrice} TL'den, KDV hariç.`}`
+  : entry.data.description;
 const areaHeroImage = areaPhotoList[0];
 // Izgara 4 sütun: son satır eksik kalmasın diye 4'ün katı (en çok 12) gösteriliyor.
 const GALLERY_MAX = 12;
@@ -71,7 +81,7 @@ const painLabel = kind === 'area'
 
 <BaseLayout
   title={(entry.data as any).seoTitle || entry.data.title}
-  description={entry.data.description}
+  description={seoDescription}
   path={`${base}/${slug}`}
   jsonLd={jsonLd}
 >

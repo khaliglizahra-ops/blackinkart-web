@@ -1,7 +1,8 @@
 ---
 title: "Dövmede Bölgeye Göre Acı Oranları"
+seoTitle: "Dövme Acı Haritası: En Az ve En Çok Acıyan Yerler"
 translationKey: "tattoo-pain-guide"
-description: "Dövme yaptırırken vücuttaki en az ve en çok acıyan bölgeleri gösteren acı haritası."
+description: "Dövme yaptırırken en az ve en çok acıyan yerleri gösteren vücut acı haritası. Sarı bölgeler en az acıyan yerler, renk koyulaştıkça acı artıyor."
 order: 6
 updatedAt: "2026-10-08"
 heroImage: "/images/portfolyo/black-work/black-work-14.jpg"

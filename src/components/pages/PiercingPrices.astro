@@ -12,11 +12,20 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import PriceTable from '../../components/PriceTable.astro';
 import { piercingPriceTables, kdvNote, multiPiercingNote } from '../../data/prices';
 const faq = await getFaq(lang, 'piercingPrices');
+// Google başlığı ve açıklaması: yıl ve rakamlar her derlemede güncel veriden gelir.
+const year = new Date().getFullYear();
+const fmtN = (n: number) => n.toLocaleString(lang === 'en' ? 'en-GB' : 'tr-TR');
+const allRows = piercingPriceTables(lang).flatMap((tb) => tb.rows);
+const minOf = (k: 'steel' | 'titanium') => Math.min(...allRows.map((r) => r[k]).filter((v): v is number => typeof v === 'number' && v > 0));
+const seoTitle = lang === 'en' ? `Piercing Prices in Ankara ${year}` : `Ankara Piercing Fiyatları ${year}`;
+const seoDesc = lang === 'en'
+  ? `Piercing prices in Bahçelievler, Ankara: from ${fmtN(minOf('steel'))} TRY with surgical steel, from ${fmtN(minOf('titanium'))} TRY with titanium. Full list for ear, nose, lip, tongue and more. VAT not included.`
+  : `Ankara Bahçelievler'de piercing fiyatları: cerrahi çelikle ${fmtN(minOf('steel'))} TL'den, titanyumla ${fmtN(minOf('titanium'))} TL'den. Kulak, burun, dudak, dil ve tüm bölgelerin listesi. KDV hariç.`;
 ---
 
 <BaseLayout
-  title={t('pprice.pageTitle')}
-  description={t('pprice.pageDesc')}
+  title={seoTitle}
+  description={seoDesc}
   jsonLd={faqSchema(faq)}
   path={L('/piercing/fiyatlar')}
 >

@@ -20,6 +20,8 @@ const translationKey = z.string().optional();
 const guideSchema = z.object({
   translationKey,
   title: z.string(),
+  /** Yalnızca Google'daki sayfa başlığı (<title>); boşsa `title` kullanılır. */
+  seoTitle: z.string().optional(),
   description: z.string(),
   order: z.number(),
   updatedAt: dateString,
